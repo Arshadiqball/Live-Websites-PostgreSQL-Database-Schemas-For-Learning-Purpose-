@@ -1,0 +1,7183 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.19 (Ubuntu 12.19-1.pgdg20.04+1)
+-- Dumped by pg_dump version 15.7 (Ubuntu 15.7-1.pgdg20.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: agent_user_details; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.agent_user_details (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    gender character varying(255),
+    country_id integer DEFAULT 0 NOT NULL,
+    emirate_id integer DEFAULT 0 NOT NULL,
+    area_id integer DEFAULT 0 NOT NULL,
+    address character varying(255),
+    callcenter_id integer,
+    status integer DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.agent_user_details OWNER TO postgres;
+
+--
+-- Name: agent_user_details_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.agent_user_details_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.agent_user_details_id_seq OWNER TO postgres;
+
+--
+-- Name: agent_user_details_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.agent_user_details_id_seq OWNED BY public.agent_user_details.id;
+
+
+--
+-- Name: appointments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.appointments (
+    id bigint NOT NULL,
+    appointment_id character varying(255) NOT NULL,
+    booking_date date NOT NULL,
+    time_slot character varying(255) NOT NULL,
+    booking_status smallint DEFAULT '1'::smallint NOT NULL,
+    hospital_id bigint NOT NULL,
+    patient_id bigint NOT NULL,
+    doctor_id bigint NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.appointments OWNER TO postgres;
+
+--
+-- Name: appointments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.appointments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.appointments_id_seq OWNER TO postgres;
+
+--
+-- Name: appointments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.appointments_id_seq OWNED BY public.appointments.id;
+
+
+--
+-- Name: areas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.areas (
+    id bigint NOT NULL,
+    name_en character varying(255) NOT NULL,
+    name_ar character varying(255) NOT NULL,
+    active character varying(255) DEFAULT '1'::character varying NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    country_id integer DEFAULT 0 NOT NULL,
+    emirate_id integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.areas OWNER TO postgres;
+
+--
+-- Name: areas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.areas_id_seq OWNER TO postgres;
+
+--
+-- Name: areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.areas_id_seq OWNED BY public.areas.id;
+
+
+--
+-- Name: SEQUENCE areas_id_seq; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON SEQUENCE public.areas_id_seq IS '<br />
+<b>Deprecated</b>:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/home/dxbitprojects/public_html/phppgadmin/sequences.php</b> on line <b>630</b><br />
+';
+
+
+--
+-- Name: articles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.articles (
+    id bigint NOT NULL,
+    title_en character varying(255),
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    desc_en text,
+    desc_ar text,
+    meta_title text,
+    meta_keyword text,
+    meta_description text,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    type integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.articles OWNER TO postgres;
+
+--
+-- Name: articles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.articles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.articles_id_seq OWNER TO postgres;
+
+--
+-- Name: articles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.articles_id_seq OWNED BY public.articles.id;
+
+
+--
+-- Name: cache; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cache (
+    key character varying(255) NOT NULL,
+    value text NOT NULL,
+    expiration integer NOT NULL
+);
+
+
+ALTER TABLE public.cache OWNER TO postgres;
+
+--
+-- Name: cache_locks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cache_locks (
+    key character varying(255) NOT NULL,
+    owner character varying(255) NOT NULL,
+    expiration integer NOT NULL
+);
+
+
+ALTER TABLE public.cache_locks OWNER TO postgres;
+
+--
+-- Name: callcenter_user_details; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.callcenter_user_details (
+    id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    country_id integer DEFAULT 0 NOT NULL,
+    emirate_id integer DEFAULT 0 NOT NULL,
+    area_id integer DEFAULT 0 NOT NULL,
+    address character varying(255),
+    location character varying(255),
+    website character varying(255),
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.callcenter_user_details OWNER TO postgres;
+
+--
+-- Name: callcenter_user_details_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.callcenter_user_details_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.callcenter_user_details_id_seq OWNER TO postgres;
+
+--
+-- Name: callcenter_user_details_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.callcenter_user_details_id_seq OWNED BY public.callcenter_user_details.id;
+
+
+--
+-- Name: contact_us; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contact_us (
+    id bigint NOT NULL,
+    name character varying(400),
+    email character varying(200),
+    dial_code character varying(255),
+    mobile character varying(255),
+    message text,
+    reply text,
+    created_at timestamp(1) without time zone,
+    updated_at timestamp(1) without time zone
+);
+
+
+ALTER TABLE public.contact_us OWNER TO postgres;
+
+--
+-- Name: contact_us_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.contact_us_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.contact_us_id_seq OWNER TO postgres;
+
+--
+-- Name: contact_us_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.contact_us_id_seq OWNED BY public.contact_us.id;
+
+
+--
+-- Name: contact_us_settings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contact_us_settings (
+    id bigint NOT NULL,
+    title_en character varying(300),
+    title_ar character varying(300),
+    email character varying(300),
+    mobile character varying(50),
+    desc_en text,
+    desc_ar text,
+    location text,
+    latitude text,
+    longitude text,
+    twitter character varying(600),
+    instagram character varying(600),
+    facebook character varying(600),
+    youtube character varying(600),
+    linkedin character varying(600),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.contact_us_settings OWNER TO postgres;
+
+--
+-- Name: contact_us_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.contact_us_settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.contact_us_settings_id_seq OWNER TO postgres;
+
+--
+-- Name: contact_us_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.contact_us_settings_id_seq OWNED BY public.contact_us_settings.id;
+
+
+--
+-- Name: country; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.country (
+    id bigint NOT NULL,
+    name character varying(1500) NOT NULL,
+    prefix character varying(20) NOT NULL,
+    dial_code character varying(100) NOT NULL,
+    active character varying(255) DEFAULT '1'::character varying NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp without time zone,
+    name_ar character varying(255)
+);
+
+
+ALTER TABLE public.country OWNER TO postgres;
+
+--
+-- Name: country_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.country_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.country_id_seq OWNER TO postgres;
+
+--
+-- Name: country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.country_id_seq OWNED BY public.country.id;
+
+
+--
+-- Name: country_of_origins; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.country_of_origins (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    name_ar character varying(255),
+    status integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.country_of_origins OWNER TO postgres;
+
+--
+-- Name: country_of_origins_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.country_of_origins_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.country_of_origins_id_seq OWNER TO postgres;
+
+--
+-- Name: country_of_origins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.country_of_origins_id_seq OWNED BY public.country_of_origins.id;
+
+
+--
+-- Name: department_doctors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.department_doctors (
+    doctor_id bigint NOT NULL,
+    department_id bigint NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.department_doctors OWNER TO postgres;
+
+--
+-- Name: department_hospital; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.department_hospital (
+    id bigint NOT NULL,
+    hospital_id bigint NOT NULL,
+    department_id bigint NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    manager_name character varying(255),
+    dial_code character varying(255),
+    phone character varying(255),
+    email character varying(255),
+    department_name character varying(255),
+    department_manager character varying(255),
+    doctor_id bigint,
+    manager_id bigint,
+    active boolean DEFAULT true NOT NULL,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.department_hospital OWNER TO postgres;
+
+--
+-- Name: department_hospital_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.department_hospital_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.department_hospital_id_seq OWNER TO postgres;
+
+--
+-- Name: department_hospital_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.department_hospital_id_seq OWNED BY public.department_hospital.id;
+
+
+--
+-- Name: departments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.departments (
+    id bigint NOT NULL,
+    status character varying(255),
+    deleted boolean,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255) NOT NULL,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.departments OWNER TO postgres;
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.departments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.departments_id_seq OWNER TO postgres;
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.departments_id_seq OWNED BY public.departments.id;
+
+
+--
+-- Name: doctor_availabilities; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_availabilities (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    sunday_availability integer DEFAULT 0 NOT NULL,
+    sunday_time_slot json,
+    monday_availability integer DEFAULT 0 NOT NULL,
+    monday_time_slot json,
+    tuesday_availability integer DEFAULT 0 NOT NULL,
+    tuesday_time_slot json,
+    wednesday_availability integer DEFAULT 0 NOT NULL,
+    wednesday_time_slot json,
+    thursday_availability integer DEFAULT 0 NOT NULL,
+    thursday_time_slot json,
+    friday_availability integer DEFAULT 0 NOT NULL,
+    friday_time_slot json,
+    saturday_availability integer DEFAULT 0 NOT NULL,
+    saturday_time_slot json,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_availabilities OWNER TO postgres;
+
+--
+-- Name: doctor_availabilities_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_availabilities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_availabilities_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_availabilities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_availabilities_id_seq OWNED BY public.doctor_availabilities.id;
+
+
+--
+-- Name: doctor_holidays; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_holidays (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    holiday_name character varying(255) NOT NULL,
+    holiday_date date NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_holidays OWNER TO postgres;
+
+--
+-- Name: doctor_holidays_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_holidays_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_holidays_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_holidays_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_holidays_id_seq OWNED BY public.doctor_holidays.id;
+
+
+--
+-- Name: doctor_instant_appointments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_instant_appointments (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    instant_appointment_date date NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_instant_appointments OWNER TO postgres;
+
+--
+-- Name: doctor_instant_appointments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_instant_appointments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_instant_appointments_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_instant_appointments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_instant_appointments_id_seq OWNED BY public.doctor_instant_appointments.id;
+
+
+--
+-- Name: doctor_intrests; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_intrests (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    special_intrest_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_intrests OWNER TO postgres;
+
+--
+-- Name: doctor_intrests_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_intrests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_intrests_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_intrests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_intrests_id_seq OWNED BY public.doctor_intrests.id;
+
+
+--
+-- Name: doctor_language_spokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_language_spokens (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    language_spoken_id integer NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_language_spokens OWNER TO postgres;
+
+--
+-- Name: doctor_language_spokens_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_language_spokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_language_spokens_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_language_spokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_language_spokens_id_seq OWNED BY public.doctor_language_spokens.id;
+
+
+--
+-- Name: doctor_patient_appointments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_patient_appointments (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    doctor_id integer NOT NULL,
+    booking_id character varying(255),
+    booking_time_slot character varying(255),
+    booking_status character varying(255),
+    booking_date character varying(255),
+    reason_cancel character varying(255),
+    reason_reschedule character varying(255),
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    previous_booking_time_slot character varying(255),
+    previous_booking_date character varying(255),
+    member_id character varying(255),
+    hospital_id bigint,
+    department_id bigint,
+    followup_details text,
+    followup_date timestamp(0) without time zone,
+    agent_id character varying(255),
+    callcenter_id integer
+);
+
+
+ALTER TABLE public.doctor_patient_appointments OWNER TO postgres;
+
+--
+-- Name: doctor_patient_appointments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_patient_appointments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_patient_appointments_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_patient_appointments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_patient_appointments_id_seq OWNED BY public.doctor_patient_appointments.id;
+
+
+--
+-- Name: doctor_qualifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_qualifications (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    qualification_id integer NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_qualifications OWNER TO postgres;
+
+--
+-- Name: doctor_qualifications_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_qualifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_qualifications_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_qualifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_qualifications_id_seq OWNED BY public.doctor_qualifications.id;
+
+
+--
+-- Name: doctor_reschedule_appointments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_reschedule_appointments (
+    id bigint NOT NULL,
+    patient_appointment_id integer NOT NULL,
+    doctor_id integer NOT NULL,
+    reschedule_patient_booking_date character varying(255),
+    reschedule_patient_time_slot character varying(255),
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    reason text
+);
+
+
+ALTER TABLE public.doctor_reschedule_appointments OWNER TO postgres;
+
+--
+-- Name: doctor_reschedule_appointments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_reschedule_appointments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_reschedule_appointments_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_reschedule_appointments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_reschedule_appointments_id_seq OWNED BY public.doctor_reschedule_appointments.id;
+
+
+--
+-- Name: doctor_specialities; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_specialities (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    speciality_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_specialities OWNER TO postgres;
+
+--
+-- Name: doctor_specialities_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_specialities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_specialities_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_specialities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_specialities_id_seq OWNED BY public.doctor_specialities.id;
+
+
+--
+-- Name: doctor_temporary_unavailables; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctor_temporary_unavailables (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    unavailable_timeslot character varying(255) NOT NULL,
+    unavailable_date date NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.doctor_temporary_unavailables OWNER TO postgres;
+
+--
+-- Name: doctor_temporary_unavailables_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctor_temporary_unavailables_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctor_temporary_unavailables_id_seq OWNER TO postgres;
+
+--
+-- Name: doctor_temporary_unavailables_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctor_temporary_unavailables_id_seq OWNED BY public.doctor_temporary_unavailables.id;
+
+
+--
+-- Name: doctors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.doctors (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    hospital_id integer DEFAULT 0 NOT NULL,
+    year_of_experiance character varying(255),
+    license_no character varying(255),
+    license_type_id json DEFAULT '0'::json,
+    country_id integer DEFAULT 0 NOT NULL,
+    appointment_dial_code character varying(255),
+    appointment_phone character varying(255),
+    country_of_orgin integer DEFAULT 0,
+    gender integer DEFAULT 1 NOT NULL,
+    insurence_id integer DEFAULT 0,
+    sub_insurence_id integer DEFAULT 0,
+    profile_desciription text,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    department_id bigint,
+    license_no_doh character varying(255),
+    license_no_moh character varying(255),
+    agent_id integer,
+    callcenter_id integer
+);
+
+
+ALTER TABLE public.doctors OWNER TO postgres;
+
+--
+-- Name: COLUMN doctors.gender; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.doctors.gender IS '1-male,2-female';
+
+
+--
+-- Name: doctors_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.doctors_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.doctors_id_seq OWNER TO postgres;
+
+--
+-- Name: doctors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.doctors_id_seq OWNED BY public.doctors.id;
+
+
+--
+-- Name: emirates; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.emirates (
+    id bigint NOT NULL,
+    name_en character varying(255) NOT NULL,
+    name_ar character varying(255) NOT NULL,
+    active character varying(255) DEFAULT '1'::character varying NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    country_id integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.emirates OWNER TO postgres;
+
+--
+-- Name: emirates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.emirates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.emirates_id_seq OWNER TO postgres;
+
+--
+-- Name: emirates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.emirates_id_seq OWNED BY public.emirates.id;
+
+
+--
+-- Name: failed_jobs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.failed_jobs (
+    id bigint NOT NULL,
+    uuid character varying(255) NOT NULL,
+    connection text NOT NULL,
+    queue text NOT NULL,
+    payload text NOT NULL,
+    exception text NOT NULL,
+    failed_at timestamp(0) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public.failed_jobs OWNER TO postgres;
+
+--
+-- Name: failed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.failed_jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.failed_jobs_id_seq OWNER TO postgres;
+
+--
+-- Name: failed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.failed_jobs_id_seq OWNED BY public.failed_jobs.id;
+
+
+--
+-- Name: faq; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.faq (
+    id bigint NOT NULL,
+    title character varying(600),
+    description text,
+    created_by integer DEFAULT 0 NOT NULL,
+    updated_by integer DEFAULT 0 NOT NULL,
+    active integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.faq OWNER TO postgres;
+
+--
+-- Name: faq_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.faq_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.faq_id_seq OWNER TO postgres;
+
+--
+-- Name: faq_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.faq_id_seq OWNED BY public.faq.id;
+
+
+--
+-- Name: help; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.help (
+    id bigint NOT NULL,
+    title character varying(600),
+    description text,
+    created_by integer DEFAULT 0 NOT NULL,
+    updated_by integer DEFAULT 0 NOT NULL,
+    active integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.help OWNER TO postgres;
+
+--
+-- Name: help_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.help_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.help_id_seq OWNER TO postgres;
+
+--
+-- Name: help_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.help_id_seq OWNED BY public.help.id;
+
+
+--
+-- Name: hospital_doctor_feedback; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_doctor_feedback (
+    id bigint NOT NULL,
+    doctor_id integer NOT NULL,
+    hospital_id integer NOT NULL,
+    user_id integer NOT NULL,
+    rating integer NOT NULL,
+    feeback_message character varying(255),
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    appointment_id integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.hospital_doctor_feedback OWNER TO postgres;
+
+--
+-- Name: hospital_doctor_feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_doctor_feedback_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_doctor_feedback_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_doctor_feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_doctor_feedback_id_seq OWNED BY public.hospital_doctor_feedback.id;
+
+
+--
+-- Name: hospital_images; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_images (
+    id bigint NOT NULL,
+    hospital_id integer NOT NULL,
+    image_name text NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.hospital_images OWNER TO postgres;
+
+--
+-- Name: hospital_images_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_images_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_images_id_seq OWNED BY public.hospital_images.id;
+
+
+--
+-- Name: hospital_insurance_policies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_insurance_policies (
+    id bigint NOT NULL,
+    hospital_id bigint NOT NULL,
+    insurance_id bigint NOT NULL,
+    sub_insurance_id bigint,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.hospital_insurance_policies OWNER TO postgres;
+
+--
+-- Name: hospital_insurance_policies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_insurance_policies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_insurance_policies_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_insurance_policies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_insurance_policies_id_seq OWNED BY public.hospital_insurance_policies.id;
+
+
+--
+-- Name: hospital_insurances; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_insurances (
+    id bigint NOT NULL,
+    hospital_id bigint NOT NULL,
+    insurance_id bigint NOT NULL,
+    sub_insurance_id character varying(255),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.hospital_insurances OWNER TO postgres;
+
+--
+-- Name: hospital_insurances_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_insurances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_insurances_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_insurances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_insurances_id_seq OWNED BY public.hospital_insurances.id;
+
+
+--
+-- Name: hospital_locations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_locations (
+    id bigint NOT NULL,
+    hospital_id integer NOT NULL,
+    location text NOT NULL,
+    latitude character varying(255),
+    longitude character varying(255),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.hospital_locations OWNER TO postgres;
+
+--
+-- Name: hospital_locations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_locations_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_locations_id_seq OWNED BY public.hospital_locations.id;
+
+
+--
+-- Name: hospital_services; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_services (
+    id bigint NOT NULL,
+    hospital_id integer NOT NULL,
+    service_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.hospital_services OWNER TO postgres;
+
+--
+-- Name: hospital_services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_services_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_services_id_seq OWNED BY public.hospital_services.id;
+
+
+--
+-- Name: hospital_specialities; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospital_specialities (
+    id bigint NOT NULL,
+    hospital_id integer NOT NULL,
+    speciality_id integer NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.hospital_specialities OWNER TO postgres;
+
+--
+-- Name: hospital_specialities_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospital_specialities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospital_specialities_id_seq OWNER TO postgres;
+
+--
+-- Name: hospital_specialities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospital_specialities_id_seq OWNED BY public.hospital_specialities.id;
+
+
+--
+-- Name: hospitals; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.hospitals (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    country_id integer DEFAULT 0 NOT NULL,
+    emirate_id integer DEFAULT 0 NOT NULL,
+    area_id integer DEFAULT 0 NOT NULL,
+    address text,
+    website character varying(255),
+    profile_description text,
+    trade_licenece text,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    name_en character varying(255) NOT NULL,
+    name_ar character varying(255),
+    appointment_dial_code character varying(255),
+    appointment_phone character varying(255),
+    profile_description_ar text,
+    latitude character varying(600),
+    longitude character varying(600),
+    txt_location character varying(600),
+    agent_id integer,
+    callcenter_id integer,
+    type integer DEFAULT 10 NOT NULL
+);
+
+
+ALTER TABLE public.hospitals OWNER TO postgres;
+
+--
+-- Name: hospitals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hospitals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hospitals_id_seq OWNER TO postgres;
+
+--
+-- Name: hospitals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.hospitals_id_seq OWNED BY public.hospitals.id;
+
+
+--
+-- Name: insurence_policies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.insurence_policies (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.insurence_policies OWNER TO postgres;
+
+--
+-- Name: insurence_policies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.insurence_policies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.insurence_policies_id_seq OWNER TO postgres;
+
+--
+-- Name: insurence_policies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.insurence_policies_id_seq OWNED BY public.insurence_policies.id;
+
+
+--
+-- Name: job_batches; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.job_batches (
+    id character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    total_jobs integer NOT NULL,
+    pending_jobs integer NOT NULL,
+    failed_jobs integer NOT NULL,
+    failed_job_ids text NOT NULL,
+    options text,
+    cancelled_at integer,
+    created_at integer NOT NULL,
+    finished_at integer
+);
+
+
+ALTER TABLE public.job_batches OWNER TO postgres;
+
+--
+-- Name: jobs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jobs (
+    id bigint NOT NULL,
+    queue character varying(255) NOT NULL,
+    payload text NOT NULL,
+    attempts smallint NOT NULL,
+    reserved_at integer,
+    available_at integer NOT NULL,
+    created_at integer NOT NULL
+);
+
+
+ALTER TABLE public.jobs OWNER TO postgres;
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jobs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jobs_id_seq OWNER TO postgres;
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jobs_id_seq OWNED BY public.jobs.id;
+
+
+--
+-- Name: languages; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.languages (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.languages OWNER TO postgres;
+
+--
+-- Name: languages_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.languages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.languages_id_seq OWNER TO postgres;
+
+--
+-- Name: languages_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.languages_id_seq OWNED BY public.languages.id;
+
+
+--
+-- Name: licence_types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.licence_types (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.licence_types OWNER TO postgres;
+
+--
+-- Name: licence_types_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.licence_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.licence_types_id_seq OWNER TO postgres;
+
+--
+-- Name: licence_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.licence_types_id_seq OWNED BY public.licence_types.id;
+
+
+--
+-- Name: locations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.locations (
+    id bigint NOT NULL,
+    txt_location character varying(600),
+    latitude character varying(600),
+    longitude character varying(600),
+    user_id character varying(600),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.locations OWNER TO postgres;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.locations_id_seq OWNER TO postgres;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
+
+
+--
+-- Name: medical_conditions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.medical_conditions (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.medical_conditions OWNER TO postgres;
+
+--
+-- Name: medical_conditions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.medical_conditions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.medical_conditions_id_seq OWNER TO postgres;
+
+--
+-- Name: medical_conditions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.medical_conditions_id_seq OWNED BY public.medical_conditions.id;
+
+
+--
+-- Name: members; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.members (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    full_name character varying(255) NOT NULL,
+    gender integer DEFAULT 0 NOT NULL,
+    age integer DEFAULT 0 NOT NULL,
+    insurence_id integer,
+    sub_insurence_id integer,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    full_name_ar character varying(255),
+    user_image text
+);
+
+
+ALTER TABLE public.members OWNER TO postgres;
+
+--
+-- Name: COLUMN members.gender; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.members.gender IS '1-Male,2-FEmale,3-Others';
+
+
+--
+-- Name: members_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.members_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.members_id_seq OWNER TO postgres;
+
+--
+-- Name: members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.members_id_seq OWNED BY public.members.id;
+
+
+--
+-- Name: migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.migrations (
+    id integer NOT NULL,
+    migration character varying(255) NOT NULL,
+    batch integer NOT NULL
+);
+
+
+ALTER TABLE public.migrations OWNER TO postgres;
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.migrations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.migrations_id_seq OWNER TO postgres;
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.migrations_id_seq OWNED BY public.migrations.id;
+
+
+--
+-- Name: mydrworld_service_feedback; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.mydrworld_service_feedback (
+    id bigint NOT NULL,
+    user_id integer NOT NULL,
+    rating integer NOT NULL,
+    feeback_message character varying(255),
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.mydrworld_service_feedback OWNER TO postgres;
+
+--
+-- Name: mydrworld_service_feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.mydrworld_service_feedback_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.mydrworld_service_feedback_id_seq OWNER TO postgres;
+
+--
+-- Name: mydrworld_service_feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.mydrworld_service_feedback_id_seq OWNED BY public.mydrworld_service_feedback.id;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.orders (
+    id bigint NOT NULL,
+    ticket_number character varying(255) NOT NULL,
+    user_id integer NOT NULL,
+    product_id integer NOT NULL,
+    drow_date date NOT NULL,
+    price double precision NOT NULL,
+    is_winner integer DEFAULT 0 NOT NULL,
+    product_type character varying(255) DEFAULT 'daily'::character varying NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.orders OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.orders_id_seq OWNER TO postgres;
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.orders_id_seq OWNED BY public.orders.id;
+
+
+--
+-- Name: personal_access_tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.personal_access_tokens (
+    id bigint NOT NULL,
+    tokenable_type character varying(255) NOT NULL,
+    tokenable_id bigint NOT NULL,
+    name character varying(255) NOT NULL,
+    token character varying(64) NOT NULL,
+    abilities text,
+    last_used_at timestamp(0) without time zone,
+    expires_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.personal_access_tokens OWNER TO postgres;
+
+--
+-- Name: personal_access_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.personal_access_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.personal_access_tokens_id_seq OWNER TO postgres;
+
+--
+-- Name: personal_access_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.personal_access_tokens_id_seq OWNED BY public.personal_access_tokens.id;
+
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    product_code character varying(255) NOT NULL,
+    product_name character varying(255) NOT NULL,
+    product_type character varying(255) DEFAULT 'daily'::character varying NOT NULL,
+    price double precision DEFAULT '0'::double precision NOT NULL,
+    description text,
+    file_name text,
+    drow_date integer,
+    drow_time time(0) without time zone,
+    product_status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    updated_by integer DEFAULT 0 NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- Name: COLUMN products.product_type; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.products.product_type IS 'daily,monthly';
+
+
+--
+-- Name: COLUMN products.product_status; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.products.product_status IS '1-active,0-inactive';
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_id_seq OWNER TO postgres;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- Name: profile_bios; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.profile_bios (
+    id bigint NOT NULL,
+    value character varying(900),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.profile_bios OWNER TO postgres;
+
+--
+-- Name: profile_bios_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.profile_bios_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.profile_bios_id_seq OWNER TO postgres;
+
+--
+-- Name: profile_bios_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.profile_bios_id_seq OWNED BY public.profile_bios.id;
+
+
+--
+-- Name: qualifications; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.qualifications (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.qualifications OWNER TO postgres;
+
+--
+-- Name: qualifications_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.qualifications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.qualifications_id_seq OWNER TO postgres;
+
+--
+-- Name: qualifications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.qualifications_id_seq OWNED BY public.qualifications.id;
+
+
+--
+-- Name: SEQUENCE qualifications_id_seq; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON SEQUENCE public.qualifications_id_seq IS '<br />
+<b>Deprecated</b>:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/home/dxbitprojects/public_html/phppgadmin/sequences.php</b> on line <b>630</b><br />
+';
+
+
+--
+-- Name: role_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.role_permissions (
+    id bigint NOT NULL,
+    user_role_id_fk integer NOT NULL,
+    module_key character varying(255) NOT NULL,
+    permissions text,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.role_permissions OWNER TO postgres;
+
+--
+-- Name: role_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.role_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.role_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: role_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.role_permissions_id_seq OWNED BY public.role_permissions.id;
+
+
+--
+-- Name: roles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.roles (
+    id bigint NOT NULL,
+    role character varying(255) NOT NULL,
+    status smallint DEFAULT '0'::smallint,
+    is_admin_role smallint DEFAULT '0'::smallint,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.roles OWNER TO postgres;
+
+--
+-- Name: COLUMN roles.status; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.roles.status IS '0=inactive, 1=active';
+
+
+--
+-- Name: COLUMN roles.is_admin_role; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.roles.is_admin_role IS '0=not admin role, 1=admin role';
+
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.roles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.roles_id_seq OWNER TO postgres;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
+
+
+--
+-- Name: services; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.services (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.services OWNER TO postgres;
+
+--
+-- Name: services_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.services_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.services_id_seq OWNER TO postgres;
+
+--
+-- Name: services_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.services_id_seq OWNED BY public.services.id;
+
+
+--
+-- Name: settings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.settings (
+    id bigint NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    doctor_search_radius double precision DEFAULT '50'::double precision NOT NULL,
+    instant_appoitment_number character varying(255) DEFAULT '971 50 50 00 000'::character varying
+);
+
+
+ALTER TABLE public.settings OWNER TO postgres;
+
+--
+-- Name: settings_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.settings_id_seq OWNER TO postgres;
+
+--
+-- Name: settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.settings_id_seq OWNED BY public.settings.id;
+
+
+--
+-- Name: special_intrests; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.special_intrests (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.special_intrests OWNER TO postgres;
+
+--
+-- Name: special_intrests_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.special_intrests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.special_intrests_id_seq OWNER TO postgres;
+
+--
+-- Name: special_intrests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.special_intrests_id_seq OWNED BY public.special_intrests.id;
+
+
+--
+-- Name: SEQUENCE special_intrests_id_seq; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON SEQUENCE public.special_intrests_id_seq IS '<br />
+<b>Deprecated</b>:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/home/dxbitprojects/public_html/phppgadmin/sequences.php</b> on line <b>630</b><br />
+';
+
+
+--
+-- Name: specialties; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.specialties (
+    id bigint NOT NULL,
+    name_en character varying(255) NOT NULL,
+    name_ar character varying(255) NOT NULL,
+    active character varying(255) DEFAULT '1'::character varying NOT NULL,
+    deleted_at timestamp(0) without time zone,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.specialties OWNER TO postgres;
+
+--
+-- Name: specialties_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.specialties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.specialties_id_seq OWNER TO postgres;
+
+--
+-- Name: specialties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.specialties_id_seq OWNED BY public.specialties.id;
+
+
+--
+-- Name: SEQUENCE specialties_id_seq; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON SEQUENCE public.specialties_id_seq IS '<br />
+<b>Deprecated</b>:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in <b>/home/dxbitprojects/public_html/phppgadmin/sequences.php</b> on line <b>630</b><br />
+';
+
+
+--
+-- Name: sub_insurence_policies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.sub_insurence_policies (
+    id bigint NOT NULL,
+    insurence_id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    title_ar character varying(255),
+    status integer DEFAULT 1 NOT NULL,
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.sub_insurence_policies OWNER TO postgres;
+
+--
+-- Name: sub_insurence_policies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.sub_insurence_policies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sub_insurence_policies_id_seq OWNER TO postgres;
+
+--
+-- Name: sub_insurence_policies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.sub_insurence_policies_id_seq OWNED BY public.sub_insurence_policies.id;
+
+
+--
+-- Name: temp_users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.temp_users (
+    id bigint NOT NULL,
+    user_image text,
+    first_name character varying(255) NOT NULL,
+    last_name character varying(255) NOT NULL,
+    gender integer,
+    dob date,
+    email character varying(255),
+    dial_code character varying(255) NOT NULL,
+    phone character varying(255) NOT NULL,
+    whatsap_dial_code character varying(255),
+    whatsap_phone character varying(255),
+    insurence_id integer DEFAULT 0 NOT NULL,
+    sub_insurence_id integer DEFAULT 0 NOT NULL,
+    phone_otp character varying(255),
+    email_otp character varying(255),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone
+);
+
+
+ALTER TABLE public.temp_users OWNER TO postgres;
+
+--
+-- Name: COLUMN temp_users.gender; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.temp_users.gender IS '1-Male,2-Female,3-Others';
+
+
+--
+-- Name: temp_users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.temp_users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.temp_users_id_seq OWNER TO postgres;
+
+--
+-- Name: temp_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.temp_users_id_seq OWNED BY public.temp_users.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    name character varying(255),
+    email character varying(255),
+    dial_code character varying(255),
+    phone character varying(255),
+    phone_verified integer DEFAULT 0 NOT NULL,
+    password character varying(255) NOT NULL,
+    email_verified_at timestamp(0) without time zone,
+    role character varying(255),
+    verified integer DEFAULT 0 NOT NULL,
+    user_type_id integer,
+    first_name character varying(255),
+    last_name character varying(255),
+    user_image character varying(255),
+    user_phone_otp character varying(255),
+    remember_token character varying(100),
+    created_at timestamp(0) without time zone,
+    updated_at timestamp(0) without time zone,
+    deleted integer DEFAULT 0 NOT NULL,
+    role_id integer DEFAULT 0 NOT NULL,
+    active integer DEFAULT 0 NOT NULL,
+    user_code character varying(255),
+    created_by integer DEFAULT 0 NOT NULL,
+    last_updated_by integer DEFAULT 0 NOT NULL,
+    access_token text,
+    user_device_token character varying(255),
+    firebase_user_key character varying(255),
+    device_type character varying(255),
+    gender integer,
+    dob date,
+    whatsap_dial_code character varying(255),
+    whatsap_phone character varying(255),
+    insurence_id integer DEFAULT 0 NOT NULL,
+    sub_insurence_id integer DEFAULT 0 NOT NULL,
+    user_email_otp character varying(100),
+    is_social integer DEFAULT 0 NOT NULL,
+    face_login_id character varying(600)
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: COLUMN users.gender; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.users.gender IS '1-Male,2-Female,3-Others';
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: agent_user_details id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agent_user_details ALTER COLUMN id SET DEFAULT nextval('public.agent_user_details_id_seq'::regclass);
+
+
+--
+-- Name: appointments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments ALTER COLUMN id SET DEFAULT nextval('public.appointments_id_seq'::regclass);
+
+
+--
+-- Name: areas id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.areas ALTER COLUMN id SET DEFAULT nextval('public.areas_id_seq'::regclass);
+
+
+--
+-- Name: articles id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.articles ALTER COLUMN id SET DEFAULT nextval('public.articles_id_seq'::regclass);
+
+
+--
+-- Name: callcenter_user_details id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.callcenter_user_details ALTER COLUMN id SET DEFAULT nextval('public.callcenter_user_details_id_seq'::regclass);
+
+
+--
+-- Name: contact_us id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contact_us ALTER COLUMN id SET DEFAULT nextval('public.contact_us_id_seq'::regclass);
+
+
+--
+-- Name: contact_us_settings id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contact_us_settings ALTER COLUMN id SET DEFAULT nextval('public.contact_us_settings_id_seq'::regclass);
+
+
+--
+-- Name: country id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country ALTER COLUMN id SET DEFAULT nextval('public.country_id_seq'::regclass);
+
+
+--
+-- Name: country_of_origins id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country_of_origins ALTER COLUMN id SET DEFAULT nextval('public.country_of_origins_id_seq'::regclass);
+
+
+--
+-- Name: department_hospital id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_hospital ALTER COLUMN id SET DEFAULT nextval('public.department_hospital_id_seq'::regclass);
+
+
+--
+-- Name: departments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.departments ALTER COLUMN id SET DEFAULT nextval('public.departments_id_seq'::regclass);
+
+
+--
+-- Name: doctor_availabilities id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_availabilities ALTER COLUMN id SET DEFAULT nextval('public.doctor_availabilities_id_seq'::regclass);
+
+
+--
+-- Name: doctor_holidays id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_holidays ALTER COLUMN id SET DEFAULT nextval('public.doctor_holidays_id_seq'::regclass);
+
+
+--
+-- Name: doctor_instant_appointments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_instant_appointments ALTER COLUMN id SET DEFAULT nextval('public.doctor_instant_appointments_id_seq'::regclass);
+
+
+--
+-- Name: doctor_intrests id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_intrests ALTER COLUMN id SET DEFAULT nextval('public.doctor_intrests_id_seq'::regclass);
+
+
+--
+-- Name: doctor_language_spokens id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_language_spokens ALTER COLUMN id SET DEFAULT nextval('public.doctor_language_spokens_id_seq'::regclass);
+
+
+--
+-- Name: doctor_patient_appointments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_patient_appointments ALTER COLUMN id SET DEFAULT nextval('public.doctor_patient_appointments_id_seq'::regclass);
+
+
+--
+-- Name: doctor_qualifications id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_qualifications ALTER COLUMN id SET DEFAULT nextval('public.doctor_qualifications_id_seq'::regclass);
+
+
+--
+-- Name: doctor_reschedule_appointments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_reschedule_appointments ALTER COLUMN id SET DEFAULT nextval('public.doctor_reschedule_appointments_id_seq'::regclass);
+
+
+--
+-- Name: doctor_specialities id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_specialities ALTER COLUMN id SET DEFAULT nextval('public.doctor_specialities_id_seq'::regclass);
+
+
+--
+-- Name: doctor_temporary_unavailables id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_temporary_unavailables ALTER COLUMN id SET DEFAULT nextval('public.doctor_temporary_unavailables_id_seq'::regclass);
+
+
+--
+-- Name: doctors id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctors ALTER COLUMN id SET DEFAULT nextval('public.doctors_id_seq'::regclass);
+
+
+--
+-- Name: emirates id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.emirates ALTER COLUMN id SET DEFAULT nextval('public.emirates_id_seq'::regclass);
+
+
+--
+-- Name: failed_jobs id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.failed_jobs ALTER COLUMN id SET DEFAULT nextval('public.failed_jobs_id_seq'::regclass);
+
+
+--
+-- Name: faq id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.faq ALTER COLUMN id SET DEFAULT nextval('public.faq_id_seq'::regclass);
+
+
+--
+-- Name: help id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.help ALTER COLUMN id SET DEFAULT nextval('public.help_id_seq'::regclass);
+
+
+--
+-- Name: hospital_doctor_feedback id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_doctor_feedback ALTER COLUMN id SET DEFAULT nextval('public.hospital_doctor_feedback_id_seq'::regclass);
+
+
+--
+-- Name: hospital_images id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_images ALTER COLUMN id SET DEFAULT nextval('public.hospital_images_id_seq'::regclass);
+
+
+--
+-- Name: hospital_insurance_policies id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurance_policies ALTER COLUMN id SET DEFAULT nextval('public.hospital_insurance_policies_id_seq'::regclass);
+
+
+--
+-- Name: hospital_insurances id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurances ALTER COLUMN id SET DEFAULT nextval('public.hospital_insurances_id_seq'::regclass);
+
+
+--
+-- Name: hospital_locations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_locations ALTER COLUMN id SET DEFAULT nextval('public.hospital_locations_id_seq'::regclass);
+
+
+--
+-- Name: hospital_services id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_services ALTER COLUMN id SET DEFAULT nextval('public.hospital_services_id_seq'::regclass);
+
+
+--
+-- Name: hospital_specialities id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_specialities ALTER COLUMN id SET DEFAULT nextval('public.hospital_specialities_id_seq'::regclass);
+
+
+--
+-- Name: hospitals id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospitals ALTER COLUMN id SET DEFAULT nextval('public.hospitals_id_seq'::regclass);
+
+
+--
+-- Name: insurence_policies id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.insurence_policies ALTER COLUMN id SET DEFAULT nextval('public.insurence_policies_id_seq'::regclass);
+
+
+--
+-- Name: jobs id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jobs ALTER COLUMN id SET DEFAULT nextval('public.jobs_id_seq'::regclass);
+
+
+--
+-- Name: languages id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.languages ALTER COLUMN id SET DEFAULT nextval('public.languages_id_seq'::regclass);
+
+
+--
+-- Name: licence_types id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.licence_types ALTER COLUMN id SET DEFAULT nextval('public.licence_types_id_seq'::regclass);
+
+
+--
+-- Name: locations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
+
+
+--
+-- Name: medical_conditions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medical_conditions ALTER COLUMN id SET DEFAULT nextval('public.medical_conditions_id_seq'::regclass);
+
+
+--
+-- Name: members id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.members ALTER COLUMN id SET DEFAULT nextval('public.members_id_seq'::regclass);
+
+
+--
+-- Name: migrations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.migrations ALTER COLUMN id SET DEFAULT nextval('public.migrations_id_seq'::regclass);
+
+
+--
+-- Name: mydrworld_service_feedback id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mydrworld_service_feedback ALTER COLUMN id SET DEFAULT nextval('public.mydrworld_service_feedback_id_seq'::regclass);
+
+
+--
+-- Name: orders id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN id SET DEFAULT nextval('public.orders_id_seq'::regclass);
+
+
+--
+-- Name: personal_access_tokens id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personal_access_tokens ALTER COLUMN id SET DEFAULT nextval('public.personal_access_tokens_id_seq'::regclass);
+
+
+--
+-- Name: products id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: profile_bios id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profile_bios ALTER COLUMN id SET DEFAULT nextval('public.profile_bios_id_seq'::regclass);
+
+
+--
+-- Name: qualifications id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.qualifications ALTER COLUMN id SET DEFAULT nextval('public.qualifications_id_seq'::regclass);
+
+
+--
+-- Name: role_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permissions ALTER COLUMN id SET DEFAULT nextval('public.role_permissions_id_seq'::regclass);
+
+
+--
+-- Name: roles id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_id_seq'::regclass);
+
+
+--
+-- Name: services id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.services ALTER COLUMN id SET DEFAULT nextval('public.services_id_seq'::regclass);
+
+
+--
+-- Name: settings id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.settings ALTER COLUMN id SET DEFAULT nextval('public.settings_id_seq'::regclass);
+
+
+--
+-- Name: special_intrests id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.special_intrests ALTER COLUMN id SET DEFAULT nextval('public.special_intrests_id_seq'::regclass);
+
+
+--
+-- Name: specialties id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.specialties ALTER COLUMN id SET DEFAULT nextval('public.specialties_id_seq'::regclass);
+
+
+--
+-- Name: sub_insurence_policies id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sub_insurence_policies ALTER COLUMN id SET DEFAULT nextval('public.sub_insurence_policies_id_seq'::regclass);
+
+
+--
+-- Name: temp_users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.temp_users ALTER COLUMN id SET DEFAULT nextval('public.temp_users_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: agent_user_details; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.agent_user_details (id, user_id, gender, country_id, emirate_id, area_id, address, callcenter_id, status) FROM stdin;
+1	13	male	229	2	1	testing	\N	1
+2	29	male	229	2	1	address	\N	1
+4	63	male	229	2	1	al	\N	1
+5	76	female	229	2	1	Al	\N	1
+6	77	female	229	2	1	Al	\N	1
+3	32	male	229	2	2	Downtown, Dubai	\N	1
+7	137	male	229	2	1	Dubai	1	1
+8	167	female	229	8	75	dubai	8	1
+9	168	female	229	8	75	3	\N	1
+\.
+
+
+--
+-- Data for Name: appointments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.appointments (id, appointment_id, booking_date, time_slot, booking_status, hospital_id, patient_id, doctor_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: areas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.areas (id, name_en, name_ar, active, deleted_at, created_at, updated_at, country_id, emirate_id) FROM stdin;
+1	JLT	أبراج بحيرات جميرا	1	\N	2024-05-24 06:49:42	2024-05-24 06:49:42	229	2
+2	Marina	مارينا	1	\N	2024-05-24 06:50:12	2024-05-24 06:50:12	229	2
+3	Arabian Ranches	المرابع العربية	1	\N	2024-05-24 06:50:39	2024-05-24 06:50:39	229	2
+4	Musaffa	mall	1	\N	2024-06-28 04:47:51	2024-07-02 04:59:31	229	3
+5	Al Reem Island	Al Reem Island	1	\N	2024-07-05 10:04:49	2024-07-05 10:04:49	229	3
+6	Air Port Road	Air Port Road	1	\N	2024-07-06 03:33:18	2024-07-06 03:33:18	229	3
+7	Al Ain	Al Ain	1	\N	2024-07-06 03:34:04	2024-07-06 03:34:04	229	3
+8	Al Murur	Al Murur	1	\N	2024-07-06 06:49:48	2024-07-06 06:49:48	229	3
+9	Al Reem	Al Reem	1	\N	2024-07-06 06:50:08	2024-07-06 06:50:08	229	3
+10	Al Ruwais	Al Ruwais	1	\N	2024-07-06 06:50:27	2024-07-06 06:50:27	229	3
+11	Al Shamakh	Al Shamakh	1	\N	2024-07-06 06:51:21	2024-07-06 06:51:21	229	3
+12	Al Wahda	Al Wahda	1	\N	2024-07-06 06:51:40	2024-07-06 06:51:40	229	3
+13	Al Zahiya	Al Zahiya	1	\N	2024-07-06 06:52:30	2024-07-06 06:52:30	229	3
+14	Baniyas	Baniyas	1	\N	2024-07-06 06:52:45	2024-07-06 06:52:45	229	3
+15	Bawadi	Bawadi	1	\N	2024-07-06 06:53:03	2024-07-06 06:53:03	229	3
+16	Guwaitat	Guwaitat	1	\N	2024-07-06 07:03:25	2024-07-06 07:03:25	229	3
+17	Hili	Hili	1	\N	2024-07-06 07:03:41	2024-07-06 07:03:41	229	3
+18	Ind Area	Ind Area	1	\N	2024-07-06 07:03:55	2024-07-06 07:03:55	229	3
+19	Jabl Al Hafees	Jabl Al Hafees	1	\N	2024-07-06 07:04:13	2024-07-06 07:04:13	229	3
+20	Jawazat Road	Jawazat Road	1	\N	2024-07-06 07:04:30	2024-07-06 07:04:30	229	3
+21	Khaifa City	Khaifa City	1	\N	2024-07-06 07:04:44	2024-07-06 07:04:44	229	3
+22	Khaladiya	Khaladiya	1	\N	2024-07-06 07:04:58	2024-07-06 07:04:58	229	3
+23	Khalifa City	Khalifa City	1	\N	2024-07-06 07:05:17	2024-07-06 07:05:17	229	3
+24	Mbz	Mbz	1	\N	2024-07-06 07:05:31	2024-07-06 07:05:31	229	3
+25	Reem Island	Reem Island	1	\N	2024-07-06 07:05:44	2024-07-06 07:05:44	229	3
+26	Shk Zaid City	Shk Zaid City	1	\N	2024-07-06 07:05:59	2024-07-06 07:05:59	229	3
+27	Suwaihan	Suwaihan	1	\N	2024-07-06 07:06:13	2024-07-06 07:06:13	229	3
+28	Tarif	Tarif	1	\N	2024-07-06 07:06:25	2024-07-06 07:06:25	229	3
+29	Jaraf	Jaraf	1	\N	2024-07-06 07:10:28	2024-07-06 07:10:28	229	4
+30	Hamidiya	Hamidiya	1	\N	2024-07-06 07:10:48	2024-07-06 07:10:48	229	4
+31	Ind Area	Ind Area	1	\N	2024-07-06 07:11:00	2024-07-06 07:11:00	229	4
+32	Nuaimiya	Nuaimiya	1	\N	2024-07-06 07:11:14	2024-07-06 07:11:14	229	4
+33	Rashdiya	Rashdiya	1	\N	2024-07-06 07:11:29	2024-07-06 07:11:29	229	4
+34	Palm Jumaira	Palm Jumaira	1	\N	2024-07-06 07:12:10	2024-07-06 07:12:10	229	2
+35	Qusais - 1	Qusais - 1	1	\N	2024-07-06 07:12:36	2024-07-06 07:12:36	229	2
+37	Qusais - 4	Qusais - 4	1	\N	2024-07-06 07:14:09	2024-07-06 07:14:09	229	2
+38	Rashadiya	Rashadiya	1	\N	2024-07-06 07:14:21	2024-07-06 07:14:21	229	2
+39	Safa	Safa	1	\N	2024-07-06 07:14:35	2024-07-06 07:14:35	229	2
+40	Satwa	Satwa	1	\N	2024-07-06 07:14:46	2024-07-06 07:14:46	229	2
+41	Shk.Zayed Road	Shk.Zayed Road	1	\N	2024-07-06 07:15:00	2024-07-06 07:15:00	229	2
+42	Um Hureir	Um Hureir	1	\N	2024-07-06 07:15:22	2024-07-06 07:15:22	229	2
+43	Um Ramool	Um Ramool	1	\N	2024-07-06 07:15:34	2024-07-06 07:15:34	229	2
+44	Um Sequin	Um Sequin	1	\N	2024-07-06 07:15:46	2024-07-06 07:15:46	229	2
+45	Umm Hurair	Umm Hurair	1	\N	2024-07-06 07:16:07	2024-07-06 07:16:07	229	2
+46	Umm Seqein	Umm Seqein	1	\N	2024-07-06 07:16:22	2024-07-06 07:16:22	229	2
+47	Warsan	Warsan	1	\N	2024-07-06 07:16:35	2024-07-06 07:16:35	229	2
+48	Zabeel	Zabeel	1	\N	2024-07-06 07:16:48	2024-07-06 07:16:48	229	2
+49	Dibba	Dibba	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	5
+50	Fujaira	Fujaira	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	5
+51	Nakheel	Nakheel	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	6
+52	Dait	Dait	1	\N	2024-07-07 07:16:00	2024-07-07 07:16:00	229	6
+53	Dig Dagah	Dig Dagah	1	\N	2024-08-07 07:16:00	2024-08-07 07:16:00	229	6
+54	Kuwati Road	Kuwati Road	1	\N	2024-09-07 07:16:00	2024-09-07 07:16:00	229	6
+55	Shaam	Shaam	1	\N	2024-10-07 07:16:00	2024-10-07 07:16:00	229	6
+56	Dibba	Dibba	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+57	Estiqlal St	Estiqlal St	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+58	Hamariya	Hamariya	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+59	Ind Areas	Ind Areas	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+60	Jamal Abdul Naser St	Jamal Abdul Naser St	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+61	Kalba	Kalba	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+62	Khaladiya	Khaladiya	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+63	Khorfukan	Khorfukan	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+64	King Abdu Aziz St	King Abdu Aziz St	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+65	King Faisal St	King Faisal St	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+66	Madam	Madam	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+67	Mahatha	Mahatha	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+68	Mawella	Mawella	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+69	Nahda-2	Nahda-2	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+70	Rolla	Rolla	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+71	Sajja	Sajja	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+72	University	University	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+73	Zaiha	Zaiha	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00	229	7
+74	Umq	Umq	1	\N	2024-07-06 07:42:41	2024-07-06 07:42:41	229	8
+75	Salma	Salma	1	\N	2024-07-06 07:43:02	2024-07-06 07:43:02	229	8
+36	Qusais - 2	Qusais - 2	1	\N	2024-07-06 07:13:52	2024-07-06 09:46:30	229	2
+76	Oud Mehta	Oud Mehta	1	\N	2024-07-06 09:47:07	2024-07-06 09:47:07	229	2
+77	Naif	Naif	1	\N	2024-07-06 09:47:22	2024-07-06 09:47:22	229	2
+78	Muhasina	Muhasina	1	\N	2024-07-06 09:47:43	2024-07-06 09:47:43	229	2
+79	Barsha 1	Barsha 1	1	\N	2024-07-07 05:36:06	2024-07-07 05:36:06	229	2
+80	Jumeirah	Jumeirah	1	\N	2024-07-07 07:47:28	2024-07-07 07:47:28	229	2
+\.
+
+
+--
+-- Data for Name: articles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.articles (id, title_en, title_ar, status, desc_en, desc_ar, meta_title, meta_keyword, meta_description, created_at, updated_at, type) FROM stdin;
+13	About Us	About Us	1	<p>About Us</p>	<p>About Us</p>	\N	\N	\N	2024-06-29 09:55:32	2024-06-29 09:55:32	5
+14	Terms of use	Terms of use	1	<p>Terms of use</p>	<p>Terms of use</p>	\N	\N	\N	2024-06-29 09:55:42	2024-06-29 09:55:42	5
+1	About Us	About Us	1	<p><strong>About Us</strong><br>Are you looking for a simple solution to get the best medical care for you and your family?</p><p>MyDrWorld is a leading digital platform that showcases many of the &nbsp;best healthcare practitioners and healthcare providers in the UAE. Healthcare is something that cannot be compromised. So, &nbsp;our main aim is to connect &nbsp;people with healthcare providers and expert healthcare professionals to deliver high-quality medical care for all.<br>With our &nbsp;extensive database of doctors/clinics/hospitals, and information about their expertise, we ensure that people have access to the &nbsp;right healthcare at the right time</p><p><strong>Our Vision</strong><br>At MyDrWorld, we strive to revolutionize the delivery of healthcare services across the region. We believe that everyone should have easy access to the best possible healthcare. Our vision is to connect healthcare professionals and society in a seamless and empowering way, driving significant improvements in health outcomes for the entire community.</p><p><strong>Our Mission</strong><br>Our mission is to create a cutting-edge platform that connects the community with healthcare professionals and providers, fostering collaboration, communication, and innovation in the healthcare industry. We're committed to providing the best possible access to healthcare services for our community, while supporting our doctors and healthcare providers to deliver the highest standard of care. We're passionate about providing a platform that enables healthcare professionals to showcase their expertise and excellence, and we're dedicated to empowering them in delivering exceptional healthcare services.</p><p><strong>What we offer</strong><br>MyDrWorld App provides a comprehensive directory with detailed and verified information about doctors, hospitals, and clinics. Through this highly advanced digital platform, people can make online appointments with their preferred doctors/hospitals/clinics based on their insurance, and their location.</p><p>Core Features</p><p>1.&nbsp;&nbsp;&nbsp;&nbsp;Online Appointment Booking 24/7: Users can book doctor appointments online at any time, 24/7, for added convenience.<br>2.&nbsp;&nbsp;&nbsp;&nbsp;Easy Rescheduling and Cancellation: Patients can reschedule or cancel appointments with just a few clicks<br>3.&nbsp;&nbsp;&nbsp;&nbsp;Advanced Filters for Doctor Selection Robust filtering options, including location, specialisation, gender preference, language, insurance .<br>4.&nbsp;&nbsp;&nbsp;&nbsp;Appointment reminders and follow-ups: Automated appointment reminders via email or SMS to minimize no-shows.<br>5.&nbsp;&nbsp;&nbsp;&nbsp;Instant Appointments : Users can secure Instant appointments for immediate consultations within 2 hours<br>6.&nbsp;&nbsp;&nbsp;&nbsp;Comprehensive Doctor Profiles :Doctors can showcase their expertise, qualifications, certifications, and specialization areas.<br>&nbsp;</p>	<p>About Us</p>	\N	\N	\N	2024-06-29 09:45:27	2024-06-29 11:00:19	2
+3	Privacy & Internet Cookies Policy	\N	1	<p><strong>Contact Information</strong><br>MyDrWorld.com may collect and record certain information such as your name, mobile/WhatsApp number, and email ID to protect your account from unauthorized access. We do not collect any information from users entering as guests (collectively referred to as "Personally Identifiable Information" or "PII"). MYDRWORLD.COM also uses web analytics software to track and analyse site traffic for advertising and promotional purposes. These statistics may be published or shared with third parties without including PII.</p><p>Your IP address is automatically assigned by your Internet Service Provider (ISP) and logged in our server files whenever you visit the site, along with the time and pages visited. Collecting IP addresses is standard practice on the internet and is done automatically by many websites.</p><p><strong>Uses of Information</strong><br>The information you provide is used to confirm your booking and to communicate with you in case of any issues. Registration with MyDrWorld.com requires supplying a phone number or other contact information. MyDrWorld.com uses both personally identifiable information and non-personally identifiable information (such as anonymous user usage data, cookies, IP addresses, browser type, clickstream data, etc.) to improve the quality and design of our application, and to develop new features, promotions, functionality, and services. This is done by storing, tracking, analyzing, and processing user preferences and trends, as well as user activity and communications.</p><p><strong>Reports</strong><br>MyDrWorld.com is a service provider platform and does not offer medical or health services. Nothing posted on the platform should be taken as medical, dental, nursing, or other healthcare professional services. For medical records, lab reports, or any other medical documents, please contact your relevant hospital or clinic directly.</p><p><strong>Healthcare Providers</strong><br>Healthcare providers and other third parties who have registered with MyDrWorld.com and entered into a subscription agreement regarding our appointment booking facility are subject to a service agreement with additional provisions on how we use personal data. We recommend reviewing the healthcare provider's privacy policy to understand how they process your personal data.</p><p><strong>Third Party Sites</strong><br>The platform may include links to third-party websites, plug-ins, and applications, including those of healthcare providers. These third-party sites are not owned or controlled by MyDrWorld.com, and we are not responsible for their content.</p><p><strong>Cookies</strong><br>When you visit MyDrWorld.com, our server sends a "cookie" to your computer. Cookies save time by retaining your contact information and can only be read by the server that sent them. They do not deliver viruses. You can accept or decline cookies by modifying your browser settings. Accepting cookies allows you to use all features of MyDrWorld.com without re-entering your information.<br><br><strong>Protection</strong><br>Our website has secure pages for collecting user information, and critical data is stored in encrypted form. We use various technical and management practices to protect the confidentiality, security, and integrity of data stored on our system. Our servers use Secure Sockets Layer (SSL) and encryption technology compatible with Netscape Navigator, Microsoft Internet Explorer, Firefox, Safari, and Chrome.</p><p><strong>Security</strong><br>We employ reasonable organizational, technical, and administrative measures to protect PII under our control. However, no data transmission over the internet or data storage system can be guaranteed to be 100% secure. Please do not send sensitive information via email. If you believe your interaction with us is no longer secure (e.g., if you suspect your account security has been compromised), immediately notify us in accordance with the "Contacting Us" section below. Note that notifying us via physical mail will delay our response.</p><p><strong>Policy Amendment</strong><br>MyDrWorld.com may amend the Privacy Policy and will publish updates on the website periodically.</p><p><strong>Contacting Us</strong><br>All comments and inquiries should be addressed to MyDrWorld.com.</p>	<p>Privacy Policy</p>	\N	\N	\N	2024-06-29 09:46:38	2024-06-30 05:30:16	2
+2	Terms and Conditions	Terms and Conditions	1	<p>This Subscription Agreement (hereinafter “<strong>Agreement</strong>”) is a legal contract between you, (hereinafter referred to as “<strong>Subscriber</strong>”) and MyDrWorld LLC with its principal place of business located at Dubai , UAE (hereinafter referred to as “<strong>MyDrWorld</strong>”), for access to the MyDrWorld Software. BE SURE TO CAREFULLY READ AND UNDERSTAND ALL OF THE RIGHTS AND RESTRICTIONS DESCRIBED IN THIS AGREEMENT BEFORE USING THE MYDRWORLD SOFTWARE. BY USING THE MYDRWORLD SOFTWARE, YOU INDICATE YOUR PERSONAL ACCEPTANCE AND YOUR CONCURRENCE TO BE BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO THE TERMS OF THIS AGREEMENT, PLEASE DO NOT USE THE MYDRWORLD SOFTWARE.</p><p>Subscriber hereby acknowledges that MyDrWorld has designed and developed certain proprietary software defined below as MyDrWorld Software to be used by individuals/establishments looking for patient relationship management, software solutions; and associated hardware(s); and that MyDrWorld intends to make available such MyDrWorld Software, to the Subscriber(s) to enable the Subscriber(s) to upgrade its Outpatient department (OPD) in order to attract and delight patients, facilitate and manage (i) SMS and web based appointment booking system; (ii) doctor schedule and queue management; (iii) actionable patient contact base; and (iv) patient communication system for follow-up visit and alerts in order to improve patient satisfaction (v) improve conversion from out-patient to in-patient (“<strong>Purpose</strong>”). The Subscriber, being a third party / end customer, desires to use the MyDrWorld Software for the Purpose, and not for redistribution.</p><p><strong>1.&nbsp;Definitions</strong></p><p><strong>1.1 “MyDrWorld Software”</strong>&nbsp;shall mean, collectively or individually, the software created/ designed by &nbsp; &nbsp; MyDrWorld identified in&nbsp;Exhibit A&nbsp;of this Agreement that is provided to the Subscriber(s) on a &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; subscription basis for the Purpose, including the Updates (defined below).</p><p><strong>1.2&nbsp;</strong>“<strong>Updates</strong>” shall mean enhancements, bug fixes, updates and new versions made to the MyDrWorld &nbsp; Software by MyDrWorld and provided to the Subscriber by MyDrWorld.</p><p><strong>1.3“Upgrades</strong>” shall mean replacement of the MyDrWorld Software with a newer or better version in &nbsp; &nbsp; &nbsp; order to bring the system up to date or improve the characteristics of the MyDrWorld Software.</p><ol><li><strong>Intellectual property rights.</strong></li></ol><p><strong>&nbsp;2.1 Ownership</strong>. MyDrWorld retains all right, title and interest in and to and ownership of all MyDrWorld Software, to all Updates and all modifications and the intellectual property rights thereto. MyDrWorld does not transfer either the title or the intellectual property rights of the MyDrWorld Software and its subscription services to the Subscriber(s).</p><p><strong>2.2 Preservation of MyDrWorld’s Notices</strong>. The Subscriber agrees not to (and not to allow others to) remove, alter, cover over, or deface MyDrWorld’s proprietary notices which appear in or in connection with the MyDrWorld Software as provided by MyDrWorld to the Subscriber under this Agreement. Additionally, MyDrWorld may include Subscriber’s name and/or logo within its list of customers for general promotional purposes.</p><p><strong>2.3 Subscription to the Subscriber</strong>. Subject to all limitations and restrictions contained herein, MyDrWorld grants to the Subscriber a subscription, software as a service (‘SaaS’), non-exclusive, and non-transferable right to access and operate the object code form of the MyDrWorld Software, as hosted by MyDrWorld (“Use”). Subscriber shall have a limited right and license to Use the MyDrWorld Software solely for its internal purposes, to perform the functions described under&nbsp;Exhibit A&nbsp;for the Purpose. Subscriber shall not allow any website that is not fully owned by the Subscriber to frame, syndicate, distribute, replicate, or copy any portion of the Subscriber’s website that provides direct or indirect access to the MyDrWorld Software. Unless otherwise expressly permitted in this Agreement under&nbsp;Exhibit A, Subscriber shall not permit any subsidiaries, affiliated companies, or third parties to access the MyDrWorld Software. The Subscriber shall be provided with log-in credentials to the MyDrWorld Software by the MyDrWorld representative.</p><p><strong>2.4 Implementation and Training.&nbsp;</strong>MyDrWorld shall initiate the implementation of the MyDrWorld Software for the Subscriber which might include creating the segregated hosting environment and effecting necessary interfaces for the MyDrWorld Software upon mutual agreement between the parties. The start date of the subscription period shall be referred to as the “Commencement Date” which is fifteen (15) from the date of clearance of the payments. Further, the Subscriber shall conduct the necessary training for the Subscriber’s Authorized Users (as defined below) and the administrator of the MyDrWorld Software with respect to the use and operation of all modules or components of MyDrWorld Software (“<strong>Implementation and Training</strong>”). The Subscriber shall ensure the availability of the Authorized Users for the referred training.</p><p><strong>2.5 Free Trial</strong>. MyDrWorld may offer at its discretion, a free trial of the MyDrWorld Software for a specified time period. During such trial period, the Subscriber shall be bound by the terms of this Agreement and any applicable law, regulation and generally accepted practices or guidelines in the relevant jurisdictions. Any data which the Subscriber enters into the MyDrWorld Software, and any customizations made to the MyDrWorld Software by or for the Subscriber, during the Subscriber’s free trial will be permanently lost at the expiry of the specified time period unless the Subscriber Upgrades his/her/its subscription to one of the paid subscription plans. MyDrWorld does not provide any warranty during the trial period.</p><p><strong>2.6 Customization to the MyDrWorld Software</strong>. MyDrWorld has the sole right to modify any feature or customize them at its discretion and there shall be no obligation to honor customization requests of the Subscriber.&nbsp;</p><p><strong>2.7 Functionality Changes</strong>. MyDrWorld reserves the right to add new functionality and modify existing functionality to the MyDrWorld Software as and when it deems fit, and make any such changes available in newer versions of the MyDrWorld Software or native mobile application or all of these at its discretion. The Subscriber will be duly notified upon release of such newer versions and MyDrWorld reserves the right to automatically Upgrade all its users, including the Subscriber, to the latest version of the MyDrWorld Software as and when MyDrWorld deems fit. MyDrWorld reserves the right to extend and withdraw the “Book” functionality to the Subscriber at MyDrWorld’s sole discretion. The terms and conditions pertaining to the Book functionality is more fully described in Schedule No. 3 located at https://www.MyDrWorld.com/company/terms.</p><p><strong>2.8 Subscriber Information</strong>. Any communication sent by or through MyDrWorld or the MyDrWorld Software to the clients or customers of the Subscriber is based solely on information uploaded by the Subscriber on the MyDrWorld Software. The accuracy and completeness of such information (including but not limited to contact details of the client or customer) is the sole responsibility of the Subscriber. MyDrWorld will not be responsible for the incompleteness or inaccuracy of such information, including if as a result of such inaccuracy, a communication is sent to an unintended recipient.</p><p><strong>2.9 Additional Restrictions.</strong>&nbsp;In no event shall the Subscriber disassemble, decompile, or reverse engineer the MyDrWorld Software or permit others to do so.&nbsp; Disassembling, decompiling, and reverse engineering include, without limitation: (i) converting the MyDrWorld Software from a machine-readable form into a human-readable form; (ii) disassembling or decompiling the MyDrWorld Software by using any means or methods to translate machine-dependent or machine-independent object code into the original human-readable source code or any approximation thereof; (iii) examining the machine-readable object code that controls MyDrWorld Software’s operation and creating the original source code or any approximation thereof by, for example, studying MyDrWorld Software’s behavior in response to a variety of inputs; or (iv) performing any other activity related to the MyDrWorld Software that could be construed to be reverse engineering, disassembling, or decompiling.&nbsp; The Subscriber agrees to immediately report to MyDrWorld any unauthorized use or infringement of the MyDrWorld Software that comes to its attention</p><p><strong>2.10 Authorized Users.</strong>&nbsp;Unless otherwise specifically provided in the Agreement, “Authorized Users” will only consist of: (i) employees or consultants of the Subscriber, and (ii) subject to Section 5 (“Confidentiality”), third party contractors of the Subscriber who do not compete with MyDrWorld (“Permitted Contractors”). Permitted Contractors may Use the MyDrWorld Software only at the Subscriber’s place of business and/or the mobile application or in the presence of Subscriber personnel. Subscriber is fully liable for the acts and omissions of Permitted Contractors under this Agreement.</p><p><strong>2.11 Feedback&nbsp;</strong>Subscriber acknowledges that the MyDrWorld Software shall include the ability for users of the Subscriber’s service (“End-Users”) to provide Feedback on such service using the MyDrWorld Software. Subscriber acknowledges that MyDrWorld shall be entitled to, in its sole discretion, to publish or not publish such Feedback or to retain or not retain such Feedback and to moderate such Feedback, as required. “Feedback” for the purposes of this Agreement shall mean feedback, ratings and review provided by End-Users to the Subscriber’s service made available by MyDrWorld on the MyDrWorld Software. Any communication sent by the Subscriber to its clients or customers (whether or not End-Users) based on information collected by the Subscriber of its clients or customers will be sole responsibility of the Subscriber. The Subscriber must ensure accuracy of such communication sent, and must ensure that it is sent to the intended recipient.</p><ol><li><strong>Technical Support.</strong></li></ol><p><strong>&nbsp;3.1 Subscriber Support</strong>. MyDrWorld provides, at its discretion basic support for the MyDrWorld Software subscribed by the Subscriber at no additional charge, and/or upgraded support if purchased separately and will use commercially reasonable efforts to make the subscription services available from 10 AM to 6.30 PM, Monday through Saturday excluding national holidays, except for (i) planned downtime (for which MyDrWorld shall give at least eight (8) hours’ notice to the Subscribe(s) and which MyDrWorld shall schedule to the extent practicable during the weekend hours from 6:00 p.m. regional’s&nbsp; Standard Time ( Friday to 6:00 a.m. regional’s Standard Time Monday, or (ii) any unavailability caused by circumstances beyond MyDrWorld’s reasonable control, including without limitation, acts of God, acts of government, flood, fire, earthquakes, civil unrest, acts of terror, strikes or other labour problems, or internet service provider failures or delays.</p><p><strong>4.Confidentiality</strong></p><p><strong>&nbsp;4.1 Confidential Information</strong>. The parties to this Agreement undertake to retain in confidence all information disclosed to the other party in relation to this Agreement that the disclosing party has designated as being confidential in writing or if disclosed orally, or if, designated as confidential at the time of such disclosure and reduced to writing conspicuously marked as confidential and sent to such other party within thirty (30) days thereof (“<strong>Confidential Information</strong>“). The terms and conditions of this Agreement including its Exhibits shall be considered Confidential Information.</p><p><strong>4.2 Exclusions</strong>. “Confidential Information” will not include information that: (a) is or becomes generally known or available by publication, commercial use or otherwise through no fault of the receiving party; (b) the receiving party can demonstrate to have had rightfully in its possession and without restriction, prior to disclosure hereunder; (c) is independently developed by the receiving party without use of the disclosing part’s Confidential&nbsp; Information, as can be shown by tile written records of the receiving party; (d) is lawfully obtained from a third party who has the right to make such disclosure; or (e) is released for publication by the disclosing party in writing.&nbsp; A receiving party also may disclose disclosing party’s Confidential Information to the extent required by a court or other governmental authority, provided that the receiving party promptly notifies the disclosing party of the disclosure requirement and cooperates with the disclosing party (at the latter’s expense and at its request) to resist or limit the disclosure.</p><p><strong>4.3 Protection of Confidential Information</strong>. Each party agrees to protect the other party’s Confidential Information to the same extent that it protects its own confidential information of a similar nature and shall take all reasonable precautions to prevent any unauthorized disclosure of Confidential Information to third parties. A party may disclose other party’s Confidential Information to its directors, officers, employees and third party contractor(s) (“Representatives”) on a need to know basis and to the extent necessary for the purpose of this Agreement. If a party provides Confidential Information of the other party to its Representatives, then it will ensure that such Representatives have entered into a written confidentiality agreement with the part providing such information to the Representatives protecting such Confidential Information from unauthorized disclosure or improper use. Obligations of confidentiality under this Agreement shall survive the termination or expiration of the Agreement for a period of three (3) years; save for Confidential Information constituting trade secrets, in which event the obligations shall subsist indefinitely.</p><p><strong>5.Representations and Warranties.</strong></p><p><strong>&nbsp;5.1 By the Subscriber.&nbsp;</strong>The Subscriber represents and warrants that the (a) Subscriber is 18 years of age or older and has the right, authority and capacity under the applicable law to use the MyDrWorld Software and enter into this Agreement; (b) Subscriber will not transfer (including by way of sublicense, lease, assignment or other transfer, including by operation of law) their login and Account details or right to use the MyDrWorld Software to any third party; (c) information given to MyDrWorld or uploaded on the MyDrWorld Software by the Subscriber will always be true, accurate, correct, complete and up to date, to the best of the Subscriber’s knowledge that the Subscriber has the necessary rights from the end-user to upload such information on the MyDrWorld Software, including but not limited to end-user health records (“User Content”), and that such right from the end-user shall include an explicit right for MyDrWorld to reflect and map the User Content with an account of such user as may be created by such user through the MyDrWorld website and for MyDrWorld to further store and use the User Content for the purposes of MyDrWorld’s business and for providing such other services in the region and outside region, as may be applicable; (d) Subscriber will not use the MyDrWorld Software for any unauthorized and unlawful purpose; (e) Subscriber will not engage in any activity that interferes with or disrupts the MyDrWorld Software or the servers and networks which are connected to the MyDrWorld Software; (f) Subscriber will not reproduce, duplicate, copy, transfer, license, rent, sell, trade or resell the MyDrWorld Software for any purpose whatsoever; (g) comply with all laws, regulations, and ordinances applicable to the Subscriber and its business and relating to the use of the MyDrWorld Software under this Agreement; and (h) Subscriber will be subscribing to the MyDrWorld Software only for the Purpose.</p><p><strong>5.2 By MyDrWorld.&nbsp;</strong>The MyDrWorld Software provided by MyDrWorld is provided “as is”, “as available” and MyDrWorld makes no express or implied representations or warranties about its subscription services and/ or the MyDrWorld Software or of merchantability or fitness for a particular purpose or use or non-infringement. MyDrWorld does not authorize anyone to make a warranty on MyDrWorld’s behalf and you may not rely on any statement of warranty as a warranty by MyDrWorld.</p><p><strong>&nbsp;6.Representations and Warranties.</strong></p><p><strong>&nbsp;6.1 MyDrWorld Indemnity.</strong>&nbsp;MyDrWorld shall indemnify, hold harmless and, defend the Subscriber from and against any and all final court awarded damages that are attributable to claim by a third party indicating that the MyDrWorld Software infringes such third party intellectual property rights; provided that: (a) the Subscriber gives MyDrWorld prompt notice in writing of any such suit and permits MyDrWorld, through counsel of its choice, to answer the charge of infringement and defend such claim or suit; (b) the Subscriber provides information, assistance and authority to enable MyDrWorld to defend such suit; and (c) MyDrWorld shall not be responsible for any settlement made by the Subscriber without MyDrWorld’s prior written permission provided, however that such permission shall not be unreasonably withheld.</p><p><strong>6.2&nbsp;Exclusions.&nbsp;</strong>MyDrWorld shall have no liability set forth in Section 7.1 above: (a) for any claim or suit, where such claim or suit would have been avoided but for the effect on the MyDrWorld Software caused by other software or hardware by the Subscriber; (b) for infringement of any intellectual property or proprietary rights arising in whole or in part from changes made to any MyDrWorld Software by any party other than MyDrWorld; and (c) where the allegedly infringing activity continues after the Subscriber has being notified thereof or has been informed of modifications that would have avoided the alleged infringement by MyDrWorld.</p><p><strong>&nbsp;6.3 Subscriber Indemnity.</strong>&nbsp;The Subscriber will defend, indemnify, and hold harmless MyDrWorld, its corporate affiliates, or any of its or their respective directors, officers, owners, employees, agents, successors, and permitted assigns from and against any and all third-party claims, suits, proceedings, costs, and expenses (including, without limitation, attorneys’ fees) arising from or related to the Subscriber’s (a) breach of the confidentiality obligations, breach of intellectual property provisions and breach of representation and warranties provisions herein; (b) violation of any applicable law.</p><p><strong>7.Limitation of Liability.</strong></p><p><strong>Lol.</strong>&nbsp;In no event shall mydrworld be liable to the subscriber for any lost or corrupted data, downtime, lost profits, business interruption, replacement service or other special, incidental, consequential, punitive or indirect damages, however caused and regardless of theory of liability, including without limitation negligence and (b) in no event shall the total aggregate liability of mydrworld, for all claims arising out of or under this agreement, exceed the amount that the subscriber has paid or will pay to mydrworld for the mydrworld software under this agreement in the twelve (12) months preceding the most recent claim.</p><p><strong>8.Term and Termination.</strong></p><p><strong>8.1&nbsp;Term.&nbsp;</strong>This Agreement will remain in full force and effect for a period of one (1) year unless terminated by the parties in accordance with the provisions mentioned hereunder. This Agreement shall automatically renew for one (1) year period unless a party expresses his/her/its intention to terminate the agreement by providing sixty (60) days’ notice to the other party.</p><p><strong>8.2 Termination for Convenience.</strong>&nbsp;The Subscriber can request for termination of his/her/its subscription of the MyDrWorld Software at any time by providing sixty (60) days’ prior written notice to the address of MyDrWorld mentioned in clause 10.3. During this sixty (60) day period, MyDrWorld will investigate and ascertain the fulfilment of any ongoing subscription services or pending dues related to subscription fees or any other fees by the Subscriber. MyDrWorld reserves the right to terminate the association with the Subscriber at any time by providing thirty (30) days’ prior written notice to the Subscriber to the addresses mentioned in Clause 10.3.</p><p><strong>8.3 Termination for Cause.</strong>&nbsp;Each party reserves the right to terminate this Agreement if the other party breaches a material obligation under this Agreement and such breach remains uncured for a period of thirty (30) days from the date of notification of the non-breaching party.</p><p><strong>&nbsp;8.4 Effect of termination</strong>. On termination of this Agreement due to the reasons mentioned herein, MyDrWorld reserves the right to immediately terminate the subscription of the MyDrWorld Software to the Subscriber. Nothing contained in this Agreement shall restrict MyDrWorld’s use of the data or right to publish information made available by the Subscriber in the public domain through the subscription services or any other platform managed by MyDrWorld after the termination or expiry of this Agreement. After a 30 (thirty) day period from the date of termination of the Agreement, MyDrWorld shall then provide/share any Subscriber data and shall thereafter, unless legally prohibited, delete all Subscriber’s data in its systems or otherwise in its possession or under its control. In cases where the Subscriber terminates the subscription voluntarily, it will be the sole responsibility of the Subscriber to make a copy of their data before terminating the subscription. End-Users data will not be available after termination of subscription in such cases.</p><p>9.&nbsp;<strong>Term and Termination.</strong></p><p><strong>9.1 Assignment.</strong>The Subscriber may not assign this Agreement or any rights herein without the prior, written consent of MyDrWorld.</p><p><strong>9.2 Waiver.</strong>Failure or delay on the part of a party to exercise any right, power, privilege or remedy hereunder shall not constitute a waiver thereof. A waiver of default shall not operate as a waiver of any other default or of the same type of default on future occasions.</p><p><strong>9.3&nbsp;Notices.</strong>&nbsp;All notices and other communications pertaining to this Agreement shall be in writing and shall be deemed to have been given by a party hereto as set forth below and shall either be (a) personally delivered; (b) sent via postage prepaid certified mail, return receipt requested; (c) sent by nationally-recognized private express courier or (d) sent via fax provided that a confirmation copy is sent via one of the other methods described herein. Notices shall be deemed to have been given on the date of receipt if personally delivered or via fax, or two (2) days after deposit via certified mail or express courier. A party may change its address for purposes hereof by written notice to the other in accordance with the provision of this section. The addresses for the parties are as follows:</p><p><strong>MyDrWorld:</strong>&nbsp;Dubai ,UAE</p><p><strong>Subscriber:</strong>&nbsp;As mentioned in the invoice</p><p><strong>9.4&nbsp;Severability.&nbsp;</strong>If any portion of this Agreement is held invalid, the parties agree that such invalidity sshall not affect the validity of the remaining portions of this Agreement, and the parties further agree to substitute for the invalid provision a valid provision that most closely approximates the economic effect and intent of the invalid provision.</p><p><strong>9.5&nbsp;Independent Parties.&nbsp;</strong>The parties acknowledge that neither party is an agent or employee of the other party, and that neither party has any authority to bind the other party to any agreement or obligation.</p><p><strong>9.6&nbsp;Governing Law.&nbsp;</strong>Any dispute, claim or controversy arising out of or relating to this Agreement, will be governed by the laws of&nbsp; UAE and the courts in UAE shall have exclusive jurisdiction over any disputes arising out of or in relation to this Agreement.</p><p><strong>9.7&nbsp;Headings.&nbsp;</strong>Paragraph headings have been included in this Agreement merely for convenience of reference. They shall not be considered part of, or be used in interpreting, this Agreement.</p><p><strong>9.8&nbsp;Counterparts.&nbsp;</strong>This Agreement may be executed in two or more counterparts, each of which shall be deemed an original and all of which taken together shall constitute one and the same Agreement.</p><p><strong>9.9&nbsp;Survival</strong>. The provisions of Sections 2, 4, 5, 6, 7, 8, 9 and 10 shall survive expiration or termination of this Agreement for any reason.</p><p><strong>9.10&nbsp;Entire Agreement.&nbsp;</strong>This Agreement and the Exhibits attached hereto constitute the entire agreement between the parties with respect to the subject matter hereof and supersede all proposals, oral or written, all previous negotiations and all previous communications between the parties with respect thereto.</p><p><strong>9.11&nbsp;Additional terms</strong>. MyDrWorld reserves the right to modify this Agreement at any time without giving the Subscriber any prior notice. Subscriber’s use of the MyDrWorld Software following any such modification constitutes Subscriber’s agreement to follow and be bound by this Agreement as modified. Any additional terms and conditions, disclaimers, privacy policies and other policies applicable to general and specific areas of the MyDrWorld Software or to subscription services are also considered as part of this Agreement. By agreeing to these terms, Subscriber also agrees to the terms of use, which are available at MyDrWorld.com/company/terms.</p>	<p>Terms of use</p>	\N	\N	\N	2024-06-29 09:45:56	2024-07-02 04:43:05	2
+6	Terms and Conditions	Terms and Conditions	1	<ol><li><strong>Definitions:</strong><br>a)&nbsp;Supplier: M H A T Technologies, Dubai, UAE with License No. 1169959<br>b)&nbsp;Customer: Means the Doctor/Hospital/Clinic/Home care named as Customer<br>c)&nbsp; Platform: MyDrWorld online and mobile based Software operated by M H A T Technologies for the purposes of providing the Services<br>d) Initial Subscription Term: The initial 12-month term of this agreement from the date hereof.<br>e)Practitioners: Doctors and other healthcare professionals of the Customer<br>&nbsp;</li><li><strong>Services</strong><br>a)This agreement is valid from January 01,2024 to December 31, 2024<br>b)&nbsp; The Supplier shall provide to the Customer the Services subject to the terms and conditions mentioned in this agreement.<br>c)The Supplier and the Customer shall cooperate with each other in&nbsp; &nbsp;performing their obligations under this agreement.<br>&nbsp;</li><li><strong>&nbsp;Charges and Payments</strong><br>a) Agreed Fees payable by the Customer to the Supplier in respect of this Service will be in prior to the beginning of every half year and this fee are exclusive of all &nbsp; taxes including value added tax (VAT) applicable under any relevant laws.</li></ol><p><strong>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supplier’s Obligations</strong><br><strong>&nbsp; &nbsp;</strong>The Supplier undertakes that the Service will be performed with reasonable skill, diligence and care and in accordance with Good Industry Practice</p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has taken and undertakes that it shall continue to take such reasonable steps as would be taken by a prudent supplier in accordance with Good Industry Practice to ensure that,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any personal identity, contact and booking data in relation to patients is processed, transferred to the Customer and stored by it in accordance with the provisions in the Point 8.</p><p>&nbsp;</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IT systems provide for the continuous operation, availability and performance of the Software and the Services to users’&nbsp;whole days except for any maintenance which is required in relation to IT systems.</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ems are free from vulnerabilities of which the Supplier is aware or are publicly and widely known in the industry. Supplier operates and which it can take reasonable and commercial precautions to mitigate against and which it is reasonably foreseeable could materially adversely affect the Software and the Services.</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The provided Software including websites and relevant data is hosted on servers and hosting equipment as is provided by reputable cloud service.</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A support facility is provided to the Customer which shall be accessible by both email and call which shall be used as the initial point of contact for all day-to-day queries and fault reporting.</p><p>&nbsp;</p><p>v.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has and will maintain all necessary Licenses, consents and permissions necessary for the performance of its obligations under this agreement.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier does not warrant that.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any interruption of Software services by the use of customers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use of the Software and the Services will comply with laws and regulations which are applicable to the Customer.</p><p>&nbsp;</p><p><strong>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier is not responsible and has no liability to the Customer for:</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Information provided by the customers and third-party information management, communications systems and technology used by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploaded Information in relation to patients of the Customer who have booked directly with Customer.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Users who have booked appointments with the Customer through the Platform cancelling.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or other loss or damage resulting from the transfer of data over communications due to networks and facilities.</p><p>&nbsp;</p><p><strong>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall not prevent the Supplier from entering into similar agreements with third parties.</strong></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer's obligations</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Provide all required information accurate and timely manner relating to the Practitioners.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comply with all applicable laws and regulations with respect to its activities under this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is obliged to customer to carry out all other Customer responsibilities timely.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any delays in the Customer's provision of such assistance as agreed by the parties, the Supplier may adjust any agreed timetable or delivery schedule as necessary.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its Practitioners are properly qualified, accredited, licensed and experienced to provide proper healthcare assistance to patients. Applicable law shall be responsible for any Authorized User's breach of this agreement.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Obtain and shall maintain all necessary Licenses, consents, and permissions necessary for the Supplier, its contractors and agents to us e the Service and to perform their obligations under this agreement, including without limitation the platform and the Services and their health care services including but not limited to the online consultations.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its network and systems comply with the relevant specifications provided by the Supplier from time to time and by the relevant regulatory authorities.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To the extent permitted by law and except as otherwise expressly provided in this agreement, solely responsible for procuring, maintaining and securing its network connections and telecommunications links from its systems to the Supplier's data centers.</p><p><strong>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Proprietary rights</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges and agrees that the Supplier and/or its licensors own all intellectual property rights in the platform and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer does not grant any rights to, under or in, any patents, copyright, database right, trade secrets, trade names, trademarks.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier confirms that it has all the rights in relation to the platform and the Services that are necessary to grant all the rights it purports to grant under, and in accordance with, the terms of this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subject to the terms of this agreement, the Supplier hereby grants to the Customer a limited, non-exclusive, non- transferable license (without the right to sublicense) to use, access and interact with the platform solely for the purpose of receiving and using the Services for the purposes of, on and subject to the terms and conditions set out in this agreement.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The rights provided by the Supplier to the Customer are granted to the Customer only and shall not be considered granted to any subsidiary or holding company of the Customer.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer grants the Supplier a fully paid-up, worldwide, non- exclusive, royalty-free, non-transferable License to copy and modify the information and to use the trademarks of the Customer for the purpose of providing the Services to the Customer in accordance with this agreement.</p><p>&nbsp;</p><p><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indemnity</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall defend, indemnify and hold harmless the Customer against claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with any claim that the Software and the Services breach the intellectual property rights of any third party and Customer's, its Practitioners or its patients use of the Software and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In the defense or settlement of any claim, the Supplier may procure the right for the Customer to continue using the Software and the Services, replace or modify the Software and the Services so that they become non-infringing or, if such remedies are not reasonably available, terminate this agreement on 30 Business Days' notice to the Customer. In the event of such a termination of the agreement the Supplier will be liable to pay liquidated damages or other additional costs to the Customer.</p><p>&nbsp;</p><p><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protection and processing of personal data</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It is contemplated that the Supplier and the Customer shall obtain, process and transfer personal data relating to employees and contractors of the Supplier, employees, contractors and Practitioners of the Customer and patients of such Practitioners who use the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Both parties will comply with all applicable requirements of the Data Protection Legislation. This is in addition to, and does not relieve, remove or replace, a party's obligations or rights under the Data Protection Legislation.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall, in relation to any personal data processed in connection with the performance by such party of its obligations.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that it has in place appropriate technical and organizational measures, to protect against unauthorized or unlawful processing of personal data and against accidental loss or destruction.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Not transfer any such personal data outside of United Arab Emirates unless the following conditions are fulfilled:</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There are in place appropriate safeguards in relation to the transfer.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The data subject has enforceable rights and effective legal remedies.</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maintain complete and accurate records and information to demonstrate its compliance with this paragraph and immediately inform the other party if, in the reasonable opinion of the other party, an instruction infringes the Data Protection Legislation</p><p>&nbsp;</p><p>IV.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There is an adequate level of protection to any personal data that is transferred; and</p><p>V.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The party complies with reasonable instructions notified to it in advance by the other party with respect to the processing of the personal data.</p><p>VI.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; At the written direction of the other party, delete or return personal data transferred from or processed on behalf of the other party and copies thereof to the other party termination of the agreement unless required by Applicable Law to store the personal data.</p><p>&nbsp;</p><p><strong>12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Anti-bribery and conflicts of interest</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer shall comply with all applicable laws, regulations, codes and sanctions relating to anti-bribery and anti-corruption relevant requirements.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customers have and shall maintain in place throughout the term of this agreement its own policies and procedures to ensure compliance with the Relevant Requirements and will enforce them where appropriate.</p><p><strong>13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warranties</strong></p><p>a)&nbsp; &nbsp; Each party represents, warrants and undertakes that, it has full capacity and authority and all necessary consents to enter in to perform this agreement and to grant the rights and Licenses referred to in this agreement and that this agreement is executed by its duly authorized representative and represents a binding commitment on it; and without affecting its other obligations under this agreement.</p><p><strong>14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Limitation of liability</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly and specifically provided in this agreement, the Customer assumes sole responsibility for results obtained from the use of the Software and the Services by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall have no liability for any damage caused by errors or omissions, in any information, instructions or scripts provided to the Supplier by the Customer in connection with the Software and the Services,</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any actions taken by the Supplier at the Customer's direction; all warranties, representations, conditions and all other terms of any kind whatsoever implied by statute or common law are, to the fullest extent permitted by applicable law, excluded from this agreement,</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Software and Services are provided to the customer on an&nbsp;“as is”&nbsp;basis.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement excludes the liability of the Supplier, death or injury caused by the supplier’s negligence or fraud or fraudulent representation.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The service provided by Mydrworld shall not be used for medical emergency.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subjected to above points in this paragraph,</p><p>&nbsp;</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The Supplier shall not be liable whether in tort including for negligence or breach of statutory duty, contract, misrepresentation, restitution or otherwise for any loss of profits, loss of business, depletion of goodwill and/or similar losses or loss or corruption of data or information, or pure economic loss, or for any special, indirect or consequential loss, costs, damages, charges or expenses however arising under this agreement.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier's total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall&nbsp; &nbsp;be limited to the total fee paid by the Customer to the Supplier during the 6 months immediately preceding the date on which the claim arose; and</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In respect of a breach on Charges and Payment terms and improper use of Software, the Customer’s total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall be limited to the higher of: (i) US$ 25,000 and: (ii) the total fee paid by the Customer to the Supplier during the 12 months immediately preceding the date on which the claim arose</p><p>&nbsp;</p><p><strong>15. Non-solicitation of Employees and Contractors</strong></p><p>a) &nbsp;In order to protect the legitimate business interests of the Supplier, the Customer covenants with the Supplier that it shall not and shall procure that no member of the Customer's group of companies shall) (except with the prior written consent of the Supplier</p><p>&nbsp;</p><p><strong>15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Confidentiality</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party may be given access to Confidential Information from the other party in order to perform its obligations under this agreement. A party's Confidential Information shall not be deemed to include information that, is or becomes publicly known other than through any act or omission of the receiving party, was in the other party's lawful possession before the disclosure,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall take all reasonable steps to ensure that the other's Confidential Information to which it has access is not disclosed or distributed by its employees or agents in violation of the terms of this agreement</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No party shall make, or permit any person to make, any public announcement concerning this agreement without the prior written consent of the other parties</p><p>&nbsp;</p><p><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Termination and terms.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall, unless otherwise terminated as provided in this paragraph, commence on the date hereof and shall continue for the Initial Subscription Term and, thereafter, this agreement shall be automatically renewed for successive periods of 12 months, either party notifies the other party of termination, in writing, at least 60 days before the end of the Initial Subscription Term</p><p>&nbsp;</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bother party commits a material breach of any other term of this agreement which breach is irremediable or fails to remedy that breach within a period of 30 days after being notified in writing to do so.The other party repeatedly breaches any of the terms of this The other party repeatedly breaches any of the terms of this agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this agreement;</p><p>&nbsp;</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party suspends, or threatens to suspend, payment of its debts or is unable to pay its debts as they fall due or admits inability to pay its debts or is deemed unable to pay its debts.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party commences negotiations with all or any class of its creditors with a view to rescheduling any of its debts, or makes a proposal for or enters into any compromise or arrangement with its creditors other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A petition is filed, a notice is given, a resolution is passed, or an order is made, for or in connection with the winding up of that other party other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party;</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; An application is made to court, or an order is made, for the appointment of an administrator, or if a notice of intention to appoint an administrator is given or if an administrator is appointed, over the other party.</p><p>&nbsp;</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A person becomes entitled to appoint a receiver over the assets of the other party or a receiver is appointed over the assets of the other party.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any event occurs, or proceeding is taken, with respect to the other party in any jurisdiction to which it is subject that has an effect equivalent or similar to any of the events mentioned in this paragraph above.</p><p>&nbsp;</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In termination of this agreement for any reason:</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; All Licenses granted under this agreement shall immediately terminate and the Customer shall immediately cease all use of the Software and the Services;</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall return and make no further use of any equipment, property and other items (and all copies of them) belonging to the other party;</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall destroy or otherwise dispose of any of the Confidential Information of the other party and in its possession save that each party shall be entitled to keep one copy of such information for legal and record keeping purposes provided that it shall keep such Confidential Information confidential and not use it for any purpose other than in connection with this agreement; and</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the rightto claim damages in respect of any breach of the agreement which existed at or before the date of termination shall not be affected or prejudiced.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Force majeure</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither party shall in any circumstances be in breach of this agreement nor liable for delay in performing, or failure to perform, any of its obligations under this agreement if such as</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or failure results from events, circumstances or causes beyond its reasonable control, including, without limitation, strikes, lockouts or other industrial disputes (whether involving the workforce of the Reseller or any other party</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Failure of a utility service or transport or telecommunications network, natural calamities, compliance with any law or governmental order, default of suppliers or Subcontractors.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In such circumstances the affected party shall be entitled to a reasonable extension of the time for performing such&nbsp; obligations, provided that if the period of delay or non-performance continues for three months, the party not affected may terminate this agreement by giving 30 days' written notice to the other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For the avoidance of doubt, as of the date of the agreement, any pandemic situations should not prevent the Parties from performing their respective obligations under this Agreement.</p><p>&nbsp;</p><p><strong>18.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Conflict</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If there is an inconsistency between any of the provisions in the main body of this agreement and the Schedules, the provisions in the main body of this agreement shall prevail.</p><p>&nbsp;</p><p><strong>19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variation</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No variation of this agreement shall be effective unless it is in writing and signed by the parties (or their authorized representatives).</p><p>&nbsp;</p><p><strong>20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Waiver</strong></p><p>a)&nbsp; &nbsp; &nbsp;No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it preventor restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy.</p><p>&nbsp;</p><p><strong>21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rights and remedies</strong></p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly provided in this agreement, the rights and remedies provided under this agreement are in addition to, and not exclusive of, any rights or remedies provided by law.</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Severance</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is or becomes invalid, illegal or unenforceable, it shall be deemed deleted, but that shall not affect the validity and enforceability of the rest of this agreement.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is deemed deleted under paragraph 20.1 the parties shall negotiate in good faith to agree a replacement provision that, to the greatest extent possible, achieves the intended commercial result of the original provision.</p><p>&nbsp;</p><p><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Entire agreement</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement constitutes the entire agreement between the parties and supersedes and extinguishes all previous agreements, promises, assurances, warranties, representations and understandings between them, whether written or oral, relating to its subject matter.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party acknowledges that in entering into this agreement it does not rely on, and shall have no remedies in respect of, any statement, representation, assurance or warranty (whether made innocently or negligently) that is not set out in this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party agrees that it shall have no claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this paragraph shall limit or exclude any liability for fraud.</p><p>&nbsp;</p><p><strong>25. Assignment</strong></p><p>a) Each Party shall not, without the prior written consent of the other Party, assign, transfer, charge, sub-contract or deal in any other manner with all or any of its rights or obligations under this agreement.</p><p><strong>26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No partnership or agency</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement is intended to or shall operate to create a partnership between the parties, or authorize either party to act as agent for the other, and neither party shall have the authority to act in the name or on behalf of or otherwise to bind the other in any way (including, but not limited to, the making of any representation or warranty, the assumption of any obligation or liability and the exercise of any right or power).Third party rights</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement does not confer any rights on any person or party (other than the parties to this agreement and, where applicable, their successors and permitted assigns).</p><p><strong>27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Notices</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any notice required to be given under this agreement shall be in writing and shall be delivered by hand or sent by pre-paid first-class post or recorded delivery post to the other party at its address set out in this agreement, or such other address as may have been notified by that party for such purposes, or sent by email to the other party’s email address as may have been notified by that party for such purpose as set out in this agreement</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A notice delivered by hand shall be deemed to have been received when delivered (or if delivery is not in business hours, at 9 am on the first business day following delivery). A correctly addressed notice sent by pre-paid first-class post or recorded delivery post shall be deemed to have been received at the time at which it would have been delivered in the normal course of post. An email shall be deemed to have been received at the time of transmission (as shown by the timed delivery receipt shown on the system of the sender).</p><p>&nbsp;</p><p><strong>28.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Governing law</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non- contractual disputes or claims) (Dispute) shall be governed by construed in accordance with the laws of Dubai, UAE</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The parties irrevocably agree that the courts of the Dubai, UAE have exclusive jurisdiction to settle any Disputes or claims arising out of or in connection with this agreement&nbsp;</p>	<p><strong>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Definitions:</strong><br>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supplier: M H A T Technologies, Dubai, UAE with License No. 1169959<br>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer: Means the Doctor/Hospital/Clinic/Home care named as Customer<br>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Platform: MyDrWorld online and mobile based Software operated by M H A T Technologies for the purposes of providing the Services<br>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Initial Subscription Term: The initial 12-month term of this agreement from the date hereof.<br>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Practitioners: Doctors and other healthcare professionals of the Customer</p><p><strong>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Services</strong><br>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement is valid from January 01,2024 to December 31, 2024<br>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall provide to the Customer the Services subject to the terms and conditions mentioned in this agreement.<br>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier and the Customer shall cooperate with each other in&nbsp; &nbsp;performing their obligations under this agreement.</p><p><strong>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Charges and Payments</strong><br>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Agreed Fees payable by the Customer to the Supplier in respect of this Service will be in prior to the beginning of every half year and this fee are exclusive of all &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; taxes including value added tax (VAT) applicable under any relevant laws.</p><p><strong>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supplier’s Obligations</strong><br><strong>&nbsp; &nbsp;</strong>The Supplier undertakes that the Service will be performed with reasonable skill, diligence and care and in accordance with Good Industry Practice</p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has taken and undertakes that it shall continue to take such reasonable steps as would be taken by a prudent supplier in accordance with Good Industry Practice to ensure that,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any personal identity, contact and booking data in relation to patients is processed, transferred to the Customer and stored by it in accordance with the provisions in the Point 8.</p><p>&nbsp;</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IT systems provide for the continuous operation, availability and performance of the Software and the Services to users’&nbsp;whole days except for any maintenance which is required in relation to IT systems.</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ems are free from vulnerabilities of which the Supplier is aware or are publicly and widely known in the industry. Supplier operates and which it can take reasonable and commercial precautions to mitigate against and which it is reasonably foreseeable could materially adversely affect the Software and the Services.</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The provided Software including websites and relevant data is hosted on servers and hosting equipment as is provided by reputable cloud service.</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A support facility is provided to the Customer which shall be accessible by both email and call which shall be used as the initial point of contact for all day-to-day queries and fault reporting.</p><p>&nbsp;</p><p>v.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has and will maintain all necessary Licenses, consents and permissions necessary for the performance of its obligations under this agreement.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier does not warrant that.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any interruption of Software services by the use of customers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use of the Software and the Services will comply with laws and regulations which are applicable to the Customer.</p><p>&nbsp;</p><p><strong>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier is not responsible and has no liability to the Customer for:</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Information provided by the customers and third-party information management, communications systems and technology used by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploaded Information in relation to patients of the Customer who have booked directly with Customer.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Users who have booked appointments with the Customer through the Platform cancelling.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or other loss or damage resulting from the transfer of data over communications due to networks and facilities.</p><p>&nbsp;</p><p><strong>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall not prevent the Supplier from entering into similar agreements with third parties.</strong></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer's obligations</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Provide all required information accurate and timely manner relating to the Practitioners.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comply with all applicable laws and regulations with respect to its activities under this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is obliged to customer to carry out all other Customer responsibilities timely.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any delays in the Customer's provision of such assistance as agreed by the parties, the Supplier may adjust any agreed timetable or delivery schedule as necessary.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its Practitioners are properly qualified, accredited, licensed and experienced to provide proper healthcare assistance to patients. Applicable law shall be responsible for any Authorized User's breach of this agreement.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Obtain and shall maintain all necessary Licenses, consents, and permissions necessary for the Supplier, its contractors and agents to us e the Service and to perform their obligations under this agreement, including without limitation the platform and the Services and their health care services including but not limited to the online consultations.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its network and systems comply with the relevant specifications provided by the Supplier from time to time and by the relevant regulatory authorities.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To the extent permitted by law and except as otherwise expressly provided in this agreement, solely responsible for procuring, maintaining and securing its network connections and telecommunications links from its systems to the Supplier's data centers.</p><p><strong>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Proprietary rights</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges and agrees that the Supplier and/or its licensors own all intellectual property rights in the platform and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer does not grant any rights to, under or in, any patents, copyright, database right, trade secrets, trade names, trademarks.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier confirms that it has all the rights in relation to the platform and the Services that are necessary to grant all the rights it purports to grant under, and in accordance with, the terms of this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subject to the terms of this agreement, the Supplier hereby grants to the Customer a limited, non-exclusive, non- transferable license (without the right to sublicense) to use, access and interact with the platform solely for the purpose of receiving and using the Services for the purposes of, on and subject to the terms and conditions set out in this agreement.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The rights provided by the Supplier to the Customer are granted to the Customer only and shall not be considered granted to any subsidiary or holding company of the Customer.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer grants the Supplier a fully paid-up, worldwide, non- exclusive, royalty-free, non-transferable License to copy and modify the information and to use the trademarks of the Customer for the purpose of providing the Services to the Customer in accordance with this agreement.</p><p>&nbsp;</p><p><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indemnity</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall defend, indemnify and hold harmless the Customer against claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with any claim that the Software and the Services breach the intellectual property rights of any third party and Customer's, its Practitioners or its patients use of the Software and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In the defense or settlement of any claim, the Supplier may procure the right for the Customer to continue using the Software and the Services, replace or modify the Software and the Services so that they become non-infringing or, if such remedies are not reasonably available, terminate this agreement on 30 Business Days' notice to the Customer. In the event of such a termination of the agreement the Supplier will be liable to pay liquidated damages or other additional costs to the Customer.</p><p>&nbsp;</p><p><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protection and processing of personal data</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It is contemplated that the Supplier and the Customer shall obtain, process and transfer personal data relating to employees and contractors of the Supplier, employees, contractors and Practitioners of the Customer and patients of such Practitioners who use the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Both parties will comply with all applicable requirements of the Data Protection Legislation. This is in addition to, and does not relieve, remove or replace, a party's obligations or rights under the Data Protection Legislation.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall, in relation to any personal data processed in connection with the performance by such party of its obligations.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that it has in place appropriate technical and organizational measures, to protect against unauthorized or unlawful processing of personal data and against accidental loss or destruction.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Not transfer any such personal data outside of United Arab Emirates unless the following conditions are fulfilled:</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There are in place appropriate safeguards in relation to the transfer.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The data subject has enforceable rights and effective legal remedies.</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maintain complete and accurate records and information to demonstrate its compliance with this paragraph and immediately inform the other party if, in the reasonable opinion of the other party, an instruction infringes the Data Protection Legislation</p><p>&nbsp;</p><p>IV.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There is an adequate level of protection to any personal data that is transferred; and</p><p>V.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The party complies with reasonable instructions notified to it in advance by the other party with respect to the processing of the personal data.</p><p>VI.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; At the written direction of the other party, delete or return personal data transferred from or processed on behalf of the other party and copies thereof to the other party termination of the agreement unless required by Applicable Law to store the personal data.</p><p>&nbsp;</p><p><strong>12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Anti-bribery and conflicts of interest</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer shall comply with all applicable laws, regulations, codes and sanctions relating to anti-bribery and anti-corruption relevant requirements.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customers have and shall maintain in place throughout the term of this agreement its own policies and procedures to ensure compliance with the Relevant Requirements and will enforce them where appropriate.</p><p><strong>13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warranties</strong></p><p>a)&nbsp; &nbsp; Each party represents, warrants and undertakes that, it has full capacity and authority and all necessary consents to enter in to perform this agreement and to grant the rights and Licenses referred to in this agreement and that this agreement is executed by its duly authorized representative and represents a binding commitment on it; and without affecting its other obligations under this agreement.</p><p><strong>14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Limitation of liability</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly and specifically provided in this agreement, the Customer assumes sole responsibility for results obtained from the use of the Software and the Services by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall have no liability for any damage caused by errors or omissions, in any information, instructions or scripts provided to the Supplier by the Customer in connection with the Software and the Services,</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any actions taken by the Supplier at the Customer's direction; all warranties, representations, conditions and all other terms of any kind whatsoever implied by statute or common law are, to the fullest extent permitted by applicable law, excluded from this agreement,</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Software and Services are provided to the customer on an&nbsp;“as is”&nbsp;basis.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement excludes the liability of the Supplier, death or injury caused by the supplier’s negligence or fraud or fraudulent representation.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The service provided by Mydrworld shall not be used for medical emergency.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subjected to above points in this paragraph,</p><p>&nbsp;</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The Supplier shall not be liable whether in tort including for negligence or breach of statutory duty, contract, misrepresentation, restitution or otherwise for any loss of profits, loss of business, depletion of goodwill and/or similar losses or loss or corruption of data or information, or pure economic loss, or for any special, indirect or consequential loss, costs, damages, charges or expenses however arising under this agreement.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier's total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall&nbsp; &nbsp;be limited to the total fee paid by the Customer to the Supplier during the 6 months immediately preceding the date on which the claim arose; and</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In respect of a breach on Charges and Payment terms and improper use of Software, the Customer’s total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall be limited to the higher of: (i) US$ 25,000 and: (ii) the total fee paid by the Customer to the Supplier during the 12 months immediately preceding the date on which the claim arose</p><p>&nbsp;</p><p><strong>15. Non-solicitation of Employees and Contractors</strong></p><p>a) &nbsp;In order to protect the legitimate business interests of the Supplier, the Customer covenants with the Supplier that it shall not and shall procure that no member of the Customer's group of companies shall) (except with the prior written consent of the Supplier</p><p>&nbsp;</p><p><strong>15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Confidentiality</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party may be given access to Confidential Information from the other party in order to perform its obligations under this agreement. A party's Confidential Information shall not be deemed to include information that, is or becomes publicly known other than through any act or omission of the receiving party, was in the other party's lawful possession before the disclosure,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall take all reasonable steps to ensure that the other's Confidential Information to which it has access is not disclosed or distributed by its employees or agents in violation of the terms of this agreement</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No party shall make, or permit any person to make, any public announcement concerning this agreement without the prior written consent of the other parties</p><p>&nbsp;</p><p><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Termination and terms.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall, unless otherwise terminated as provided in this paragraph, commence on the date hereof and shall continue for the Initial Subscription Term and, thereafter, this agreement shall be automatically renewed for successive periods of 12 months, either party notifies the other party of termination, in writing, at least 60 days before the end of the Initial Subscription Term</p><p>&nbsp;</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bother party commits a material breach of any other term of this agreement which breach is irremediable or fails to remedy that breach within a period of 30 days after being notified in writing to do so.The other party repeatedly breaches any of the terms of this The other party repeatedly breaches any of the terms of this agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this agreement;</p><p>&nbsp;</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party suspends, or threatens to suspend, payment of its debts or is unable to pay its debts as they fall due or admits inability to pay its debts or is deemed unable to pay its debts.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party commences negotiations with all or any class of its creditors with a view to rescheduling any of its debts, or makes a proposal for or enters into any compromise or arrangement with its creditors other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A petition is filed, a notice is given, a resolution is passed, or an order is made, for or in connection with the winding up of that other party other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party;</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; An application is made to court, or an order is made, for the appointment of an administrator, or if a notice of intention to appoint an administrator is given or if an administrator is appointed, over the other party.</p><p>&nbsp;</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A person becomes entitled to appoint a receiver over the assets of the other party or a receiver is appointed over the assets of the other party.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any event occurs, or proceeding is taken, with respect to the other party in any jurisdiction to which it is subject that has an effect equivalent or similar to any of the events mentioned in this paragraph above.</p><p>&nbsp;</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In termination of this agreement for any reason:</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; All Licenses granted under this agreement shall immediately terminate and the Customer shall immediately cease all use of the Software and the Services;</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall return and make no further use of any equipment, property and other items (and all copies of them) belonging to the other party;</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall destroy or otherwise dispose of any of the Confidential Information of the other party and in its possession save that each party shall be entitled to keep one copy of such information for legal and record keeping purposes provided that it shall keep such Confidential Information confidential and not use it for any purpose other than in connection with this agreement; and</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the rightto claim damages in respect of any breach of the agreement which existed at or before the date of termination shall not be affected or prejudiced.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Force majeure</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither party shall in any circumstances be in breach of this agreement nor liable for delay in performing, or failure to perform, any of its obligations under this agreement if such as</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or failure results from events, circumstances or causes beyond its reasonable control, including, without limitation, strikes, lockouts or other industrial disputes (whether involving the workforce of the Reseller or any other party</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Failure of a utility service or transport or telecommunications network, natural calamities, compliance with any law or governmental order, default of suppliers or Subcontractors.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In such circumstances the affected party shall be entitled to a reasonable extension of the time for performing such&nbsp; obligations, provided that if the period of delay or non-performance continues for three months, the party not affected may terminate this agreement by giving 30 days' written notice to the other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For the avoidance of doubt, as of the date of the agreement, any pandemic situations should not prevent the Parties from performing their respective obligations under this Agreement.</p><p>&nbsp;</p><p><strong>18.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Conflict</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If there is an inconsistency between any of the provisions in the main body of this agreement and the Schedules, the provisions in the main body of this agreement shall prevail.</p><p>&nbsp;</p><p><strong>19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variation</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No variation of this agreement shall be effective unless it is in writing and signed by the parties (or their authorized representatives).</p><p>&nbsp;</p><p><strong>20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Waiver</strong></p><p>a)&nbsp; &nbsp; &nbsp;No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it preventor restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy.</p><p>&nbsp;</p><p><strong>21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rights and remedies</strong></p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly provided in this agreement, the rights and remedies provided under this agreement are in addition to, and not exclusive of, any rights or remedies provided by law.</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Severance</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is or becomes invalid, illegal or unenforceable, it shall be deemed deleted, but that shall not affect the validity and enforceability of the rest of this agreement.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is deemed deleted under paragraph 20.1 the parties shall negotiate in good faith to agree a replacement provision that, to the greatest extent possible, achieves the intended commercial result of the original provision.</p><p>&nbsp;</p><p><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Entire agreement</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement constitutes the entire agreement between the parties and supersedes and extinguishes all previous agreements, promises, assurances, warranties, representations and understandings between them, whether written or oral, relating to its subject matter.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party acknowledges that in entering into this agreement it does not rely on, and shall have no remedies in respect of, any statement, representation, assurance or warranty (whether made innocently or negligently) that is not set out in this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party agrees that it shall have no claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this paragraph shall limit or exclude any liability for fraud.</p><p>&nbsp;</p><p><strong>25. Assignment</strong></p><p>a) Each Party shall not, without the prior written consent of the other Party, assign, transfer, charge, sub-contract or deal in any other manner with all or any of its rights or obligations under this agreement.</p><p><strong>26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No partnership or agency</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement is intended to or shall operate to create a partnership between the parties, or authorize either party to act as agent for the other, and neither party shall have the authority to act in the name or on behalf of or otherwise to bind the other in any way (including, but not limited to, the making of any representation or warranty, the assumption of any obligation or liability and the exercise of any right or power).Third party rights</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement does not confer any rights on any person or party (other than the parties to this agreement and, where applicable, their successors and permitted assigns).</p><p><strong>27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Notices</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any notice required to be given under this agreement shall be in writing and shall be delivered by hand or sent by pre-paid first-class post or recorded delivery post to the other party at its address set out in this agreement, or such other address as may have been notified by that party for such purposes, or sent by email to the other party’s email address as may have been notified by that party for such purpose as set out in this agreement</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A notice delivered by hand shall be deemed to have been received when delivered (or if delivery is not in business hours, at 9 am on the first business day following delivery). A correctly addressed notice sent by pre-paid first-class post or recorded delivery post shall be deemed to have been received at the time at which it would have been delivered in the normal course of post. An email shall be deemed to have been received at the time of transmission (as shown by the timed delivery receipt shown on the system of the sender).</p><p>&nbsp;</p><p><strong>28.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Governing law</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non- contractual disputes or claims) (Dispute) shall be governed by construed in accordance with the laws of Dubai, UAE</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The parties irrevocably agree that the courts of the Dubai, UAE have exclusive jurisdiction to settle any Disputes or claims arising out of or in connection with this agreement&nbsp;</p>	\N	\N	\N	2024-06-29 09:47:44	2024-07-07 05:14:56	1
+8	Terms of use	Terms of use	1	<ol><li><strong>Definitions:</strong><br>a)&nbsp;Supplier: M H A T Technologies, Dubai, UAE with License No. 1169959<br>b)&nbsp;Customer: Means the Doctor/Hospital/Clinic/Home care named as Customer<br>c)&nbsp; Platform: MyDrWorld online and mobile based Software operated by M H A T Technologies for the purposes of providing the Services<br>d) Initial Subscription Term: The initial 12-month term of this agreement from the date hereof.<br>e)Practitioners: Doctors and other healthcare professionals of the Customer<br>&nbsp;</li><li><strong>Services</strong><br>a)This agreement is valid from January 01,2024 to December 31, 2024<br>b)&nbsp; The Supplier shall provide to the Customer the Services subject to the terms and conditions mentioned in this agreement.<br>c)The Supplier and the Customer shall cooperate with each other in&nbsp; &nbsp;performing their obligations under this agreement.<br>&nbsp;</li><li><strong>&nbsp;Charges and Payments</strong><br>a) Agreed Fees payable by the Customer to the Supplier in respect of this Service will be in prior to the beginning of every half year and this fee are exclusive of all &nbsp; taxes including value added tax (VAT) applicable under any relevant laws.</li></ol><p><strong>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supplier’s Obligations</strong><br><strong>&nbsp; &nbsp;</strong>The Supplier undertakes that the Service will be performed with reasonable skill, diligence and care and in accordance with Good Industry Practice</p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has taken and undertakes that it shall continue to take such reasonable steps as would be taken by a prudent supplier in accordance with Good Industry Practice to ensure that,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any personal identity, contact and booking data in relation to patients is processed, transferred to the Customer and stored by it in accordance with the provisions in the Point 8.</p><p>&nbsp;</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IT systems provide for the continuous operation, availability and performance of the Software and the Services to users’&nbsp;whole days except for any maintenance which is required in relation to IT systems.</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ems are free from vulnerabilities of which the Supplier is aware or are publicly and widely known in the industry. Supplier operates and which it can take reasonable and commercial precautions to mitigate against and which it is reasonably foreseeable could materially adversely affect the Software and the Services.</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The provided Software including websites and relevant data is hosted on servers and hosting equipment as is provided by reputable cloud service.</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A support facility is provided to the Customer which shall be accessible by both email and call which shall be used as the initial point of contact for all day-to-day queries and fault reporting.</p><p>&nbsp;</p><p>v.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has and will maintain all necessary Licenses, consents and permissions necessary for the performance of its obligations under this agreement.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier does not warrant that.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any interruption of Software services by the use of customers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use of the Software and the Services will comply with laws and regulations which are applicable to the Customer.</p><p>&nbsp;</p><p><strong>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier is not responsible and has no liability to the Customer for:</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Information provided by the customers and third-party information management, communications systems and technology used by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploaded Information in relation to patients of the Customer who have booked directly with Customer.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Users who have booked appointments with the Customer through the Platform cancelling.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or other loss or damage resulting from the transfer of data over communications due to networks and facilities.</p><p>&nbsp;</p><p><strong>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall not prevent the Supplier from entering into similar agreements with third parties.</strong></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer's obligations</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Provide all required information accurate and timely manner relating to the Practitioners.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comply with all applicable laws and regulations with respect to its activities under this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is obliged to customer to carry out all other Customer responsibilities timely.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any delays in the Customer's provision of such assistance as agreed by the parties, the Supplier may adjust any agreed timetable or delivery schedule as necessary.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its Practitioners are properly qualified, accredited, licensed and experienced to provide proper healthcare assistance to patients. Applicable law shall be responsible for any Authorized User's breach of this agreement.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Obtain and shall maintain all necessary Licenses, consents, and permissions necessary for the Supplier, its contractors and agents to us e the Service and to perform their obligations under this agreement, including without limitation the platform and the Services and their health care services including but not limited to the online consultations.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its network and systems comply with the relevant specifications provided by the Supplier from time to time and by the relevant regulatory authorities.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To the extent permitted by law and except as otherwise expressly provided in this agreement, solely responsible for procuring, maintaining and securing its network connections and telecommunications links from its systems to the Supplier's data centers.</p><p><strong>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Proprietary rights</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges and agrees that the Supplier and/or its licensors own all intellectual property rights in the platform and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer does not grant any rights to, under or in, any patents, copyright, database right, trade secrets, trade names, trademarks.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier confirms that it has all the rights in relation to the platform and the Services that are necessary to grant all the rights it purports to grant under, and in accordance with, the terms of this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subject to the terms of this agreement, the Supplier hereby grants to the Customer a limited, non-exclusive, non- transferable license (without the right to sublicense) to use, access and interact with the platform solely for the purpose of receiving and using the Services for the purposes of, on and subject to the terms and conditions set out in this agreement.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The rights provided by the Supplier to the Customer are granted to the Customer only and shall not be considered granted to any subsidiary or holding company of the Customer.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer grants the Supplier a fully paid-up, worldwide, non- exclusive, royalty-free, non-transferable License to copy and modify the information and to use the trademarks of the Customer for the purpose of providing the Services to the Customer in accordance with this agreement.</p><p>&nbsp;</p><p><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indemnity</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall defend, indemnify and hold harmless the Customer against claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with any claim that the Software and the Services breach the intellectual property rights of any third party and Customer's, its Practitioners or its patients use of the Software and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In the defense or settlement of any claim, the Supplier may procure the right for the Customer to continue using the Software and the Services, replace or modify the Software and the Services so that they become non-infringing or, if such remedies are not reasonably available, terminate this agreement on 30 Business Days' notice to the Customer. In the event of such a termination of the agreement the Supplier will be liable to pay liquidated damages or other additional costs to the Customer.</p><p>&nbsp;</p><p><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protection and processing of personal data</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It is contemplated that the Supplier and the Customer shall obtain, process and transfer personal data relating to employees and contractors of the Supplier, employees, contractors and Practitioners of the Customer and patients of such Practitioners who use the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Both parties will comply with all applicable requirements of the Data Protection Legislation. This is in addition to, and does not relieve, remove or replace, a party's obligations or rights under the Data Protection Legislation.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall, in relation to any personal data processed in connection with the performance by such party of its obligations.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that it has in place appropriate technical and organizational measures, to protect against unauthorized or unlawful processing of personal data and against accidental loss or destruction.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Not transfer any such personal data outside of United Arab Emirates unless the following conditions are fulfilled:</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There are in place appropriate safeguards in relation to the transfer.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The data subject has enforceable rights and effective legal remedies.</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maintain complete and accurate records and information to demonstrate its compliance with this paragraph and immediately inform the other party if, in the reasonable opinion of the other party, an instruction infringes the Data Protection Legislation</p><p>&nbsp;</p><p>IV.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There is an adequate level of protection to any personal data that is transferred; and</p><p>V.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The party complies with reasonable instructions notified to it in advance by the other party with respect to the processing of the personal data.</p><p>VI.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; At the written direction of the other party, delete or return personal data transferred from or processed on behalf of the other party and copies thereof to the other party termination of the agreement unless required by Applicable Law to store the personal data.</p><p>&nbsp;</p><p><strong>12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Anti-bribery and conflicts of interest</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer shall comply with all applicable laws, regulations, codes and sanctions relating to anti-bribery and anti-corruption relevant requirements.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customers have and shall maintain in place throughout the term of this agreement its own policies and procedures to ensure compliance with the Relevant Requirements and will enforce them where appropriate.</p><p><strong>13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warranties</strong></p><p>a)&nbsp; &nbsp; Each party represents, warrants and undertakes that, it has full capacity and authority and all necessary consents to enter in to perform this agreement and to grant the rights and Licenses referred to in this agreement and that this agreement is executed by its duly authorized representative and represents a binding commitment on it; and without affecting its other obligations under this agreement.</p><p><strong>14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Limitation of liability</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly and specifically provided in this agreement, the Customer assumes sole responsibility for results obtained from the use of the Software and the Services by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall have no liability for any damage caused by errors or omissions, in any information, instructions or scripts provided to the Supplier by the Customer in connection with the Software and the Services,</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any actions taken by the Supplier at the Customer's direction; all warranties, representations, conditions and all other terms of any kind whatsoever implied by statute or common law are, to the fullest extent permitted by applicable law, excluded from this agreement,</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Software and Services are provided to the customer on an&nbsp;“as is”&nbsp;basis.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement excludes the liability of the Supplier, death or injury caused by the supplier’s negligence or fraud or fraudulent representation.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The service provided by Mydrworld shall not be used for medical emergency.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subjected to above points in this paragraph,</p><p>&nbsp;</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The Supplier shall not be liable whether in tort including for negligence or breach of statutory duty, contract, misrepresentation, restitution or otherwise for any loss of profits, loss of business, depletion of goodwill and/or similar losses or loss or corruption of data or information, or pure economic loss, or for any special, indirect or consequential loss, costs, damages, charges or expenses however arising under this agreement.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier's total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall&nbsp; &nbsp;be limited to the total fee paid by the Customer to the Supplier during the 6 months immediately preceding the date on which the claim arose; and</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In respect of a breach on Charges and Payment terms and improper use of Software, the Customer’s total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall be limited to the higher of: (i) US$ 25,000 and: (ii) the total fee paid by the Customer to the Supplier during the 12 months immediately preceding the date on which the claim arose</p><p>&nbsp;</p><p><strong>15. Non-solicitation of Employees and Contractors</strong></p><p>a) &nbsp;In order to protect the legitimate business interests of the Supplier, the Customer covenants with the Supplier that it shall not and shall procure that no member of the Customer's group of companies shall) (except with the prior written consent of the Supplier</p><p>&nbsp;</p><p><strong>15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Confidentiality</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party may be given access to Confidential Information from the other party in order to perform its obligations under this agreement. A party's Confidential Information shall not be deemed to include information that, is or becomes publicly known other than through any act or omission of the receiving party, was in the other party's lawful possession before the disclosure,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall take all reasonable steps to ensure that the other's Confidential Information to which it has access is not disclosed or distributed by its employees or agents in violation of the terms of this agreement</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No party shall make, or permit any person to make, any public announcement concerning this agreement without the prior written consent of the other parties</p><p>&nbsp;</p><p><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Termination and terms.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall, unless otherwise terminated as provided in this paragraph, commence on the date hereof and shall continue for the Initial Subscription Term and, thereafter, this agreement shall be automatically renewed for successive periods of 12 months, either party notifies the other party of termination, in writing, at least 60 days before the end of the Initial Subscription Term</p><p>&nbsp;</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bother party commits a material breach of any other term of this agreement which breach is irremediable or fails to remedy that breach within a period of 30 days after being notified in writing to do so.The other party repeatedly breaches any of the terms of this The other party repeatedly breaches any of the terms of this agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this agreement;</p><p>&nbsp;</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party suspends, or threatens to suspend, payment of its debts or is unable to pay its debts as they fall due or admits inability to pay its debts or is deemed unable to pay its debts.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party commences negotiations with all or any class of its creditors with a view to rescheduling any of its debts, or makes a proposal for or enters into any compromise or arrangement with its creditors other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A petition is filed, a notice is given, a resolution is passed, or an order is made, for or in connection with the winding up of that other party other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party;</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; An application is made to court, or an order is made, for the appointment of an administrator, or if a notice of intention to appoint an administrator is given or if an administrator is appointed, over the other party.</p><p>&nbsp;</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A person becomes entitled to appoint a receiver over the assets of the other party or a receiver is appointed over the assets of the other party.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any event occurs, or proceeding is taken, with respect to the other party in any jurisdiction to which it is subject that has an effect equivalent or similar to any of the events mentioned in this paragraph above.</p><p>&nbsp;</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In termination of this agreement for any reason:</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; All Licenses granted under this agreement shall immediately terminate and the Customer shall immediately cease all use of the Software and the Services;</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall return and make no further use of any equipment, property and other items (and all copies of them) belonging to the other party;</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall destroy or otherwise dispose of any of the Confidential Information of the other party and in its possession save that each party shall be entitled to keep one copy of such information for legal and record keeping purposes provided that it shall keep such Confidential Information confidential and not use it for any purpose other than in connection with this agreement; and</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the rightto claim damages in respect of any breach of the agreement which existed at or before the date of termination shall not be affected or prejudiced.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Force majeure</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither party shall in any circumstances be in breach of this agreement nor liable for delay in performing, or failure to perform, any of its obligations under this agreement if such as</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or failure results from events, circumstances or causes beyond its reasonable control, including, without limitation, strikes, lockouts or other industrial disputes (whether involving the workforce of the Reseller or any other party</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Failure of a utility service or transport or telecommunications network, natural calamities, compliance with any law or governmental order, default of suppliers or Subcontractors.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In such circumstances the affected party shall be entitled to a reasonable extension of the time for performing such&nbsp; obligations, provided that if the period of delay or non-performance continues for three months, the party not affected may terminate this agreement by giving 30 days' written notice to the other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For the avoidance of doubt, as of the date of the agreement, any pandemic situations should not prevent the Parties from performing their respective obligations under this Agreement.</p><p>&nbsp;</p><p><strong>18.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Conflict</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If there is an inconsistency between any of the provisions in the main body of this agreement and the Schedules, the provisions in the main body of this agreement shall prevail.</p><p>&nbsp;</p><p><strong>19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variation</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No variation of this agreement shall be effective unless it is in writing and signed by the parties (or their authorized representatives).</p><p>&nbsp;</p><p><strong>20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Waiver</strong></p><p>a)&nbsp; &nbsp; &nbsp;No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it preventor restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy.</p><p>&nbsp;</p><p><strong>21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rights and remedies</strong></p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly provided in this agreement, the rights and remedies provided under this agreement are in addition to, and not exclusive of, any rights or remedies provided by law.</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Severance</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is or becomes invalid, illegal or unenforceable, it shall be deemed deleted, but that shall not affect the validity and enforceability of the rest of this agreement.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is deemed deleted under paragraph 20.1 the parties shall negotiate in good faith to agree a replacement provision that, to the greatest extent possible, achieves the intended commercial result of the original provision.</p><p>&nbsp;</p><p><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Entire agreement</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement constitutes the entire agreement between the parties and supersedes and extinguishes all previous agreements, promises, assurances, warranties, representations and understandings between them, whether written or oral, relating to its subject matter.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party acknowledges that in entering into this agreement it does not rely on, and shall have no remedies in respect of, any statement, representation, assurance or warranty (whether made innocently or negligently) that is not set out in this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party agrees that it shall have no claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this paragraph shall limit or exclude any liability for fraud.</p><p>&nbsp;</p><p><strong>25. Assignment</strong></p><p>a) Each Party shall not, without the prior written consent of the other Party, assign, transfer, charge, sub-contract or deal in any other manner with all or any of its rights or obligations under this agreement.</p><p><strong>26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No partnership or agency</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement is intended to or shall operate to create a partnership between the parties, or authorize either party to act as agent for the other, and neither party shall have the authority to act in the name or on behalf of or otherwise to bind the other in any way (including, but not limited to, the making of any representation or warranty, the assumption of any obligation or liability and the exercise of any right or power).Third party rights</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement does not confer any rights on any person or party (other than the parties to this agreement and, where applicable, their successors and permitted assigns).</p><p><strong>27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Notices</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any notice required to be given under this agreement shall be in writing and shall be delivered by hand or sent by pre-paid first-class post or recorded delivery post to the other party at its address set out in this agreement, or such other address as may have been notified by that party for such purposes, or sent by email to the other party’s email address as may have been notified by that party for such purpose as set out in this agreement</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A notice delivered by hand shall be deemed to have been received when delivered (or if delivery is not in business hours, at 9 am on the first business day following delivery). A correctly addressed notice sent by pre-paid first-class post or recorded delivery post shall be deemed to have been received at the time at which it would have been delivered in the normal course of post. An email shall be deemed to have been received at the time of transmission (as shown by the timed delivery receipt shown on the system of the sender).</p><p>&nbsp;</p><p><strong>28.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Governing law</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non- contractual disputes or claims) (Dispute) shall be governed by construed in accordance with the laws of Dubai, UAE</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The parties irrevocably agree that the courts of the Dubai, UAE have exclusive jurisdiction to settle any Disputes or claims arising out of or in connection with this agreement&nbsp;</p>	<ol><li><strong>Definitions:</strong><br>a)&nbsp;Supplier: M H A T Technologies, Dubai, UAE with License No. 1169959<br>b)&nbsp;Customer: Means the Doctor/Hospital/Clinic/Home care named as Customer<br>c)&nbsp; Platform: MyDrWorld online and mobile based Software operated by M H A T Technologies for the purposes of providing the Services<br>d) Initial Subscription Term: The initial 12-month term of this agreement from the date hereof.<br>e)Practitioners: Doctors and other healthcare professionals of the Customer<br>&nbsp;</li><li><strong>Services</strong><br>a)This agreement is valid from January 01,2024 to December 31, 2024<br>b)&nbsp; The Supplier shall provide to the Customer the Services subject to the terms and conditions mentioned in this agreement.<br>c)The Supplier and the Customer shall cooperate with each other in&nbsp; &nbsp;performing their obligations under this agreement.<br>&nbsp;</li><li><strong>&nbsp;Charges and Payments</strong><br>a) Agreed Fees payable by the Customer to the Supplier in respect of this Service will be in prior to the beginning of every half year and this fee are exclusive of all &nbsp; taxes including value added tax (VAT) applicable under any relevant laws.</li></ol><p><strong>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supplier’s Obligations</strong><br><strong>&nbsp; &nbsp;</strong>The Supplier undertakes that the Service will be performed with reasonable skill, diligence and care and in accordance with Good Industry Practice</p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has taken and undertakes that it shall continue to take such reasonable steps as would be taken by a prudent supplier in accordance with Good Industry Practice to ensure that,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any personal identity, contact and booking data in relation to patients is processed, transferred to the Customer and stored by it in accordance with the provisions in the Point 8.</p><p>&nbsp;</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IT systems provide for the continuous operation, availability and performance of the Software and the Services to users’&nbsp;whole days except for any maintenance which is required in relation to IT systems.</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ems are free from vulnerabilities of which the Supplier is aware or are publicly and widely known in the industry. Supplier operates and which it can take reasonable and commercial precautions to mitigate against and which it is reasonably foreseeable could materially adversely affect the Software and the Services.</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The provided Software including websites and relevant data is hosted on servers and hosting equipment as is provided by reputable cloud service.</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A support facility is provided to the Customer which shall be accessible by both email and call which shall be used as the initial point of contact for all day-to-day queries and fault reporting.</p><p>&nbsp;</p><p>v.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has and will maintain all necessary Licenses, consents and permissions necessary for the performance of its obligations under this agreement.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier does not warrant that.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any interruption of Software services by the use of customers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use of the Software and the Services will comply with laws and regulations which are applicable to the Customer.</p><p>&nbsp;</p><p><strong>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier is not responsible and has no liability to the Customer for:</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Information provided by the customers and third-party information management, communications systems and technology used by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploaded Information in relation to patients of the Customer who have booked directly with Customer.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Users who have booked appointments with the Customer through the Platform cancelling.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or other loss or damage resulting from the transfer of data over communications due to networks and facilities.</p><p>&nbsp;</p><p><strong>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall not prevent the Supplier from entering into similar agreements with third parties.</strong></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer's obligations</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Provide all required information accurate and timely manner relating to the Practitioners.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comply with all applicable laws and regulations with respect to its activities under this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is obliged to customer to carry out all other Customer responsibilities timely.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any delays in the Customer's provision of such assistance as agreed by the parties, the Supplier may adjust any agreed timetable or delivery schedule as necessary.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its Practitioners are properly qualified, accredited, licensed and experienced to provide proper healthcare assistance to patients. Applicable law shall be responsible for any Authorized User's breach of this agreement.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Obtain and shall maintain all necessary Licenses, consents, and permissions necessary for the Supplier, its contractors and agents to us e the Service and to perform their obligations under this agreement, including without limitation the platform and the Services and their health care services including but not limited to the online consultations.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its network and systems comply with the relevant specifications provided by the Supplier from time to time and by the relevant regulatory authorities.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To the extent permitted by law and except as otherwise expressly provided in this agreement, solely responsible for procuring, maintaining and securing its network connections and telecommunications links from its systems to the Supplier's data centers.</p><p><strong>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Proprietary rights</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges and agrees that the Supplier and/or its licensors own all intellectual property rights in the platform and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer does not grant any rights to, under or in, any patents, copyright, database right, trade secrets, trade names, trademarks.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier confirms that it has all the rights in relation to the platform and the Services that are necessary to grant all the rights it purports to grant under, and in accordance with, the terms of this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subject to the terms of this agreement, the Supplier hereby grants to the Customer a limited, non-exclusive, non- transferable license (without the right to sublicense) to use, access and interact with the platform solely for the purpose of receiving and using the Services for the purposes of, on and subject to the terms and conditions set out in this agreement.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The rights provided by the Supplier to the Customer are granted to the Customer only and shall not be considered granted to any subsidiary or holding company of the Customer.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer grants the Supplier a fully paid-up, worldwide, non- exclusive, royalty-free, non-transferable License to copy and modify the information and to use the trademarks of the Customer for the purpose of providing the Services to the Customer in accordance with this agreement.</p><p>&nbsp;</p><p><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indemnity</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall defend, indemnify and hold harmless the Customer against claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with any claim that the Software and the Services breach the intellectual property rights of any third party and Customer's, its Practitioners or its patients use of the Software and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In the defense or settlement of any claim, the Supplier may procure the right for the Customer to continue using the Software and the Services, replace or modify the Software and the Services so that they become non-infringing or, if such remedies are not reasonably available, terminate this agreement on 30 Business Days' notice to the Customer. In the event of such a termination of the agreement the Supplier will be liable to pay liquidated damages or other additional costs to the Customer.</p><p>&nbsp;</p><p><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protection and processing of personal data</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It is contemplated that the Supplier and the Customer shall obtain, process and transfer personal data relating to employees and contractors of the Supplier, employees, contractors and Practitioners of the Customer and patients of such Practitioners who use the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Both parties will comply with all applicable requirements of the Data Protection Legislation. This is in addition to, and does not relieve, remove or replace, a party's obligations or rights under the Data Protection Legislation.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall, in relation to any personal data processed in connection with the performance by such party of its obligations.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that it has in place appropriate technical and organizational measures, to protect against unauthorized or unlawful processing of personal data and against accidental loss or destruction.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Not transfer any such personal data outside of United Arab Emirates unless the following conditions are fulfilled:</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There are in place appropriate safeguards in relation to the transfer.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The data subject has enforceable rights and effective legal remedies.</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maintain complete and accurate records and information to demonstrate its compliance with this paragraph and immediately inform the other party if, in the reasonable opinion of the other party, an instruction infringes the Data Protection Legislation</p><p>&nbsp;</p><p>IV.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There is an adequate level of protection to any personal data that is transferred; and</p><p>V.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The party complies with reasonable instructions notified to it in advance by the other party with respect to the processing of the personal data.</p><p>VI.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; At the written direction of the other party, delete or return personal data transferred from or processed on behalf of the other party and copies thereof to the other party termination of the agreement unless required by Applicable Law to store the personal data.</p><p>&nbsp;</p><p><strong>12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Anti-bribery and conflicts of interest</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer shall comply with all applicable laws, regulations, codes and sanctions relating to anti-bribery and anti-corruption relevant requirements.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customers have and shall maintain in place throughout the term of this agreement its own policies and procedures to ensure compliance with the Relevant Requirements and will enforce them where appropriate.</p><p><strong>13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warranties</strong></p><p>a)&nbsp; &nbsp; Each party represents, warrants and undertakes that, it has full capacity and authority and all necessary consents to enter in to perform this agreement and to grant the rights and Licenses referred to in this agreement and that this agreement is executed by its duly authorized representative and represents a binding commitment on it; and without affecting its other obligations under this agreement.</p><p><strong>14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Limitation of liability</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly and specifically provided in this agreement, the Customer assumes sole responsibility for results obtained from the use of the Software and the Services by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall have no liability for any damage caused by errors or omissions, in any information, instructions or scripts provided to the Supplier by the Customer in connection with the Software and the Services,</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any actions taken by the Supplier at the Customer's direction; all warranties, representations, conditions and all other terms of any kind whatsoever implied by statute or common law are, to the fullest extent permitted by applicable law, excluded from this agreement,</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Software and Services are provided to the customer on an&nbsp;“as is”&nbsp;basis.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement excludes the liability of the Supplier, death or injury caused by the supplier’s negligence or fraud or fraudulent representation.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The service provided by Mydrworld shall not be used for medical emergency.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subjected to above points in this paragraph,</p><p>&nbsp;</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The Supplier shall not be liable whether in tort including for negligence or breach of statutory duty, contract, misrepresentation, restitution or otherwise for any loss of profits, loss of business, depletion of goodwill and/or similar losses or loss or corruption of data or information, or pure economic loss, or for any special, indirect or consequential loss, costs, damages, charges or expenses however arising under this agreement.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier's total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall&nbsp; &nbsp;be limited to the total fee paid by the Customer to the Supplier during the 6 months immediately preceding the date on which the claim arose; and</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In respect of a breach on Charges and Payment terms and improper use of Software, the Customer’s total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall be limited to the higher of: (i) US$ 25,000 and: (ii) the total fee paid by the Customer to the Supplier during the 12 months immediately preceding the date on which the claim arose</p><p>&nbsp;</p><p><strong>15. Non-solicitation of Employees and Contractors</strong></p><p>a) &nbsp;In order to protect the legitimate business interests of the Supplier, the Customer covenants with the Supplier that it shall not and shall procure that no member of the Customer's group of companies shall) (except with the prior written consent of the Supplier</p><p>&nbsp;</p><p><strong>15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Confidentiality</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party may be given access to Confidential Information from the other party in order to perform its obligations under this agreement. A party's Confidential Information shall not be deemed to include information that, is or becomes publicly known other than through any act or omission of the receiving party, was in the other party's lawful possession before the disclosure,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall take all reasonable steps to ensure that the other's Confidential Information to which it has access is not disclosed or distributed by its employees or agents in violation of the terms of this agreement</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No party shall make, or permit any person to make, any public announcement concerning this agreement without the prior written consent of the other parties</p><p>&nbsp;</p><p><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Termination and terms.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall, unless otherwise terminated as provided in this paragraph, commence on the date hereof and shall continue for the Initial Subscription Term and, thereafter, this agreement shall be automatically renewed for successive periods of 12 months, either party notifies the other party of termination, in writing, at least 60 days before the end of the Initial Subscription Term</p><p>&nbsp;</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bother party commits a material breach of any other term of this agreement which breach is irremediable or fails to remedy that breach within a period of 30 days after being notified in writing to do so.The other party repeatedly breaches any of the terms of this The other party repeatedly breaches any of the terms of this agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this agreement;</p><p>&nbsp;</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party suspends, or threatens to suspend, payment of its debts or is unable to pay its debts as they fall due or admits inability to pay its debts or is deemed unable to pay its debts.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party commences negotiations with all or any class of its creditors with a view to rescheduling any of its debts, or makes a proposal for or enters into any compromise or arrangement with its creditors other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A petition is filed, a notice is given, a resolution is passed, or an order is made, for or in connection with the winding up of that other party other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party;</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; An application is made to court, or an order is made, for the appointment of an administrator, or if a notice of intention to appoint an administrator is given or if an administrator is appointed, over the other party.</p><p>&nbsp;</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A person becomes entitled to appoint a receiver over the assets of the other party or a receiver is appointed over the assets of the other party.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any event occurs, or proceeding is taken, with respect to the other party in any jurisdiction to which it is subject that has an effect equivalent or similar to any of the events mentioned in this paragraph above.</p><p>&nbsp;</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In termination of this agreement for any reason:</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; All Licenses granted under this agreement shall immediately terminate and the Customer shall immediately cease all use of the Software and the Services;</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall return and make no further use of any equipment, property and other items (and all copies of them) belonging to the other party;</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall destroy or otherwise dispose of any of the Confidential Information of the other party and in its possession save that each party shall be entitled to keep one copy of such information for legal and record keeping purposes provided that it shall keep such Confidential Information confidential and not use it for any purpose other than in connection with this agreement; and</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the rightto claim damages in respect of any breach of the agreement which existed at or before the date of termination shall not be affected or prejudiced.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Force majeure</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither party shall in any circumstances be in breach of this agreement nor liable for delay in performing, or failure to perform, any of its obligations under this agreement if such as</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or failure results from events, circumstances or causes beyond its reasonable control, including, without limitation, strikes, lockouts or other industrial disputes (whether involving the workforce of the Reseller or any other party</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Failure of a utility service or transport or telecommunications network, natural calamities, compliance with any law or governmental order, default of suppliers or Subcontractors.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In such circumstances the affected party shall be entitled to a reasonable extension of the time for performing such&nbsp; obligations, provided that if the period of delay or non-performance continues for three months, the party not affected may terminate this agreement by giving 30 days' written notice to the other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For the avoidance of doubt, as of the date of the agreement, any pandemic situations should not prevent the Parties from performing their respective obligations under this Agreement.</p><p>&nbsp;</p><p><strong>18.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Conflict</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If there is an inconsistency between any of the provisions in the main body of this agreement and the Schedules, the provisions in the main body of this agreement shall prevail.</p><p>&nbsp;</p><p><strong>19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variation</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No variation of this agreement shall be effective unless it is in writing and signed by the parties (or their authorized representatives).</p><p>&nbsp;</p><p><strong>20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Waiver</strong></p><p>a)&nbsp; &nbsp; &nbsp;No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it preventor restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy.</p><p>&nbsp;</p><p><strong>21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rights and remedies</strong></p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly provided in this agreement, the rights and remedies provided under this agreement are in addition to, and not exclusive of, any rights or remedies provided by law.</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Severance</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is or becomes invalid, illegal or unenforceable, it shall be deemed deleted, but that shall not affect the validity and enforceability of the rest of this agreement.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is deemed deleted under paragraph 20.1 the parties shall negotiate in good faith to agree a replacement provision that, to the greatest extent possible, achieves the intended commercial result of the original provision.</p><p>&nbsp;</p><p><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Entire agreement</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement constitutes the entire agreement between the parties and supersedes and extinguishes all previous agreements, promises, assurances, warranties, representations and understandings between them, whether written or oral, relating to its subject matter.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party acknowledges that in entering into this agreement it does not rely on, and shall have no remedies in respect of, any statement, representation, assurance or warranty (whether made innocently or negligently) that is not set out in this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party agrees that it shall have no claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this paragraph shall limit or exclude any liability for fraud.</p><p>&nbsp;</p><p><strong>25. Assignment</strong></p><p>a) Each Party shall not, without the prior written consent of the other Party, assign, transfer, charge, sub-contract or deal in any other manner with all or any of its rights or obligations under this agreement.</p><p><strong>26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No partnership or agency</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement is intended to or shall operate to create a partnership between the parties, or authorize either party to act as agent for the other, and neither party shall have the authority to act in the name or on behalf of or otherwise to bind the other in any way (including, but not limited to, the making of any representation or warranty, the assumption of any obligation or liability and the exercise of any right or power).Third party rights</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement does not confer any rights on any person or party (other than the parties to this agreement and, where applicable, their successors and permitted assigns).</p><p><strong>27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Notices</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any notice required to be given under this agreement shall be in writing and shall be delivered by hand or sent by pre-paid first-class post or recorded delivery post to the other party at its address set out in this agreement, or such other address as may have been notified by that party for such purposes, or sent by email to the other party’s email address as may have been notified by that party for such purpose as set out in this agreement</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A notice delivered by hand shall be deemed to have been received when delivered (or if delivery is not in business hours, at 9 am on the first business day following delivery). A correctly addressed notice sent by pre-paid first-class post or recorded delivery post shall be deemed to have been received at the time at which it would have been delivered in the normal course of post. An email shall be deemed to have been received at the time of transmission (as shown by the timed delivery receipt shown on the system of the sender).</p><p>&nbsp;</p><p><strong>28.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Governing law</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non- contractual disputes or claims) (Dispute) shall be governed by construed in accordance with the laws of Dubai, UAE</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The parties irrevocably agree that the courts of the Dubai, UAE have exclusive jurisdiction to settle any Disputes or claims arising out of or in connection with this agreement&nbsp;</p>	\N	\N	\N	2024-06-29 09:48:18	2024-07-07 05:15:44	3
+11	Terms of use	Terms of use	1	<ol><li><strong>Definitions:</strong><br>a)&nbsp;Supplier: M H A T Technologies, Dubai, UAE with License No. 1169959<br>b)&nbsp;Customer: Means the Doctor/Hospital/Clinic/Home care named as Customer<br>c)&nbsp; Platform: MyDrWorld online and mobile based Software operated by M H A T Technologies for the purposes of providing the Services<br>d) Initial Subscription Term: The initial 12-month term of this agreement from the date hereof.<br>e)Practitioners: Doctors and other healthcare professionals of the Customer<br>&nbsp;</li><li><strong>Services</strong><br>a)This agreement is valid from January 01,2024 to December 31, 2024<br>b)&nbsp; The Supplier shall provide to the Customer the Services subject to the terms and conditions mentioned in this agreement.<br>c)The Supplier and the Customer shall cooperate with each other in&nbsp; &nbsp;performing their obligations under this agreement.<br>&nbsp;</li><li><strong>&nbsp;Charges and Payments</strong><br>a) Agreed Fees payable by the Customer to the Supplier in respect of this Service will be in prior to the beginning of every half year and this fee are exclusive of all &nbsp; taxes including value added tax (VAT) applicable under any relevant laws.</li></ol><p><strong>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Supplier’s Obligations</strong><br><strong>&nbsp; &nbsp;</strong>The Supplier undertakes that the Service will be performed with reasonable skill, diligence and care and in accordance with Good Industry Practice</p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has taken and undertakes that it shall continue to take such reasonable steps as would be taken by a prudent supplier in accordance with Good Industry Practice to ensure that,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any personal identity, contact and booking data in relation to patients is processed, transferred to the Customer and stored by it in accordance with the provisions in the Point 8.</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IT systems provide for the continuous operation, availability and performance of the Software and the Services to users’&nbsp;whole days except for any maintenance which is required in relation to IT systems.</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ems are free from vulnerabilities of which the Supplier is aware or are publicly and widely known in the industry. Supplier operates and which it can take reasonable and commercial precautions to mitigate against and which it is reasonably foreseeable could materially adversely affect the Software and the Services.</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The provided Software including websites and relevant data is hosted on servers and hosting equipment as is provided by reputable cloud service.</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A support facility is provided to the Customer which shall be accessible by both email and call which shall be used as the initial point of contact for all day-to-day queries and fault reporting.</p><p>&nbsp;</p><p>v.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier warrants that it has and will maintain all necessary Licenses, consents and permissions necessary for the performance of its obligations under this agreement.</p><p><strong>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier does not warrant that.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any interruption of Software services by the use of customers</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Use of the Software and the Services will comply with laws and regulations which are applicable to the Customer.</p><p>&nbsp;</p><p><strong>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier is not responsible and has no liability to the Customer for:</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Information provided by the customers and third-party information management, communications systems and technology used by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Uploaded Information in relation to patients of the Customer who have booked directly with Customer.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Users who have booked appointments with the Customer through the Platform cancelling.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or other loss or damage resulting from the transfer of data over communications due to networks and facilities.</p><p>&nbsp;</p><p><strong>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall not prevent the Supplier from entering into similar agreements with third parties.</strong></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer's obligations</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Provide all required information accurate and timely manner relating to the Practitioners.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Comply with all applicable laws and regulations with respect to its activities under this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This is obliged to customer to carry out all other Customer responsibilities timely.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any delays in the Customer's provision of such assistance as agreed by the parties, the Supplier may adjust any agreed timetable or delivery schedule as necessary.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its Practitioners are properly qualified, accredited, licensed and experienced to provide proper healthcare assistance to patients. Applicable law shall be responsible for any Authorized User's breach of this agreement.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;Obtain and shall maintain all necessary Licenses, consents, and permissions necessary for the Supplier, its contractors and agents to us e the Service and to perform their obligations under this agreement, including without limitation the platform and the Services and their health care services including but not limited to the online consultations.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that its network and systems comply with the relevant specifications provided by the Supplier from time to time and by the relevant regulatory authorities.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; To the extent permitted by law and except as otherwise expressly provided in this agreement, solely responsible for procuring, maintaining and securing its network connections and telecommunications links from its systems to the Supplier's data centers.</p><p><strong>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Proprietary rights</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges and agrees that the Supplier and/or its licensors own all intellectual property rights in the platform and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer does not grant any rights to, under or in, any patents, copyright, database right, trade secrets, trade names, trademarks.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier confirms that it has all the rights in relation to the platform and the Services that are necessary to grant all the rights it purports to grant under, and in accordance with, the terms of this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subject to the terms of this agreement, the Supplier hereby grants to the Customer a limited, non-exclusive, non- transferable license (without the right to sublicense) to use, access and interact with the platform solely for the purpose of receiving and using the Services for the purposes of, on and subject to the terms and conditions set out in this agreement.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The rights provided by the Supplier to the Customer are granted to the Customer only and shall not be considered granted to any subsidiary or holding company of the Customer.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer grants the Supplier a fully paid-up, worldwide, non- exclusive, royalty-free, non-transferable License to copy and modify the information and to use the trademarks of the Customer for the purpose of providing the Services to the Customer in accordance with this agreement.</p><p>&nbsp;</p><p><strong>10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Indemnity</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall defend, indemnify and hold harmless the Customer against claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with any claim that the Software and the Services breach the intellectual property rights of any third party and Customer's, its Practitioners or its patients use of the Software and the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In the defense or settlement of any claim, the Supplier may procure the right for the Customer to continue using the Software and the Services, replace or modify the Software and the Services so that they become non-infringing or, if such remedies are not reasonably available, terminate this agreement on 30 Business Days' notice to the Customer. In the event of such a termination of the agreement the Supplier will be liable to pay liquidated damages or other additional costs to the Customer.</p><p>&nbsp;</p><p><strong>11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protection and processing of personal data</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; It is contemplated that the Supplier and the Customer shall obtain, process and transfer personal data relating to employees and contractors of the Supplier, employees, contractors and Practitioners of the Customer and patients of such Practitioners who use the Services.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Both parties will comply with all applicable requirements of the Data Protection Legislation. This is in addition to, and does not relieve, remove or replace, a party's obligations or rights under the Data Protection Legislation.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall, in relation to any personal data processed in connection with the performance by such party of its obligations.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Ensure that it has in place appropriate technical and organizational measures, to protect against unauthorized or unlawful processing of personal data and against accidental loss or destruction.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Not transfer any such personal data outside of United Arab Emirates unless the following conditions are fulfilled:</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There are in place appropriate safeguards in relation to the transfer.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The data subject has enforceable rights and effective legal remedies.</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Maintain complete and accurate records and information to demonstrate its compliance with this paragraph and immediately inform the other party if, in the reasonable opinion of the other party, an instruction infringes the Data Protection Legislation</p><p>&nbsp;</p><p>IV.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; There is an adequate level of protection to any personal data that is transferred; and</p><p>V.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The party complies with reasonable instructions notified to it in advance by the other party with respect to the processing of the personal data.</p><p>VI.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; At the written direction of the other party, delete or return personal data transferred from or processed on behalf of the other party and copies thereof to the other party termination of the agreement unless required by Applicable Law to store the personal data.</p><p>&nbsp;</p><p><strong>12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Anti-bribery and conflicts of interest</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customer shall comply with all applicable laws, regulations, codes and sanctions relating to anti-bribery and anti-corruption relevant requirements.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Customers have and shall maintain in place throughout the term of this agreement its own policies and procedures to ensure compliance with the Relevant Requirements and will enforce them where appropriate.</p><p><strong>13.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warranties</strong></p><p>a)&nbsp; &nbsp; Each party represents, warrants and undertakes that, it has full capacity and authority and all necessary consents to enter in to perform this agreement and to grant the rights and Licenses referred to in this agreement and that this agreement is executed by its duly authorized representative and represents a binding commitment on it; and without affecting its other obligations under this agreement.</p><p><strong>14.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Limitation of liability</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly and specifically provided in this agreement, the Customer assumes sole responsibility for results obtained from the use of the Software and the Services by the Customer.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier shall have no liability for any damage caused by errors or omissions, in any information, instructions or scripts provided to the Supplier by the Customer in connection with the Software and the Services,</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any actions taken by the Supplier at the Customer's direction; all warranties, representations, conditions and all other terms of any kind whatsoever implied by statute or common law are, to the fullest extent permitted by applicable law, excluded from this agreement,</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Software and Services are provided to the customer on an&nbsp;“as is”&nbsp;basis.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement excludes the liability of the Supplier, death or injury caused by the supplier’s negligence or fraud or fraudulent representation.</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The service provided by Mydrworld shall not be used for medical emergency.</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subjected to above points in this paragraph,</p><p>&nbsp;</p><p>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;The Supplier shall not be liable whether in tort including for negligence or breach of statutory duty, contract, misrepresentation, restitution or otherwise for any loss of profits, loss of business, depletion of goodwill and/or similar losses or loss or corruption of data or information, or pure economic loss, or for any special, indirect or consequential loss, costs, damages, charges or expenses however arising under this agreement.</p><p>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Supplier's total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall&nbsp; &nbsp;be limited to the total fee paid by the Customer to the Supplier during the 6 months immediately preceding the date on which the claim arose; and</p><p>III.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In respect of a breach on Charges and Payment terms and improper use of Software, the Customer’s total aggregate liability in contract, tort (including negligence or breach of statutory duty), misrepresentation, restitution or otherwise, arising in connection with the performance or contemplated performance of this agreement to any party or third party shall be limited to the higher of: (i) US$ 25,000 and: (ii) the total fee paid by the Customer to the Supplier during the 12 months immediately preceding the date on which the claim arose</p><p>&nbsp;</p><p><strong>15. Non-solicitation of Employees and Contractors</strong></p><p>a) &nbsp;In order to protect the legitimate business interests of the Supplier, the Customer covenants with the Supplier that it shall not and shall procure that no member of the Customer's group of companies shall) (except with the prior written consent of the Supplier</p><p>&nbsp;</p><p><strong>15.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Confidentiality</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party may be given access to Confidential Information from the other party in order to perform its obligations under this agreement. A party's Confidential Information shall not be deemed to include information that, is or becomes publicly known other than through any act or omission of the receiving party, was in the other party's lawful possession before the disclosure,</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall take all reasonable steps to ensure that the other's Confidential Information to which it has access is not disclosed or distributed by its employees or agents in violation of the terms of this agreement</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The Customer acknowledges that details of the Software and the Services, and the results of any performance tests of the Software and the Services, constitute the Supplier's Confidential Information.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No party shall make, or permit any person to make, any public announcement concerning this agreement without the prior written consent of the other parties</p><p>&nbsp;</p><p><strong>16.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Termination and terms.</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement shall, unless otherwise terminated as provided in this paragraph, commence on the date hereof and shall continue for the Initial Subscription Term and, thereafter, this agreement shall be automatically renewed for successive periods of 12 months, either party notifies the other party of termination, in writing, at least 60 days before the end of the Initial Subscription Term</p><p>&nbsp;</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Bother party commits a material breach of any other term of this agreement which breach is irremediable or fails to remedy that breach within a period of 30 days after being notified in writing to do so.The other party repeatedly breaches any of the terms of this The other party repeatedly breaches any of the terms of this agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this agreement;</p><p>&nbsp;</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party suspends, or threatens to suspend, payment of its debts or is unable to pay its debts as they fall due or admits inability to pay its debts or is deemed unable to pay its debts.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The other party commences negotiations with all or any class of its creditors with a view to rescheduling any of its debts, or makes a proposal for or enters into any compromise or arrangement with its creditors other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A petition is filed, a notice is given, a resolution is passed, or an order is made, for or in connection with the winding up of that other party other than for the sole purpose of a scheme for a solvent amalgamation of that other party with one or more other companies or the solvent reconstruction of that other party;</p><p>f)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; An application is made to court, or an order is made, for the appointment of an administrator, or if a notice of intention to appoint an administrator is given or if an administrator is appointed, over the other party.</p><p>&nbsp;</p><p>g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A person becomes entitled to appoint a receiver over the assets of the other party or a receiver is appointed over the assets of the other party.</p><p>h)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any event occurs, or proceeding is taken, with respect to the other party in any jurisdiction to which it is subject that has an effect equivalent or similar to any of the events mentioned in this paragraph above.</p><p>&nbsp;</p><p>i)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In termination of this agreement for any reason:</p><p>i.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; All Licenses granted under this agreement shall immediately terminate and the Customer shall immediately cease all use of the Software and the Services;</p><p>ii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall return and make no further use of any equipment, property and other items (and all copies of them) belonging to the other party;</p><p>iii.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party shall destroy or otherwise dispose of any of the Confidential Information of the other party and in its possession save that each party shall be entitled to keep one copy of such information for legal and record keeping purposes provided that it shall keep such Confidential Information confidential and not use it for any purpose other than in connection with this agreement; and</p><p>iv.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any rights, remedies, obligations or liabilities of the parties that have accrued up to the date of termination, including the rightto claim damages in respect of any breach of the agreement which existed at or before the date of termination shall not be affected or prejudiced.</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>17.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Force majeure</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Neither party shall in any circumstances be in breach of this agreement nor liable for delay in performing, or failure to perform, any of its obligations under this agreement if such as</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Delay or failure results from events, circumstances or causes beyond its reasonable control, including, without limitation, strikes, lockouts or other industrial disputes (whether involving the workforce of the Reseller or any other party</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Failure of a utility service or transport or telecommunications network, natural calamities, compliance with any law or governmental order, default of suppliers or Subcontractors.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In such circumstances the affected party shall be entitled to a reasonable extension of the time for performing such&nbsp; obligations, provided that if the period of delay or non-performance continues for three months, the party not affected may terminate this agreement by giving 30 days' written notice to the other party.</p><p>e)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For the avoidance of doubt, as of the date of the agreement, any pandemic situations should not prevent the Parties from performing their respective obligations under this Agreement.</p><p>&nbsp;</p><p><strong>18.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Conflict</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If there is an inconsistency between any of the provisions in the main body of this agreement and the Schedules, the provisions in the main body of this agreement shall prevail.</p><p>&nbsp;</p><p><strong>19.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variation</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No variation of this agreement shall be effective unless it is in writing and signed by the parties (or their authorized representatives).</p><p>&nbsp;</p><p><strong>20.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Waiver</strong></p><p>a)&nbsp; &nbsp; &nbsp;No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it preventor restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy.</p><p>&nbsp;</p><p><strong>21.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rights and remedies</strong></p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Except as expressly provided in this agreement, the rights and remedies provided under this agreement are in addition to, and not exclusive of, any rights or remedies provided by law.</p><p>&nbsp;</p><p>&nbsp;</p><p><strong>22.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Severance</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is or becomes invalid, illegal or unenforceable, it shall be deemed deleted, but that shall not affect the validity and enforceability of the rest of this agreement.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If any provision or part-provision of this agreement is deemed deleted under paragraph 20.1 the parties shall negotiate in good faith to agree a replacement provision that, to the greatest extent possible, achieves the intended commercial result of the original provision.</p><p>&nbsp;</p><p><strong>23.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Entire agreement</strong></p><p>&nbsp;</p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement constitutes the entire agreement between the parties and supersedes and extinguishes all previous agreements, promises, assurances, warranties, representations and understandings between them, whether written or oral, relating to its subject matter.</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party acknowledges that in entering into this agreement it does not rely on, and shall have no remedies in respect of, any statement, representation, assurance or warranty (whether made innocently or negligently) that is not set out in this agreement.</p><p>c)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Each party agrees that it shall have no claim for innocent or negligent misrepresentation or negligent misstatement based on any statement in this agreement.</p><p>d)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this paragraph shall limit or exclude any liability for fraud.</p><p>&nbsp;</p><p><strong>25. Assignment</strong></p><p>a) Each Party shall not, without the prior written consent of the other Party, assign, transfer, charge, sub-contract or deal in any other manner with all or any of its rights or obligations under this agreement.</p><p><strong>26.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; No partnership or agency</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Nothing in this agreement is intended to or shall operate to create a partnership between the parties, or authorize either party to act as agent for the other, and neither party shall have the authority to act in the name or on behalf of or otherwise to bind the other in any way (including, but not limited to, the making of any representation or warranty, the assumption of any obligation or liability and the exercise of any right or power).Third party rights</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement does not confer any rights on any person or party (other than the parties to this agreement and, where applicable, their successors and permitted assigns).</p><p><strong>27.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Notices</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Any notice required to be given under this agreement shall be in writing and shall be delivered by hand or sent by pre-paid first-class post or recorded delivery post to the other party at its address set out in this agreement, or such other address as may have been notified by that party for such purposes, or sent by email to the other party’s email address as may have been notified by that party for such purpose as set out in this agreement</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A notice delivered by hand shall be deemed to have been received when delivered (or if delivery is not in business hours, at 9 am on the first business day following delivery). A correctly addressed notice sent by pre-paid first-class post or recorded delivery post shall be deemed to have been received at the time at which it would have been delivered in the normal course of post. An email shall be deemed to have been received at the time of transmission (as shown by the timed delivery receipt shown on the system of the sender).</p><p>&nbsp;</p><p><strong>28.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Governing law</strong></p><p>a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This agreement and any dispute or claim arising out of or in connection with it or its subject matter or formation (including non- contractual disputes or claims) (Dispute) shall be governed by construed in accordance with the laws of Dubai, UAE</p><p>b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The parties irrevocably agree that the courts of the Dubai, UAE have exclusive jurisdiction to settle any Disputes or claims arising out of or in connection with this agreement&nbsp;</p>	<h2>What is Lorem Ipsum?</h2><p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p><p><br>&nbsp;</p><h2>Where does it come from?</h2><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p><p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p><h2>Where can I get some?</h2><p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>	\N	\N	\N	2024-06-29 09:54:17	2024-07-07 05:16:46	4
+\.
+
+
+--
+-- Data for Name: cache; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cache (key, value, expiration) FROM stdin;
+\.
+
+
+--
+-- Data for Name: cache_locks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.cache_locks (key, owner, expiration) FROM stdin;
+\.
+
+
+--
+-- Data for Name: callcenter_user_details; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.callcenter_user_details (id, user_id, country_id, emirate_id, area_id, address, location, website, deleted_at, created_at, updated_at) FROM stdin;
+2	62	229	2	1	DFCC	25.20269671060694,55.25470899987791	helocAL.c	\N	2024-06-28 07:23:07	2024-06-28 07:23:07
+3	75	229	2	1	Al	25.19445676727194,55.27350425720215	hum.c	\N	2024-06-29 07:14:16	2024-06-29 12:32:51
+4	80	229	2	1	duhbai	25.203120200696162,55.263435118999915	hello.com	\N	2024-06-29 12:36:32	2024-06-29 12:36:32
+5	81	229	2	1	dubai	25.20696026502463,55.241403579711914	geel.com	\N	2024-06-29 12:39:41	2024-06-29 12:39:41
+6	94	229	2	1	Al Ohood Street - Sheikh Mohammed bin Rashid Blvd - Downtown Dubai - Dubai	25.200980491516884,55.27041435241699	tel.c	\N	2024-07-02 05:05:34	2024-07-02 05:05:34
+1	33	229	2	1	Downtown,Dubai	25.207143889766723,55.26693987298582	hh@hh.com	\N	2024-06-21 06:48:43	2024-07-04 12:00:07
+7	159	229	7	59	huawei	25.216904870879972,55.2736759185791	Hu`awei.com	\N	2024-07-08 14:19:56	2024-07-08 14:19:56
+8	164	229	2	75	Crescent	25.194261750461205,55.23331042928305	phonebridge.v	\N	2024-07-09 06:54:57	2024-07-09 08:37:48
+10	166	229	8	74	uae	25.2275804,55.1750121	x	\N	2024-07-09 08:35:02	2024-07-09 13:33:31
+9	165	229	8	74	Crescent	25.208289332979227,55.279142134991126	ph.ph	\N	2024-07-09 07:00:59	2024-07-09 15:56:55
+11	179	229	6	52	Dubai	25.203948572136216,55.29871153196378	g.c	\N	2024-07-09 15:59:38	2024-07-09 15:59:38
+\.
+
+
+--
+-- Data for Name: contact_us; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contact_us (id, name, email, dial_code, mobile, message, reply, created_at, updated_at) FROM stdin;
+1	test name	test2@gmail.com	+92		test message	\N	2024-07-01 10:41:37	2024-07-01 10:41:37
+2	test	test@gmail.com	+971		31231313123	\N	2024-07-02 20:41:02	2024-07-02 20:41:02
+3	moin test	test91@gmail.com	+971		1234567890	\N	2024-07-02 20:47:11	2024-07-02 20:47:11
+4	Anil Navis	fh@fgg.com	+971		523243164	\N	2024-07-03 02:47:08	2024-07-03 02:47:08
+5	Devika	devika@dxbapps.com	+971		support centre	\N	2024-07-03 05:43:45	2024-07-03 05:43:45
+6	Anna Maria	deva@deva.com	+971		505555585	\N	2024-07-06 08:28:32	2024-07-06 08:28:32
+7	Angel Maria	angel@angel.com	+971		I need the authorisation	\N	2024-07-06 08:28:32	2024-07-06 08:28:32
+8	naviz hjj	navisanil@gmail.com	+971		552255553	\N	2024-07-06 11:12:04	2024-07-06 11:12:04
+\.
+
+
+--
+-- Data for Name: contact_us_settings; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contact_us_settings (id, title_en, title_ar, email, mobile, desc_en, desc_ar, location, latitude, longitude, twitter, instagram, facebook, youtube, linkedin, created_at, updated_at) FROM stdin;
+1	MyDrWorld	\N	info@mydrworld.com	+97154866869	\N	\N	673C+W8M - Dubai - United Arab Emirates	\N	\N	\N	\N	\N	\N	\N	\N	2024-07-01 10:08:27
+\.
+
+
+--
+-- Data for Name: country; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.country (id, name, prefix, dial_code, active, created_at, updated_at, deleted_at, name_ar) FROM stdin;
+1	Afghanistan	AF	93	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+2	Aland Islands	AX	358	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+3	Albania	AL	355	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+4	Algeria	DZ	213	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+5	AmericanSamoa	AS	1684	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+6	Andorra	AD	376	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+7	Angola	AO	244	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+8	Anguilla	AI	1264	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+9	Antarctica	AQ	672	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+10	Antigua and Barbuda	AG	1268	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+11	Argentina	AR	54	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+12	Armenia	AM	374	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+13	Aruba	AW	297	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+14	Australia	AU	61	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+15	Austria	AT	43	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+16	Azerbaijan	AZ	994	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+17	Bahamas	BS	1242	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+18	Bahrain	BH	973	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+19	Bangladesh	BD	880	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+20	Barbados	BB	1246	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+21	Belarus	BY	375	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+22	Belgium	BE	32	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+23	Belize	BZ	501	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+24	Benin	BJ	229	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+25	Bermuda	BM	1441	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+26	Bhutan	BT	975	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+27	Bolivia, Plurinational State of	BO	591	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+28	Bosnia and Herzegovina	BA	387	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+29	Botswana	BW	267	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+30	Brazil	BR	55	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+31	British Indian Ocean Territory	IO	246	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+32	Brunei Darussalam	BN	673	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+33	Bulgaria	BG	359	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+34	Burkina Faso	BF	226	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+35	Burundi	BI	257	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+36	Cambodia	KH	855	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+37	Cameroon	CM	237	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+38	Canada	CA	1	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+39	Cape Verde	CV	238	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+40	Cayman Islands	KY	 345	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+41	Central African Republic	CF	236	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+42	Chad	TD	235	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+43	Chile	CL	56	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+44	China	CN	86	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+45	Christmas Island	CX	61	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+46	Cocos (Keeling) Islands	CC	61	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+47	Colombia	CO	57	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+48	Comoros	KM	269	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+49	Congo	CG	242	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+50	Congo, The Democratic Republic of the Congo	CD	243	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+51	Cook Islands	CK	682	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+52	Costa Rica	CR	506	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+53	Cote d'Ivoire	CI	225	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+54	Croatia	HR	385	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+55	Cuba	CU	53	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+56	Cyprus	CY	357	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+57	Czech Republic	CZ	420	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+58	Denmark	DK	45	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+59	Djibouti	DJ	253	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+60	Dominica	DM	1767	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+61	Dominican Republic	DO	1849	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+62	Ecuador	EC	593	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+63	Egypt	EG	20	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+64	El Salvador	SV	503	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+65	Equatorial Guinea	GQ	240	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+66	Eritrea	ER	291	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+67	Estonia	EE	372	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+68	Ethiopia	ET	251	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+69	Falkland Islands (Malvinas)	FK	500	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+70	Faroe Islands	FO	298	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+71	Fiji	FJ	679	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+72	Finland	FI	358	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+73	France	FR	33	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+74	French Guiana	GF	594	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+75	French Polynesia	PF	689	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+76	Gabon	GA	241	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+77	Gambia	GM	220	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+78	Georgia	GE	995	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+79	Germany	DE	49	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+80	Ghana	GH	233	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+81	Gibraltar	GI	350	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+82	Greece	GR	30	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+83	Greenland	GL	299	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+84	Grenada	GD	1473	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+85	Guadeloupe	GP	590	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+86	Guam	GU	1671	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+87	Guatemala	GT	502	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+88	Guernsey	GG	44	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+89	Guinea	GN	224	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+90	Guinea-Bissau	GW	245	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+91	Guyana	GY	595	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+92	Haiti	HT	509	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+93	Holy See (Vatican City State)	VA	379	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+94	Honduras	HN	504	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+95	Hong Kong	HK	852	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+96	Hungary	HU	36	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+97	Iceland	IS	354	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+98	India	IN	91	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+99	Indonesia	ID	62	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+100	Iran, Islamic Republic of Persian Gulf	IR	98	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+101	Iraq	IQ	964	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+102	Ireland	IE	353	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+103	Isle of Man	IM	44	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+104	Israel	IL	972	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+105	Italy	IT	39	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+106	Jamaica	JM	1876	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+107	Japan	JP	81	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+108	Jersey	JE	44	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+109	Jordan	JO	962	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+110	Kazakhstan	KZ	77	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+111	Kenya	KE	254	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+112	Kiribati	KI	686	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+113	Korea, Democratic People's Republic of Korea	KP	850	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+114	Korea, Republic of South Korea	KR	82	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+115	Kuwait	KW	965	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+116	Kyrgyzstan	KG	996	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+117	Laos	LA	856	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+118	Latvia	LV	371	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+119	Lebanon	LB	961	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+120	Lesotho	LS	266	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+121	Liberia	LR	231	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+122	Libyan Arab Jamahiriya	LY	218	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+123	Liechtenstein	LI	423	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+124	Lithuania	LT	370	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+125	Luxembourg	LU	352	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+126	Macao	MO	853	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+127	Macedonia	MK	389	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+128	Madagascar	MG	261	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+129	Malawi	MW	265	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+130	Malaysia	MY	60	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+131	Maldives	MV	960	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+132	Mali	ML	223	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+133	Malta	MT	356	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+134	Marshall Islands	MH	692	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+135	Martinique	MQ	596	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+136	Mauritania	MR	222	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+137	Mauritius	MU	230	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+138	Mayotte	YT	262	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+139	Mexico	MX	52	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+140	Micronesia, Federated States of Micronesia	FM	691	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+141	Moldova	MD	373	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+142	Monaco	MC	377	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+143	Mongolia	MN	976	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+144	Montenegro	ME	382	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+145	Montserrat	MS	1664	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+146	Morocco	MA	212	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+147	Mozambique	MZ	258	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+148	Myanmar	MM	95	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+149	Namibia	NA	264	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+150	Nauru	NR	674	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+151	Nepal	NP	977	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+152	Netherlands	NL	31	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+153	Netherlands Antilles	AN	599	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+154	New Caledonia	NC	687	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+155	New Zealand	NZ	64	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+156	Nicaragua	NI	505	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+157	Niger	NE	227	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+158	Nigeria	NG	234	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+159	Niue	NU	683	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+160	Norfolk Island	NF	672	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+161	Northern Mariana Islands	MP	1670	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+162	Norway	NO	47	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+163	Oman	OM	968	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+164	Pakistan	PK	92	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+165	Palau	PW	680	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+166	Palestinian Territory, Occupied	PS	970	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+167	Panama	PA	507	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+168	Papua New Guinea	PG	675	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+169	Paraguay	PY	595	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+170	Peru	PE	51	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+171	Philippines	PH	63	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+172	Pitcairn	PN	872	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+173	Poland	PL	48	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+174	Portugal	PT	351	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+175	Puerto Rico	PR	1939	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+176	Qatar	QA	974	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+177	Romania	RO	40	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+178	Russia	RU	7	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+179	Rwanda	RW	250	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+180	Reunion	RE	262	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+181	Saint Barthelemy	BL	590	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+182	Saint Helena, Ascension and Tristan Da Cunha	SH	290	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+183	Saint Kitts and Nevis	KN	1869	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+184	Saint Lucia	LC	1758	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+185	Saint Martin	MF	590	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+186	Saint Pierre and Miquelon	PM	508	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+187	Saint Vincent and the Grenadines	VC	1784	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+188	Samoa	WS	685	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+189	San Marino	SM	378	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+190	Sao Tome and Principe	ST	239	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+191	Saudi Arabia	SA	966	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+192	Senegal	SN	221	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+193	Serbia	RS	381	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+194	Seychelles	SC	248	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+195	Sierra Leone	SL	232	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+196	Singapore	SG	65	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+197	Slovakia	SK	421	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+198	Slovenia	SI	386	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+199	Solomon Islands	SB	677	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+200	Somalia	SO	252	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+201	South Africa	ZA	27	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+202	South Sudan	SS	211	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+203	South Georgia and the South Sandwich Islands	GS	500	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+204	Spain	ES	34	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+205	Sri Lanka	LK	94	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+206	Sudan	SD	249	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+207	Suriname	SR	597	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+208	Svalbard and Jan Mayen	SJ	47	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+209	Swaziland	SZ	268	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+210	Sweden	SE	46	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+211	Switzerland	CH	41	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+212	Syrian Arab Republic	SY	963	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+213	Taiwan	TW	886	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+214	Tajikistan	TJ	992	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+215	Tanzania, United Republic of Tanzania	TZ	255	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+216	Thailand	TH	66	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+217	Timor-Leste	TL	670	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+218	Togo	TG	228	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+219	Tokelau	TK	690	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+220	Tonga	TO	676	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+221	Trinidad and Tobago	TT	1868	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+222	Tunisia	TN	216	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+223	Turkey	TR	90	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+224	Turkmenistan	TM	993	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+225	Turks and Caicos Islands	TC	1649	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+226	Tuvalu	TV	688	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+227	Uganda	UG	256	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+228	Ukraine	UA	380	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+229	United Arab Emirates	AE	971	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+230	United Kingdom	GB	44	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+231	United States	US	1	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+232	Uruguay	UY	598	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+233	Uzbekistan	UZ	998	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+234	Vanuatu	VU	678	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+235	Venezuela, Bolivarian Republic of Venezuela	VE	58	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+236	Vietnam	VN	84	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+237	Virgin Islands, British	VG	1284	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+238	Virgin Islands, U.S.	VI	1340	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+239	Wallis and Futuna	WF	681	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+240	Yemen	YE	967	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+241	Zambia	ZM	260	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+242	Zimbabwe	ZW	263	1	2024-03-26 05:06:03	2024-03-26 05:06:03	\N	\N
+\.
+
+
+--
+-- Data for Name: country_of_origins; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.country_of_origins (id, name, name_ar, status, created_at, updated_at, deleted_at) FROM stdin;
+357	Egypt	\N	1	\N	\N	\N
+358	El Salvador	\N	1	\N	\N	\N
+359	Equatorial Guinea	\N	1	\N	\N	\N
+360	Eritrea	\N	1	\N	\N	\N
+361	Estonia	\N	1	\N	\N	\N
+362	Eswatini	\N	1	\N	\N	\N
+363	Ethiopia	\N	1	\N	\N	\N
+364	Faeroe Islands	\N	1	\N	\N	\N
+365	Finland	\N	1	\N	\N	\N
+366	France	\N	1	\N	\N	\N
+367	French Guiana	\N	1	\N	\N	\N
+368	Gabon	\N	1	\N	\N	\N
+369	Gambia	\N	1	\N	\N	\N
+370	Georgia	\N	1	\N	\N	\N
+371	Germany	\N	1	\N	\N	\N
+372	Ghana	\N	1	\N	\N	\N
+373	Gibraltar	\N	1	\N	\N	\N
+374	Greece	\N	1	\N	\N	\N
+375	Grenada	\N	1	\N	\N	\N
+376	Guatemala	\N	1	\N	\N	\N
+377	Guinea	\N	1	\N	\N	\N
+378	Guinea-Bissau	\N	1	\N	\N	\N
+379	Guyana	\N	1	\N	\N	\N
+380	Haiti	\N	1	\N	\N	\N
+381	Holy See	\N	1	\N	\N	\N
+382	Honduras	\N	1	\N	\N	\N
+383	Hong Kong	\N	1	\N	\N	\N
+384	Hungary	\N	1	\N	\N	\N
+385	Iceland	\N	1	\N	\N	\N
+386	India	\N	1	\N	\N	\N
+387	Indonesia	\N	1	\N	\N	\N
+388	Iran	\N	1	\N	\N	\N
+389	Iraq	\N	1	\N	\N	\N
+390	Ireland	\N	1	\N	\N	\N
+391	Isle of Man	\N	1	\N	\N	\N
+392	Israel	\N	1	\N	\N	\N
+393	Italy	\N	1	\N	\N	\N
+394	Jamaica	\N	1	\N	\N	\N
+395	Japan	\N	1	\N	\N	\N
+396	Jordan	\N	1	\N	\N	\N
+397	Kazakhstan	\N	1	\N	\N	\N
+398	Kenya	\N	1	\N	\N	\N
+399	Kuwait	\N	1	\N	\N	\N
+400	Kyrgyzstan	\N	1	\N	\N	\N
+401	Laos	\N	1	\N	\N	\N
+402	Latvia	\N	1	\N	\N	\N
+403	Lebanon	\N	1	\N	\N	\N
+404	Lesotho	\N	1	\N	\N	\N
+405	Liberia	\N	1	\N	\N	\N
+406	Libya	\N	1	\N	\N	\N
+407	Liechtenstein	\N	1	\N	\N	\N
+408	Lithuania	\N	1	\N	\N	\N
+409	Luxembourg	\N	1	\N	\N	\N
+410	Macao	\N	1	\N	\N	\N
+411	Madagascar	\N	1	\N	\N	\N
+412	Malawi	\N	1	\N	\N	\N
+413	Malaysia	\N	1	\N	\N	\N
+414	Maldives	\N	1	\N	\N	\N
+415	Mali	\N	1	\N	\N	\N
+416	Malta	\N	1	\N	\N	\N
+417	Mauritania	\N	1	\N	\N	\N
+418	Mauritius	\N	1	\N	\N	\N
+419	Mayotte	\N	1	\N	\N	\N
+420	Mexico	\N	1	\N	\N	\N
+421	Moldova	\N	1	\N	\N	\N
+422	Monaco	\N	1	\N	\N	\N
+423	Mongolia	\N	1	\N	\N	\N
+424	Montenegro	\N	1	\N	\N	\N
+425	Morocco	\N	1	\N	\N	\N
+426	Mozambique	\N	1	\N	\N	\N
+427	Myanmar	\N	1	\N	\N	\N
+428	Namibia	\N	1	\N	\N	\N
+429	Nepal	\N	1	\N	\N	\N
+430	Netherlands	\N	1	\N	\N	\N
+431	Nicaragua	\N	1	\N	\N	\N
+432	Niger	\N	1	\N	\N	\N
+433	Nigeria	\N	1	\N	\N	\N
+434	North Korea	\N	1	\N	\N	\N
+435	North Macedonia	\N	1	\N	\N	\N
+436	Norway	\N	1	\N	\N	\N
+437	Oman	\N	1	\N	\N	\N
+438	Pakistan	\N	1	\N	\N	\N
+439	Panama	\N	1	\N	\N	\N
+440	Paraguay	\N	1	\N	\N	\N
+441	Peru	\N	1	\N	\N	\N
+442	Philippines	\N	1	\N	\N	\N
+443	Poland	\N	1	\N	\N	\N
+444	Portugal	\N	1	\N	\N	\N
+445	Qatar	\N	1	\N	\N	\N
+446	Reunion	\N	1	\N	\N	\N
+447	Romania	\N	1	\N	\N	\N
+448	Russia	\N	1	\N	\N	\N
+449	Rwanda	\N	1	\N	\N	\N
+450	Saint Lucia	\N	1	\N	\N	\N
+451	San Marino	\N	1	\N	\N	\N
+452	Saudi Arabia	\N	1	\N	\N	\N
+453	Senegal	\N	1	\N	\N	\N
+454	Serbia	\N	1	\N	\N	\N
+455	Seychelles	\N	1	\N	\N	\N
+456	Sierra Leone	\N	1	\N	\N	\N
+457	Singapore	\N	1	\N	\N	\N
+458	Slovakia	\N	1	\N	\N	\N
+459	Slovenia	\N	1	\N	\N	\N
+460	Somalia	\N	1	\N	\N	\N
+461	South Africa	\N	1	\N	\N	\N
+462	South Korea	\N	1	\N	\N	\N
+463	South Sudan	\N	1	\N	\N	\N
+464	Spain	\N	1	\N	\N	\N
+465	Sri Lanka	\N	1	\N	\N	\N
+466	State of Palestine	\N	1	\N	\N	\N
+467	Sudan	\N	1	\N	\N	\N
+468	Suriname	\N	1	\N	\N	\N
+469	Sweden	\N	1	\N	\N	\N
+470	Switzerland	\N	1	\N	\N	\N
+471	Syria	\N	1	\N	\N	\N
+472	Taiwan	\N	1	\N	\N	\N
+473	Tajikistan	\N	1	\N	\N	\N
+474	Tanzania	\N	1	\N	\N	\N
+475	Thailand	\N	1	\N	\N	\N
+476	The Bahamas	\N	1	\N	\N	\N
+477	Timor-Leste	\N	1	\N	\N	\N
+478	Togo	\N	1	\N	\N	\N
+479	Trinidad and Tobago	\N	1	\N	\N	\N
+480	Tunisia	\N	1	\N	\N	\N
+481	Turkey	\N	1	\N	\N	\N
+482	Turkmenistan	\N	1	\N	\N	\N
+483	Uganda	\N	1	\N	\N	\N
+484	Ukraine	\N	1	\N	\N	\N
+485	United Arab Emirates	\N	1	\N	\N	\N
+486	United Kingdom	\N	1	\N	\N	\N
+487	United States	\N	1	\N	\N	\N
+488	Uruguay	\N	1	\N	\N	\N
+489	Uzbekistan	\N	1	\N	\N	\N
+490	Venezuela	\N	1	\N	\N	\N
+491	Vietnam	\N	1	\N	\N	\N
+492	Western Sahara	\N	1	\N	\N	\N
+493	Yemen	\N	1	\N	\N	\N
+494	Zambia	\N	1	\N	\N	\N
+495	Zimbabwe	\N	1	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: department_doctors; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.department_doctors (doctor_id, department_id, created_at, updated_at) FROM stdin;
+3	2	\N	\N
+3	4	\N	\N
+4	4	\N	\N
+4	9	\N	\N
+5	9	\N	\N
+6	2	\N	\N
+6	3	\N	\N
+8	1	\N	\N
+8	2	\N	\N
+9	6	\N	\N
+12	3	\N	\N
+13	2	\N	\N
+14	1	\N	\N
+14	2	\N	\N
+14	3	\N	\N
+14	4	\N	\N
+14	6	\N	\N
+15	1	\N	\N
+16	1	\N	\N
+16	2	\N	\N
+16	3	\N	\N
+16	4	\N	\N
+17	1	\N	\N
+17	2	\N	\N
+17	3	\N	\N
+17	4	\N	\N
+17	6	\N	\N
+18	1	\N	\N
+18	2	\N	\N
+18	3	\N	\N
+18	4	\N	\N
+18	6	\N	\N
+19	3	\N	\N
+20	1	\N	\N
+20	2	\N	\N
+20	3	\N	\N
+20	4	\N	\N
+20	6	\N	\N
+21	4	\N	\N
+26	3	\N	\N
+23	1	\N	\N
+22	2	\N	\N
+27	5	\N	\N
+28	6	\N	\N
+19	4	\N	\N
+29	6	\N	\N
+33	15	\N	\N
+35	12	\N	\N
+36	2	\N	\N
+37	2	\N	\N
+\.
+
+
+--
+-- Data for Name: department_hospital; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.department_hospital (id, hospital_id, department_id, created_at, updated_at, manager_name, dial_code, phone, email, department_name, department_manager, doctor_id, manager_id, active, deleted_at) FROM stdin;
+3	4	3	2024-06-20 05:55:16	2024-06-20 06:01:32	Ahmed	971	4634636367	uyru@yt.com	\N	\N	\N	\N	t	\N
+4	4	4	2024-06-20 06:18:43	2024-06-20 06:18:43	Asad	971	02 155 3111	asad@ent.com	\N	\N	\N	\N	t	\N
+5	4	9	2024-06-20 06:32:25	2024-06-20 06:32:25	\N	+971	785875	htdtyty@jgj.com	Neurology	ggg	\N	\N	t	\N
+6	4	2	2024-06-24 06:29:41	2024-06-24 06:29:41	fryrf	971	6545848458	dxadmin@gmail.com	\N	\N	\N	\N	t	\N
+8	1	4	2024-06-24 17:13:45	2024-06-24 17:13:45	Abdullah	971	546474777	manger@astermed.com	\N	\N	\N	\N	t	\N
+9	7	1	2024-06-27 12:35:33	2024-06-27 12:35:33	Advika	971	909 0 90909	dvika@ddd	\N	\N	\N	\N	t	\N
+10	7	2	2024-06-27 12:36:59	2024-06-27 12:36:59	Advika	971	909 0 90909	dvika@ddd	\N	\N	\N	\N	t	\N
+11	7	3	2024-06-27 12:37:16	2024-06-27 12:37:16	Advika	971	909 0 90909	dvika@ddd	\N	\N	\N	\N	t	\N
+12	7	4	2024-06-27 12:37:42	2024-06-27 12:37:42	Advika	971	909 0 90908	dvika@ddd	\N	\N	\N	\N	t	\N
+14	7	6	2024-06-27 12:38:27	2024-06-27 12:38:27	Advika	971	909 0 90890	dvika@ddd	\N	\N	\N	\N	t	\N
+15	9	3	2024-06-28 14:06:55	2024-06-28 14:06:55	Advika	971	50665	dvika@ddd	\N	\N	\N	\N	t	\N
+16	9	2	2024-06-28 14:15:43	2024-06-28 14:15:43	Advika	971	6767677	dvika@ddd	\N	\N	\N	\N	t	\N
+17	14	1	2024-07-04 10:32:24	2024-07-04 10:32:24	Advika	971	502693885	dvika@ddd	\N	\N	\N	\N	t	\N
+18	14	2	2024-07-04 10:32:39	2024-07-04 10:32:39	Advika	971	502693885	dvika@ddd	\N	\N	\N	\N	t	\N
+19	14	3	2024-07-04 10:32:58	2024-07-04 10:32:58	Advika	971	502693885	dvika@ddd	\N	\N	\N	\N	t	\N
+20	13	1	2024-07-04 10:33:32	2024-07-04 10:33:32	Advika	971	502693885	dvika@ddd	\N	\N	\N	\N	t	\N
+21	13	4	2024-07-04 10:33:49	2024-07-04 10:33:49	Advika	971	502693885	dvika@ddd	\N	\N	\N	\N	t	\N
+22	13	5	2024-07-04 10:34:08	2024-07-04 10:34:08	Advika	971	502693885	dvika@ddd	\N	\N	\N	\N	t	\N
+23	15	5	2024-07-04 12:46:42	2024-07-04 12:46:42	manager	971	123456789	manager@gmai.com	\N	\N	\N	\N	t	\N
+24	16	6	2024-07-04 15:20:58	2024-07-04 15:20:58	manager	971	123456789	asdfa@gmail.com	\N	\N	\N	\N	t	\N
+25	19	16	2024-07-07 06:25:33	2024-07-07 06:25:33	Anil	971	79679696969	gm@true.ae	\N	\N	\N	\N	t	\N
+26	19	15	2024-07-07 06:32:03	2024-07-07 06:32:03	Anil	971	4534567779	dm@true.ae	\N	\N	\N	\N	t	\N
+28	22	1	2024-07-09 06:00:58	2024-07-09 06:00:58	Ans	971	345345534534	ans@gmail.com	\N	\N	\N	\N	t	\N
+27	22	15	2024-07-09 06:00:00	2024-07-09 06:01:58	Assd	971	34234234232	assd@gmail.com	\N	\N	\N	\N	t	\N
+29	22	16	2024-07-09 06:03:30	2024-07-09 06:03:30	Gen	971	234234234344	gen@gmail.com	\N	\N	\N	\N	t	\N
+30	22	12	2024-07-09 06:04:21	2024-07-09 06:04:21	Ortho	971	34534534444	ortho@gmail.com	\N	\N	\N	\N	t	\N
+31	24	1	2024-07-09 15:38:34	2024-07-09 15:38:34	Advika	971	565566776	anix@gmail.com	\N	\N	\N	\N	t	\N
+32	24	2	2024-07-09 15:38:57	2024-07-09 15:38:57	Advika	971	565656565	anix@gmail.com	\N	\N	\N	\N	t	\N
+33	24	3	2024-07-09 15:39:27	2024-07-09 15:39:27	Advika	971	565656565	anix@gmail.com	\N	\N	\N	\N	t	\N
+\.
+
+
+--
+-- Data for Name: departments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.departments (id, status, deleted, created_at, updated_at, title, title_ar, deleted_at) FROM stdin;
+1	1	\N	2024-06-13 10:58:40	2024-06-17 17:28:19	Anesthesiology	طب الأطفال	\N
+2	1	\N	2024-06-17 17:28:36	2024-06-17 17:28:36	Cardiology	Cardiology	\N
+3	1	\N	2024-06-17 17:28:48	2024-06-17 17:28:48	ENT	ENT	\N
+4	1	\N	2024-06-17 17:29:13	2024-06-17 17:29:13	Gastroenterology	Gastroenterology	\N
+5	1	\N	2024-06-17 17:29:26	2024-06-17 17:29:26	General surgery	General surgery	\N
+6	1	\N	2024-06-17 17:29:38	2024-06-17 17:29:38	Gynaecology	Gynaecology	\N
+7	1	\N	2024-06-17 17:29:51	2024-06-17 17:29:51	Haematology	Haematology	\N
+8	1	\N	2024-06-17 17:30:03	2024-06-17 17:30:03	Pediatrics	Pediatrics	\N
+9	1	\N	2024-06-17 17:30:17	2024-06-17 17:30:17	Neurology	Neurology	\N
+10	1	\N	2024-06-17 17:30:28	2024-06-17 17:30:28	Oncology	Oncology	\N
+11	1	\N	2024-06-17 17:30:39	2024-06-17 17:30:39	Opthalmology	Opthalmology	\N
+12	1	\N	2024-06-17 17:30:51	2024-06-17 17:30:51	Orthopaedic	Orthopaedic	\N
+13	1	\N	2024-06-17 17:31:04	2024-06-17 17:31:04	Urology	Urology	\N
+14	1	\N	2024-06-17 17:31:17	2024-06-17 17:31:17	Psychiatry	Psychiatry	\N
+15	1	\N	2024-07-07 06:18:15	2024-07-07 06:18:15	Dermatology	Dermatology	\N
+16	1	\N	2024-07-07 06:20:22	2024-07-07 06:20:22	General Medicine	General Medicine	\N
+17	0	\N	2024-07-09 10:05:34	2024-07-09 10:41:26	A Departments	A Departments	2024-07-09 10:41:26
+\.
+
+
+--
+-- Data for Name: doctor_availabilities; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_availabilities (id, doctor_id, sunday_availability, sunday_time_slot, monday_availability, monday_time_slot, tuesday_availability, tuesday_time_slot, wednesday_availability, wednesday_time_slot, thursday_availability, thursday_time_slot, friday_availability, friday_time_slot, saturday_availability, saturday_time_slot, deleted_at, created_at, updated_at) FROM stdin;
+1	1	1	["08:00","13:00"]	1	["13:30","18:00"]	1	["13:00","14:30","15:00","19:30"]	1	["13:00","13:30"]	1	["14:00","14:30","19:00","19:30"]	1	["14:00","14:30","19:00","19:30","20:00"]	1	["14:00","14:30","15:00","19:30","20:00"]	\N	2024-06-15 07:50:28	2024-06-15 07:50:28
+12	15	0	\N	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	\N	2024-07-02 09:12:52	2024-07-02 09:12:52
+6	4	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	0	null	0	null	0	null	0	null	0	null	1	["08:00","08:30","09:00","09:30","10:00","13:00","13:30","14:00","14:30","15:00","18:00","18:30","19:00","19:30","20:00"]	\N	2024-07-02 10:16:39	2024-07-02 10:16:39
+15	23	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	0	null	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	\N	2024-07-04 06:55:17	2024-07-04 06:55:17
+3	3	1	["08:00","08:30","09:00","09:30","10:00","10:30","19:30"]	1	["08:00","08:30","09:00","09:30","10:00","14:00","14:30","15:00","15:30","16:00","20:00"]	1	["08:00"]	1	["08:00","09:30","10:00","10:30","13:00"]	1	["08:00","13:00"]	0	null	0	null	\N	2024-06-24 20:35:05	2024-06-24 20:35:05
+13	17	0	["13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","18:00","18:30","19:00","19:30","20:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","18:00","18:30","19:00"]	1	["10:00","10:30","11:00","11:30","12:00","12:30","15:00","15:30","16:00","16:30","17:00","17:30","20:00"]	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	1	["10:00","10:30","11:00","11:30","12:00","12:30","15:00","15:30","16:00","16:30","17:00","17:30","20:00"]	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	\N	2024-07-03 08:13:58	2024-07-03 08:13:58
+14	18	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","13:00","13:30","14:00","14:30","15:00","15:30","18:00","18:30","19:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","13:00","13:30","14:00","14:30","15:00","15:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","13:00","13:30","14:00","14:30","15:00","15:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","13:00","13:30","14:00","14:30","15:00","15:30","18:00","18:30","19:00","19:30","20:00"]	1	["08:00","13:00","18:00"]	1	["08:00","13:00","18:00"]	\N	2024-07-03 09:53:03	2024-07-03 09:53:03
+2	2	1	["14:30","15:00","15:30","19:30","20:00"]	1	["14:30","15:00","15:30","19:30","20:00"]	1	["10:30","11:00","14:30","15:00","15:30","16:00","19:30","20:00"]	0	["09:30","10:00","14:30","15:00","19:30","20:00"]	1	["09:30","10:00","14:30","15:00","19:30","20:00"]	1	["09:00","14:00","14:30","15:00","19:00","19:30","20:00"]	1	["08:30","09:00","14:00"]	\N	2024-06-26 10:33:22	2024-06-26 10:33:22
+4	6	0	["08:00","08:30","13:00"]	0	["08:00"]	1	["09:30","10:00","13:00","13:30","14:00","15:00","18:00","19:00","19:30","20:00"]	0	null	0	["18:00"]	0	null	0	null	\N	2024-06-26 11:46:15	2024-06-26 11:46:15
+8	8	0	null	1	["08:00","13:30","14:00"]	0	["13:00","18:30","19:00"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","13:00","18:00"]	1	["08:30","13:30","18:30"]	0	null	\N	2024-06-27 13:57:02	2024-06-27 13:57:02
+9	10	1	["08:00","13:00","18:00"]	0	["14:00"]	1	["08:30","13:30","18:30"]	1	["18:00","18:30","19:00","19:30"]	1	["08:00","13:00","18:00"]	1	["18:00","18:30","19:00","19:30"]	1	["08:00","08:30","09:00","09:30"]	\N	2024-07-04 07:25:05	2024-07-04 07:25:05
+7	9	1	["08:00","13:30","14:00","14:30"]	1	["08:00","11:00","13:00","14:00","17:00","17:30"]	1	["11:30","12:00","12:30","16:00","16:30","17:00","17:30"]	1	["08:30","09:30","13:30","14:30","18:30","19:30"]	1	["10:00","10:30","11:00","15:00","15:30","20:00"]	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	1	["09:00","09:30","14:00","14:30","19:00","19:30"]	\N	2024-06-29 11:09:08	2024-06-29 11:09:08
+5	5	0	null	1	["08:00","08:30","09:00","09:30","14:30","15:00","15:30","16:00","16:30"]	1	["14:30","15:00"]	0	null	0	null	0	null	0	null	\N	2024-07-01 10:27:23	2024-07-01 10:27:23
+11	14	1	["11:30","12:00","16:30"]	1	["10:30","11:00","15:30"]	1	["10:00","15:00","20:00"]	1	["09:30","14:30","19:30"]	1	["09:00","14:00","19:00"]	1	["08:30","13:30","18:30"]	1	["08:00","13:00","18:00"]	\N	2024-07-01 11:14:31	2024-07-01 11:14:31
+17	21	1	null	1	["13:00","13:30","14:00","14:30","15:00","15:30","18:00","18:30","19:00","19:30","20:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00","14:30","15:00","18:00","18:30","19:00"]	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	0	null	\N	2024-07-03 10:44:14	2024-07-03 10:44:14
+18	26	1	["08:00","08:30","09:00"]	0	\N	0	\N	0	\N	0	\N	0	\N	0	\N	\N	2024-07-04 08:02:23	2024-07-04 08:02:23
+16	22	1	["08:00","08:30","09:00","09:30","10:00"]	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	0	\N	1	["08:00","08:30","09:00","09:30","10:00","13:00","13:30","14:00","14:30","15:00","18:00","18:30","19:00","19:30","20:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","13:00","13:30","14:00","14:30","15:00","15:30","18:00","18:30","19:00","19:30","20:00"]	0	\N	\N	2024-07-04 10:36:22	2024-07-04 10:36:22
+20	27	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	\N	2024-07-04 15:05:40	2024-07-04 15:05:40
+21	28	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	1	["08:00","08:30","09:00","09:30"]	\N	2024-07-04 15:25:32	2024-07-04 15:25:32
+22	20	0	\N	1	["08:30","09:00","09:30","13:30","14:00","14:30","18:30","19:00","19:30"]	1	["08:00","08:30","13:00","13:30","18:00","18:30"]	1	["09:00","09:30","14:00","14:30","19:00","19:30"]	0	\N	0	\N	0	\N	\N	2024-07-05 09:08:25	2024-07-05 09:08:25
+19	16	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	1	["08:00","08:30","13:00","13:30","18:00","18:30"]	0	\N	0	\N	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	\N	2024-07-05 09:10:18	2024-07-05 09:10:18
+24	7	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	0	\N	0	\N	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	0	\N	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	\N	2024-07-05 09:16:52	2024-07-05 09:16:52
+25	19	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00"]	0	\N	0	\N	0	\N	0	\N	\N	2024-07-06 08:40:11	2024-07-06 08:40:11
+10	11	1	["08:00","08:30","09:00","09:30","10:00","10:30"]	1	["08:00","08:30","09:00","09:30","10:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30"]	1	["13:00","13:30","14:00","14:30"]	0	\N	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30"]	\N	2024-07-06 09:27:49	2024-07-06 09:27:49
+26	33	1	["08:00","08:30","13:00","13:30"]	1	["08:00","08:30","13:00","13:30"]	0	\N	0	\N	0	\N	0	\N	0	\N	\N	2024-07-07 07:15:42	2024-07-07 07:15:42
+23	12	0	\N	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	0	\N	0	\N	\N	2024-07-08 11:05:17	2024-07-08 11:05:17
+27	34	1	["08:00","08:30","13:00","13:30","18:00"]	1	["08:00","08:30","09:00","13:00","13:30","18:00","18:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30"]	1	["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30"]	0	\N	0	\N	0	\N	\N	2024-07-09 11:32:05	2024-07-09 11:32:05
+28	35	1	["08:00","08:30","13:00","13:30","14:00","18:00","18:30","19:00"]	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	1	["08:00","08:30","09:00","13:00","13:30","14:00","18:00","18:30","19:00"]	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	1	["08:00","08:30","09:00","09:30","13:00","13:30","14:00","14:30","18:00","18:30","19:00","19:30"]	0	\N	0	\N	\N	2024-07-09 13:13:37	2024-07-09 13:13:37
+\.
+
+
+--
+-- Data for Name: doctor_holidays; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_holidays (id, doctor_id, holiday_name, holiday_date, deleted_at, created_at, updated_at) FROM stdin;
+11	9	sick	2024-06-29	2024-07-01 10:06:09	2024-06-29 09:13:03	2024-07-01 10:06:09
+12	9	Sick	2024-01-09	2024-07-01 10:06:09	2024-06-29 09:56:17	2024-07-01 10:06:09
+13	9	sick	2024-06-29	2024-07-01 10:07:27	2024-07-01 10:06:09	2024-07-01 10:07:27
+14	9	Sick	2024-01-09	2024-07-01 10:07:27	2024-07-01 10:06:09	2024-07-01 10:07:27
+15	9	Sick	2024-07-07	2024-07-01 10:07:27	2024-07-01 10:06:09	2024-07-01 10:07:27
+16	9	sick	2024-06-29	2024-07-01 10:16:48	2024-07-01 10:07:27	2024-07-01 10:16:48
+17	9	Sick	2024-01-09	2024-07-01 10:16:48	2024-07-01 10:07:27	2024-07-01 10:16:48
+18	9	Sick	2024-07-07	2024-07-01 10:16:48	2024-07-01 10:07:27	2024-07-01 10:16:48
+19	9	Sick	2024-07-08	2024-07-01 10:16:48	2024-07-01 10:07:27	2024-07-01 10:16:48
+25	14	Sick	2024-07-07	\N	2024-07-01 12:41:24	2024-07-01 12:41:24
+20	9	sick	2024-06-29	2024-07-01 12:42:31	2024-07-01 10:16:48	2024-07-01 12:42:31
+21	9	Sick	2024-01-09	2024-07-01 12:42:31	2024-07-01 10:16:48	2024-07-01 12:42:31
+22	9	Sick	2024-07-07	2024-07-01 12:42:31	2024-07-01 10:16:48	2024-07-01 12:42:31
+23	9	Sick	2024-07-08	2024-07-01 12:42:31	2024-07-01 10:16:48	2024-07-01 12:42:31
+24	9	sick	2024-07-09	2024-07-01 12:42:31	2024-07-01 10:16:48	2024-07-01 12:42:31
+26	9	sick	2024-06-29	\N	2024-07-01 12:42:31	2024-07-01 12:42:31
+27	9	Sick	2024-01-09	\N	2024-07-01 12:42:31	2024-07-01 12:42:31
+28	9	Sick	2024-07-08	\N	2024-07-01 12:42:31	2024-07-01 12:42:31
+29	9	sick	2024-07-09	\N	2024-07-01 12:42:31	2024-07-01 12:42:31
+30	15	Weekly off	2024-07-05	\N	2024-07-02 09:27:36	2024-07-02 09:27:36
+31	11	Sick	2024-05-07	2024-07-06 09:30:07	2024-07-04 07:24:10	2024-07-06 09:30:07
+32	11	Sick	2024-05-07	\N	2024-07-06 09:30:07	2024-07-06 09:30:07
+33	11	Sick	2024-07-08	\N	2024-07-06 09:30:07	2024-07-06 09:30:07
+34	18	Holi	2024-07-11	\N	2024-07-09 13:04:26	2024-07-09 13:04:26
+35	35	onam	2024-08-01	\N	2024-07-09 13:16:16	2024-07-09 13:16:16
+36	35	onam	2024-08-02	\N	2024-07-09 13:16:16	2024-07-09 13:16:16
+37	34	Sick	2024-07-15	\N	2024-07-09 16:12:29	2024-07-09 16:12:29
+\.
+
+
+--
+-- Data for Name: doctor_instant_appointments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_instant_appointments (id, doctor_id, instant_appointment_date, deleted_at, created_at, updated_at) FROM stdin;
+1	6	2024-06-26	\N	2024-06-25 09:58:23	2024-06-25 09:58:23
+2	6	2024-06-29	\N	2024-06-25 09:58:45	2024-06-25 09:58:45
+3	4	2024-07-03	\N	2024-06-26 11:14:18	2024-06-26 11:14:18
+4	9	2024-06-29	2024-06-29 10:33:23	2024-06-29 10:33:06	2024-06-29 10:33:23
+5	9	2024-06-29	2024-07-01 09:09:17	2024-06-29 10:33:23	2024-07-01 09:09:17
+6	9	2024-07-04	2024-07-01 09:09:17	2024-06-29 10:33:23	2024-07-01 09:09:17
+7	9	2024-06-29	2024-07-01 09:09:44	2024-07-01 09:09:17	2024-07-01 09:09:44
+8	9	2024-07-04	2024-07-01 09:09:44	2024-07-01 09:09:17	2024-07-01 09:09:44
+9	9	2024-07-02	2024-07-01 09:09:44	2024-07-01 09:09:17	2024-07-01 09:09:44
+14	15	2024-07-02	\N	2024-07-02 09:41:48	2024-07-02 09:41:48
+15	14	2024-07-04	\N	2024-07-02 09:42:06	2024-07-02 09:42:06
+16	26	2024-04-07	\N	2024-07-04 10:58:55	2024-07-04 10:58:55
+10	9	2024-06-29	2024-07-05 09:12:25	2024-07-01 09:09:44	2024-07-05 09:12:25
+11	9	2024-07-04	2024-07-05 09:12:25	2024-07-01 09:09:44	2024-07-05 09:12:25
+12	9	2024-07-02	2024-07-05 09:12:25	2024-07-01 09:09:44	2024-07-05 09:12:25
+13	9	2024-07-01	2024-07-05 09:12:25	2024-07-01 09:09:44	2024-07-05 09:12:25
+17	9	2024-06-29	\N	2024-07-05 09:12:25	2024-07-05 09:12:25
+18	9	2024-07-04	\N	2024-07-05 09:12:25	2024-07-05 09:12:25
+19	9	2024-07-02	\N	2024-07-05 09:12:25	2024-07-05 09:12:25
+20	9	2024-07-01	\N	2024-07-05 09:12:25	2024-07-05 09:12:25
+21	9	2024-07-05	\N	2024-07-05 09:12:25	2024-07-05 09:12:25
+26	22	2024-07-06	\N	2024-07-06 08:31:20	2024-07-06 08:31:20
+27	22	2024-07-08	\N	2024-07-06 08:31:20	2024-07-06 08:31:20
+28	22	2024-07-09	\N	2024-07-06 08:31:20	2024-07-06 08:31:20
+25	23	2024-07-06	2024-07-08 12:18:30	2024-07-06 08:30:56	2024-07-08 12:18:30
+29	23	2024-07-06	\N	2024-07-08 12:18:30	2024-07-08 12:18:30
+30	23	2024-07-08	\N	2024-07-08 12:18:30	2024-07-08 12:18:30
+31	23	2024-07-09	\N	2024-07-08 12:18:30	2024-07-08 12:18:30
+32	23	2024-07-10	\N	2024-07-08 12:18:30	2024-07-08 12:18:30
+22	18	2024-07-05	2024-07-08 12:18:51	2024-07-05 09:12:48	2024-07-08 12:18:51
+23	18	2024-07-06	2024-07-08 12:18:51	2024-07-05 09:12:48	2024-07-08 12:18:51
+24	18	2024-07-07	2024-07-08 12:18:51	2024-07-05 09:12:48	2024-07-08 12:18:51
+33	18	2024-07-05	\N	2024-07-08 12:18:51	2024-07-08 12:18:51
+34	18	2024-07-06	\N	2024-07-08 12:18:51	2024-07-08 12:18:51
+35	18	2024-07-07	\N	2024-07-08 12:18:51	2024-07-08 12:18:51
+36	18	2024-07-08	\N	2024-07-08 12:18:51	2024-07-08 12:18:51
+37	18	2024-07-09	\N	2024-07-08 12:18:51	2024-07-08 12:18:51
+38	18	2024-07-10	\N	2024-07-08 12:18:51	2024-07-08 12:18:51
+39	34	2024-07-10	\N	2024-07-08 14:21:08	2024-07-08 14:21:08
+\.
+
+
+--
+-- Data for Name: doctor_intrests; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_intrests (id, doctor_id, special_intrest_id, created_at, updated_at, deleted_at) FROM stdin;
+1	1	2	2024-06-06 06:48:24	2024-06-11 04:33:20	2024-06-11 04:33:20
+3	1	2	2024-06-11 04:33:20	2024-06-11 04:42:20	2024-06-11 04:42:20
+4	1	2	2024-06-11 04:42:20	2024-06-11 04:42:20	\N
+2	2	2	2024-06-06 11:45:14	2024-06-11 04:43:06	2024-06-11 04:43:06
+5	2	2	2024-06-11 04:43:06	2024-06-11 05:43:29	2024-06-11 05:43:29
+6	2	2	2024-06-11 05:43:29	2024-06-11 05:43:29	\N
+228	9	2	2024-07-05 08:12:32	2024-07-05 08:12:32	\N
+13	6	2	2024-06-26 04:38:47	2024-06-26 04:38:47	\N
+233	22	3	2024-07-05 08:15:47	2024-07-05 08:15:47	\N
+234	22	4	2024-07-05 08:15:47	2024-07-05 08:15:47	\N
+174	15	2	2024-07-04 10:26:43	2024-07-04 10:26:43	\N
+175	15	3	2024-07-04 10:26:43	2024-07-04 10:26:43	\N
+176	15	4	2024-07-04 10:26:43	2024-07-04 10:26:43	\N
+177	15	5	2024-07-04 10:26:43	2024-07-04 10:26:43	\N
+178	3	2	2024-07-04 10:27:54	2024-07-04 10:27:54	\N
+181	7	2	2024-07-04 10:29:55	2024-07-04 10:29:55	\N
+182	8	2	2024-07-04 10:30:45	2024-07-04 10:30:45	\N
+183	8	3	2024-07-04 10:30:45	2024-07-04 10:30:45	\N
+239	28	4	2024-07-05 09:01:30	2024-07-05 09:01:30	\N
+240	27	3	2024-07-05 09:01:58	2024-07-05 09:01:58	\N
+241	26	3	2024-07-05 09:02:26	2024-07-05 09:02:26	\N
+248	21	2	2024-07-05 10:13:27	2024-07-05 10:13:27	\N
+249	21	3	2024-07-05 10:13:27	2024-07-05 10:13:27	\N
+250	21	4	2024-07-05 10:13:27	2024-07-05 10:13:27	\N
+251	21	5	2024-07-05 10:13:27	2024-07-05 10:13:27	\N
+252	14	2	2024-07-05 10:14:09	2024-07-05 10:14:09	\N
+253	14	3	2024-07-05 10:14:09	2024-07-05 10:14:09	\N
+254	14	4	2024-07-05 10:14:09	2024-07-05 10:14:09	\N
+255	14	5	2024-07-05 10:14:09	2024-07-05 10:14:09	\N
+256	29	9	2024-07-06 14:22:28	2024-07-06 14:22:28	\N
+127	13	2	2024-07-03 10:12:00	2024-07-03 10:12:00	\N
+128	12	2	2024-07-03 10:12:35	2024-07-03 10:12:35	\N
+194	20	2	2024-07-04 10:37:11	2024-07-04 10:37:11	\N
+195	20	3	2024-07-04 10:37:11	2024-07-04 10:37:11	\N
+269	33	51	2024-07-07 07:32:54	2024-07-07 07:32:54	\N
+270	33	52	2024-07-07 07:32:54	2024-07-07 07:32:54	\N
+271	33	53	2024-07-07 07:32:54	2024-07-07 07:32:54	\N
+272	33	54	2024-07-07 07:32:54	2024-07-07 07:32:54	\N
+210	23	5	2024-07-05 07:38:28	2024-07-05 07:38:28	\N
+211	17	2	2024-07-05 07:43:50	2024-07-05 07:43:50	\N
+212	17	3	2024-07-05 07:43:50	2024-07-05 07:43:50	\N
+279	34	55	2024-07-07 12:03:24	2024-07-07 12:03:24	\N
+280	34	56	2024-07-07 12:03:24	2024-07-07 12:03:24	\N
+213	17	4	2024-07-05 07:43:50	2024-07-05 07:43:50	\N
+214	17	5	2024-07-05 07:43:50	2024-07-05 07:43:50	\N
+281	34	57	2024-07-07 12:03:24	2024-07-07 12:03:24	\N
+282	19	4	2024-07-08 08:45:25	2024-07-08 08:45:25	\N
+215	11	2	2024-07-05 07:44:37	2024-07-05 07:44:37	\N
+283	19	5	2024-07-08 08:45:25	2024-07-08 08:45:25	\N
+216	4	2	2024-07-05 08:05:34	2024-07-05 08:05:34	\N
+217	10	2	2024-07-05 08:06:17	2024-07-05 08:06:17	\N
+218	10	3	2024-07-05 08:06:17	2024-07-05 08:06:17	\N
+219	10	4	2024-07-05 08:06:17	2024-07-05 08:06:17	\N
+284	5	2	2024-07-08 10:19:54	2024-07-08 10:19:54	\N
+285	18	2	2024-07-08 12:17:32	2024-07-08 12:17:32	\N
+286	18	3	2024-07-08 12:17:32	2024-07-08 12:17:32	\N
+220	16	2	2024-07-05 08:09:13	2024-07-05 08:09:13	\N
+221	16	3	2024-07-05 08:09:13	2024-07-05 08:09:13	\N
+222	16	4	2024-07-05 08:09:13	2024-07-05 08:09:13	\N
+223	16	5	2024-07-05 08:09:13	2024-07-05 08:09:13	\N
+287	18	4	2024-07-08 12:17:32	2024-07-08 12:17:32	\N
+288	18	5	2024-07-08 12:17:32	2024-07-08 12:17:32	\N
+289	35	57	2024-07-09 06:09:36	2024-07-09 06:09:36	\N
+296	37	7	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+297	37	9	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+298	37	10	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+299	36	8	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+300	36	10	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+301	36	11	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+302	36	2	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+303	36	18	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+304	36	20	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+\.
+
+
+--
+-- Data for Name: doctor_language_spokens; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_language_spokens (id, doctor_id, language_spoken_id, deleted_at, created_at, updated_at) FROM stdin;
+1	1	3	2024-06-11 04:33:20	2024-06-06 06:48:23	2024-06-11 04:33:20
+2	1	1	2024-06-11 04:33:20	2024-06-06 06:48:23	2024-06-11 04:33:20
+4	1	3	2024-06-11 04:42:20	2024-06-11 04:33:20	2024-06-11 04:42:20
+5	1	1	2024-06-11 04:42:20	2024-06-11 04:33:20	2024-06-11 04:42:20
+6	1	3	\N	2024-06-11 04:42:20	2024-06-11 04:42:20
+7	1	1	\N	2024-06-11 04:42:20	2024-06-11 04:42:20
+3	2	1	2024-06-11 04:43:06	2024-06-06 11:45:14	2024-06-11 04:43:06
+8	2	1	2024-06-11 05:43:29	2024-06-11 04:43:06	2024-06-11 05:43:29
+9	2	1	\N	2024-06-11 05:43:29	2024-06-11 05:43:29
+233	9	3	\N	2024-07-05 08:12:32	2024-07-05 08:12:32
+234	9	1	\N	2024-07-05 08:12:32	2024-07-05 08:12:32
+235	9	2	\N	2024-07-05 08:12:32	2024-07-05 08:12:32
+239	22	1	\N	2024-07-05 08:15:47	2024-07-05 08:15:47
+19	6	1	\N	2024-06-26 04:38:47	2024-06-26 04:38:47
+20	6	2	\N	2024-06-26 04:38:47	2024-06-26 04:38:47
+243	28	1	\N	2024-07-05 09:01:30	2024-07-05 09:01:30
+244	27	1	\N	2024-07-05 09:01:58	2024-07-05 09:01:58
+245	26	3	\N	2024-07-05 09:02:26	2024-07-05 09:02:26
+250	21	3	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+251	21	1	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+185	15	3	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+186	15	1	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+187	15	2	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+188	3	3	\N	2024-07-04 10:27:54	2024-07-04 10:27:54
+189	3	1	\N	2024-07-04 10:27:54	2024-07-04 10:27:54
+252	21	2	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+253	14	3	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+193	7	3	\N	2024-07-04 10:29:55	2024-07-04 10:29:55
+194	7	1	\N	2024-07-04 10:29:55	2024-07-04 10:29:55
+195	7	2	\N	2024-07-04 10:29:55	2024-07-04 10:29:55
+196	8	3	\N	2024-07-04 10:30:45	2024-07-04 10:30:45
+197	8	1	\N	2024-07-04 10:30:45	2024-07-04 10:30:45
+254	14	1	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+255	14	2	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+256	29	1	\N	2024-07-06 14:22:28	2024-07-06 14:22:28
+204	20	3	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+205	20	1	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+206	20	2	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+264	33	1	\N	2024-07-07 07:32:53	2024-07-07 07:32:53
+265	33	4	\N	2024-07-07 07:32:54	2024-07-07 07:32:54
+266	33	5	\N	2024-07-07 07:32:54	2024-07-07 07:32:54
+269	34	1	\N	2024-07-07 12:03:24	2024-07-07 12:03:24
+270	34	8	\N	2024-07-07 12:03:24	2024-07-07 12:03:24
+271	19	1	\N	2024-07-08 08:45:25	2024-07-08 08:45:25
+272	5	1	\N	2024-07-08 10:19:54	2024-07-08 10:19:54
+273	18	3	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+274	18	1	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+275	18	2	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+276	35	1	\N	2024-07-09 06:09:36	2024-07-09 06:09:36
+277	35	2	\N	2024-07-09 06:09:36	2024-07-09 06:09:36
+140	13	3	\N	2024-07-03 10:12:00	2024-07-03 10:12:00
+141	13	1	\N	2024-07-03 10:12:00	2024-07-03 10:12:00
+142	13	2	\N	2024-07-03 10:12:00	2024-07-03 10:12:00
+282	37	3	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+143	12	1	\N	2024-07-03 10:12:35	2024-07-03 10:12:35
+144	12	2	\N	2024-07-03 10:12:35	2024-07-03 10:12:35
+283	37	1	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+284	37	4	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+285	37	8	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+286	36	3	\N	2024-07-09 15:53:35	2024-07-09 15:53:35
+287	36	2	\N	2024-07-09 15:53:35	2024-07-09 15:53:35
+288	36	5	\N	2024-07-09 15:53:35	2024-07-09 15:53:35
+222	23	1	\N	2024-07-05 07:38:28	2024-07-05 07:38:28
+223	17	1	\N	2024-07-05 07:43:50	2024-07-05 07:43:50
+224	11	1	\N	2024-07-05 07:44:37	2024-07-05 07:44:37
+225	11	2	\N	2024-07-05 07:44:37	2024-07-05 07:44:37
+226	4	1	\N	2024-07-05 08:05:34	2024-07-05 08:05:34
+227	4	2	\N	2024-07-05 08:05:34	2024-07-05 08:05:34
+228	10	2	\N	2024-07-05 08:06:17	2024-07-05 08:06:17
+229	16	1	\N	2024-07-05 08:09:13	2024-07-05 08:09:13
+\.
+
+
+--
+-- Data for Name: doctor_patient_appointments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_patient_appointments (id, user_id, doctor_id, booking_id, booking_time_slot, booking_status, booking_date, reason_cancel, reason_reschedule, deleted_at, created_at, updated_at, previous_booking_time_slot, previous_booking_date, member_id, hospital_id, department_id, followup_details, followup_date, agent_id, callcenter_id) FROM stdin;
+35	46	3	#MYDW1719460262	08:00	Pending	2024-06-27	\N	\N	\N	2024-06-27 03:51:02	2024-06-27 06:24:12	\N	\N	0	4	\N	gvgvvvv	2024-06-27 16:00:00	\N	\N
+31	19	4	#MYDW7820	08:00	Confirmed	2024-06-30	\N	\N	\N	2024-06-26 11:15:24	2024-06-27 06:33:12	\N	\N	0	4	4	uotyiutitkjgkg	2024-08-15 23:45:00	\N	\N
+3	23	7	#MYDW2684	13:00	Rescheduled	27-06-2024	\N	\N	\N	2024-06-15 07:43:12	2024-06-15 16:59:54	13:00	27-06-2024	0	\N	\N	\N	\N	\N	\N
+4	22	3	#MYDW5738	09:00	pending	22-06-2024	\N	\N	\N	2024-06-20 06:47:56	2024-06-20 06:47:56	\N	\N	\N	\N	\N	\N	\N	\N	\N
+5	23	3	#MYDW5879	17:30	pending	22-06-2024	\N	\N	\N	2024-06-20 06:48:15	2024-06-20 06:48:15	\N	\N	\N	\N	\N	\N	\N	\N	\N
+6	14	3	#MYDW7817	13:30	Confirmed	22-06-2024	\N	\N	\N	2024-06-20 06:49:08	2024-06-20 07:16:46	\N	\N	\N	\N	\N	\N	\N	\N	\N
+7	23	7	#MYDW3296	13:00	Pending	27-06-2024	\N	\N	\N	2024-06-21 11:21:23	2024-06-21 11:21:23	\N	\N	0	\N	\N	\N	\N	\N	\N
+8	23	89	#MYDW6258	13:00	Pending	27-06-2024	\N	\N	\N	2024-06-21 11:21:32	2024-06-21 11:21:32	\N	\N	0	\N	\N	\N	\N	\N	\N
+9	23	3	#MYDW3875	13:00	Pending	27-06-2024	\N	\N	\N	2024-06-21 11:21:41	2024-06-21 11:21:41	\N	\N	0	\N	\N	\N	\N	\N	\N
+10	23	3	#MYDW2775	13:00	Pending	27-06-2024	\N	\N	\N	2024-06-21 13:03:27	2024-06-21 13:03:27	\N	\N	0	\N	\N	\N	\N	\N	\N
+11	23	3	#MYDW6956	13:00	Pending	27-06-2024	\N	\N	\N	2024-06-21 13:03:53	2024-06-21 13:03:53	\N	\N	0	\N	\N	\N	\N	\N	\N
+12	34	3	#MYDW4007	15:00	pending	24-06-2024	\N	\N	\N	2024-06-24 06:33:24	2024-06-24 06:33:24	\N	\N	\N	\N	\N	\N	\N	\N	\N
+13	25	3	#MYDW7594	12:00	pending	24-06-2024	\N	\N	\N	2024-06-24 06:34:12	2024-06-24 06:34:12	\N	\N	\N	\N	\N	\N	\N	\N	\N
+44	49	56	#MYDW1719516641	09:00	Pending	2024-07-31	\N	\N	\N	2024-06-27 19:30:41	2024-06-28 11:54:18	\N	\N	\N	7	1	\N	\N	\N	\N
+14	19	3	#MYDW7699	08:00	Completed	2024-06-25	\N	\N	\N	2024-06-24 07:07:44	2024-06-24 07:08:09	\N	\N	0	4	2	\N	\N	\N	\N
+15	21	31	#MYDW3095	16:30	Pending	2024-06-25	\N	\N	\N	2024-06-24 17:23:39	2024-06-24 17:23:39	\N	\N	0	4	2	\N	\N	\N	\N
+18	28	3	#MYDW4559	08:30	pending	26-06-2024	\N	\N	\N	2024-06-24 23:20:37	2024-06-24 23:20:37	\N	\N	\N	\N	\N	\N	\N	\N	\N
+2	14	2	#MYDW1765	09:30	Rescheduled	13-06-2024	\N	\N	2024-07-02 09:37:30	2024-06-11 04:45:06	2024-07-02 09:37:30	09:00	12-06-2024	\N	\N	\N	\N	\N	\N	\N
+46	49	11	#MYDW7863	16:30	Rescheduled	26-07-2024	No time	\N	\N	2024-06-28 06:45:29	2024-06-28 06:45:29	16:30	26-07-2024	\N	\N	\N	\N	\N	\N	\N
+36	47	2	#MYDW1719460828	20:00	Pending	2024-06-28	\N	\N	2024-07-02 09:37:30	2024-06-27 04:00:28	2024-07-02 09:37:30	\N	\N	0	1	\N	\N	\N	\N	\N
+23	20	31	#MYDW5978	19:30	Pending	2024-06-29	\N	\N	\N	2024-06-25 10:58:39	2024-06-25 10:58:39	\N	\N	\N	4	2	\N	\N	\N	\N
+40	51	37	#MYDW3696	19:30	Pending	2024-06-29	\N	\N	\N	2024-06-27 11:49:15	2024-06-27 11:58:39	\N	\N	\N	4	3	\N	\N	\N	\N
+41	53	55	#MYDW3884	12:00	Pending	2024-06-28	\N	\N	\N	2024-06-27 13:15:52	2024-06-27 13:15:52	\N	\N	\N	6	\N	\N	\N	\N	\N
+24	25	3	#MYDW7795	08:30	Completed	2024-06-30	\N	gjgkjh	\N	2024-06-25 11:00:06	2024-06-25 11:06:13	08:00	2024-06-30	0	4	2	\N	\N	\N	\N
+1	14	1	#MYDW3670	09:00	pending	12-06-2024	\N	\N	2024-07-02 09:37:47	2024-06-11 04:32:26	2024-07-02 09:37:47	\N	\N	\N	\N	\N	\N	\N	\N	\N
+32	27	1	#MYDW1719427327	14:00	Pending	2024-06-27	\N	\N	2024-07-02 09:37:47	2024-06-26 18:42:07	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+28	19	3	#MYDW1719348630	10:30	Pending	2024-06-26	\N	\N	\N	2024-06-25 20:50:30	2024-06-25 20:50:30	\N	\N	5	4	\N	\N	\N	\N	\N
+29	19	3	#MYDW1719349065	10:00	Pending	2024-06-26	\N	\N	\N	2024-06-25 20:57:45	2024-06-25 20:57:45	\N	\N	4	4	\N	\N	\N	\N	\N
+42	25	59	#MYDW6764	15:30	Pending	2024-06-28	\N	\N	\N	2024-06-27 14:24:07	2024-06-27 14:24:07	\N	\N	0	8	\N	\N	\N	\N	\N
+30	44	3	#MYDW1719397657	13:00	Completed	2024-06-27	\N	\N	\N	2024-06-26 10:27:37	2024-06-26 11:02:32	\N	\N	18	4	\N	\N	\N	\N	\N
+47	50	11	#MYDW4494	16:30	Completed	06-07-2024	\N	\N	\N	2024-06-28 06:29:00	2024-06-28 06:46:38	\N	\N	\N	\N	\N	\N	\N	\N	\N
+48	50	11	#MYDW1299	16:30	pending	28-06-2024	\N	\N	\N	2024-06-28 06:29:24	2024-06-28 06:29:24	\N	\N	\N	\N	\N	\N	\N	\N	\N
+49	50	11	#MYDW6713	16:30	pending	28-06-2024	\N	\N	\N	2024-06-28 06:29:45	2024-06-28 06:29:45	\N	\N	\N	\N	\N	\N	\N	\N	\N
+50	23	61	#MYDW6967	17:00	Pending	2024-07-05	\N	\N	\N	2024-06-28 07:37:33	2024-06-28 07:37:33	\N	\N	6	8	\N	\N	\N	\N	\N
+54	26	9	#MYDW6913	16:00	Completed	2024-07-23	\N	\N	\N	2024-06-28 12:13:58	2024-06-28 12:33:53	\N	\N	0	7	3	\N	\N	\N	\N
+52	48	57	#MYDW6109	16:30	Pending	2024-07-03	\N	\N	\N	2024-06-28 10:39:02	2024-06-28 10:39:02	\N	\N	47	7	3	\N	\N	\N	\N
+43	14	57	#MYDW3893	16:30	Pending	2024-06-28	\N	\N	\N	2024-06-27 14:27:29	2024-06-28 11:03:02	\N	\N	1	7	4	\N	\N	\N	\N
+55	26	9	#MYDW1880	12:00	Confirmed	2024-07-23	\N	\N	\N	2024-06-28 12:14:33	2024-06-28 12:33:42	\N	\N	0	7	3	\N	\N	\N	\N
+53	26	9	#MYDW6244	11:30	Cancelled	2024-07-23	\N	\N	\N	2024-06-28 12:13:00	2024-06-28 12:44:57	16:30	2024-07-23	0	7	3	\N	\N	\N	\N
+58	65	9	#MYDW4193	19:30	Pending	2024-06-29	\N	\N	\N	2024-06-28 13:29:39	2024-06-28 13:29:39	\N	\N	0	7	4	\N	\N	\N	\N
+59	65	9	#MYDW3988	13:30	Pending	2024-06-30	\N	\N	\N	2024-06-28 13:30:08	2024-06-28 13:30:08	\N	\N	0	7	6	\N	\N	\N	\N
+33	27	1	#MYDW1719427366	14:30	Pending	2024-06-27	\N	\N	2024-07-02 09:37:47	2024-06-26 18:42:46	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+34	27	1	#MYDW1719431679	20:00	Pending	2024-06-28	\N	\N	2024-07-02 09:37:47	2024-06-26 19:54:39	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+56	60	10	#MYDW1719578607	08:00	Cancelled	2024-06-29	\N	\N	\N	2024-06-28 12:43:27	2024-06-28 21:26:01	\N	\N	0	8	\N	\N	\N	\N	\N
+51	64	10	#MYDW1719567143	08:30	Confirmed	2024-06-29	\N	\N	\N	2024-06-28 09:32:23	2024-06-29 05:51:33	\N	\N	0	8	\N	\N	\N	\N	\N
+39	49	6	#MYDW1719486061	13:00	Pending	2024-07-16	\N	\N	2024-07-02 09:37:15	2024-06-27 11:01:01	2024-07-02 09:37:15	\N	\N	0	4	\N	\N	\N	\N	\N
+57	65	9	#MYDW5235	08:00	Rescheduled	2024-09-01	\N	\N	\N	2024-06-28 13:24:38	2024-06-29 10:34:00	08:00	2024-06-28	0	7	4	\N	\N	\N	\N
+63	27	9	#MYDW1719603539	14:30	Rescheduled	2024-06-30	\N	test	\N	2024-06-28 19:38:59	2024-06-29 17:54:31	14:00	2024-06-30	44	7	\N	\N	\N	\N	\N
+37	27	1	#MYDW1719464736	14:00	Pending	2024-06-28	\N	\N	2024-07-02 09:37:47	2024-06-27 05:05:36	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+45	27	1	#MYDW1719526776	15:00	Pending	2024-06-29	\N	\N	2024-07-02 09:37:47	2024-06-27 22:19:36	2024-07-02 09:37:47	\N	\N	44	1	\N	\N	\N	\N	\N
+38	27	1	#MYDW1719464928	14:30	Cancelled	2024-06-28	\N	\N	2024-07-02 09:37:47	2024-06-27 05:08:48	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+64	27	8	#MYDW1719603595	13:30	Pending	2024-07-01	\N	\N	\N	2024-06-28 19:39:55	2024-06-28 19:39:55	\N	\N	43	7	\N	\N	\N	\N	\N
+68	65	11	#MYDW2269	09:30	Cancelled	2024-07-01	\N	\N	\N	2024-06-29 06:40:51	2024-06-29 06:41:34	\N	\N	0	8	\N	\N	\N	\N	\N
+67	65	10	#MYDW4231	13:00	Confirmed	2024-07-04	\N	\N	\N	2024-06-29 06:32:19	2024-06-29 06:41:43	\N	\N	0	8	\N	\N	\N	\N	\N
+66	65	10	#MYDW3961	18:00	Completed	2024-07-04	\N	\N	\N	2024-06-29 06:31:18	2024-06-29 06:41:56	\N	\N	0	8	\N	\N	\N	\N	\N
+65	23	10	#MYDW5866	08:00	Rescheduled	2024-07-04	\N	\N	\N	2024-06-29 06:30:47	2024-06-29 06:42:14	19:30	2024-07-05	0	8	\N	\N	\N	\N	\N
+69	65	11	#MYDW3851	08:30	Pending	2024-08-13	\N	\N	\N	2024-06-29 06:43:02	2024-06-29 06:43:02	\N	\N	0	8	\N	\N	\N	\N	\N
+70	23	10	#MYDW4726	18:00	Pending	2024-07-26	\N	\N	\N	2024-06-29 06:43:55	2024-06-29 06:43:55	\N	\N	0	8	\N	\N	\N	\N	\N
+71	25	11	#MYDW3080	08:30	Pending	2024-07-10	\N	\N	\N	2024-06-29 06:44:26	2024-06-29 06:44:26	\N	\N	0	8	\N	\N	\N	\N	\N
+74	72	11	#MYDW1719646969	08:00	Pending	2024-07-03	\N	\N	\N	2024-06-29 07:42:49	2024-06-29 07:42:49	\N	\N	0	8	\N	\N	\N	\N	\N
+75	48	2	#MYDW1719647649	15:00	Pending	2024-06-30	\N	\N	2024-07-02 09:37:30	2024-06-29 07:54:09	2024-07-02 09:37:30	\N	\N	0	1	\N	\N	\N	\N	\N
+76	78	9	#MYDW2270	13:30	Pending	2024-09-01	\N	\N	\N	2024-06-29 10:35:19	2024-06-29 10:35:19	\N	\N	0	7	\N	\N	\N	\N	\N
+102	96	9	#MYDW1719905969	17:00	Confirmed	2024-07-02	\N	dr is on leave	\N	2024-07-02 07:39:29	2024-07-02 09:00:46	17:30	2024-07-02	66	7	\N	\N	\N	\N	\N
+77	78	9	#MYDW5258	14:00	Pending	2024-09-01	\N	\N	\N	2024-06-29 11:07:33	2024-06-29 11:07:33	\N	\N	0	7	\N	\N	\N	\N	\N
+78	65	9	#MYDW1821	14:30	Pending	2024-07-06	\N	\N	\N	2024-06-29 11:08:17	2024-06-29 11:08:17	\N	\N	0	7	\N	\N	\N	\N	\N
+80	23	9	#MYDW2107	08:00	Pending	2024-07-05	\N	\N	\N	2024-06-29 11:19:43	2024-06-29 11:19:43	\N	\N	0	7	\N	\N	\N	\N	\N
+81	25	9	#MYDW3314	09:00	Pending	2024-07-27	\N	\N	\N	2024-06-29 11:20:52	2024-06-29 11:20:52	\N	\N	0	7	\N	\N	\N	\N	\N
+82	23	9	#MYDW2727	09:30	Pending	2024-07-27	\N	\N	\N	2024-06-29 11:21:14	2024-06-29 11:21:14	\N	\N	0	7	\N	\N	\N	\N	\N
+95	84	9	#MYDW1719824390	11:00	Cancelled	2024-07-04	Asfg	\N	\N	2024-07-01 08:59:50	2024-07-02 21:51:34	\N	\N	62	7	\N	\N	\N	\N	\N
+85	48	3	#MYDW1719730429	08:30	Completed	2024-07-01	\N	not able to travel	\N	2024-06-30 06:53:49	2024-06-30 07:04:30	08:00	2024-07-01	0	4	\N	\N	\N	\N	\N
+86	48	3	#MYDW1719731200	09:00	Pending	2024-07-01	\N	\N	\N	2024-06-30 07:06:40	2024-06-30 07:06:40	\N	\N	56	4	\N	\N	\N	\N	\N
+89	84	11	#MYDW1719820968	08:00	Pending	2024-07-07	\N	\N	\N	2024-07-01 08:02:48	2024-07-01 08:02:48	\N	\N	63	8	\N	\N	\N	\N	\N
+91	84	11	#MYDW1719821086	08:30	Pending	2024-07-14	\N	\N	\N	2024-07-01 08:04:46	2024-07-01 08:04:46	\N	\N	63	8	\N	\N	\N	\N	\N
+108	27	2	#MYDW1719908696	14:30	Pending	2024-07-02	\N	\N	2024-07-02 09:37:30	2024-07-02 08:24:56	2024-07-02 09:37:30	\N	\N	67	1	\N	\N	\N	\N	\N
+88	84	8	#MYDW1719818456	08:00	Rescheduled	2024-07-03	\N	not well	\N	2024-07-01 07:20:56	2024-07-01 08:19:12	08:30	2024-07-03	60	7	\N	\N	\N	\N	\N
+87	84	9	#MYDW1719818406	08:30	Rescheduled	2024-07-03	\N	nit well	\N	2024-07-01 07:20:06	2024-07-01 08:22:23	12:00	2024-07-02	0	7	\N	\N	\N	\N	\N
+101	48	3	#MYDW1719887753	08:00	Cancelled	2024-07-02	Tyyyyyyu	\N	\N	2024-07-02 02:35:53	2024-07-02 02:39:06	\N	\N	0	4	\N	\N	\N	\N	\N
+99	84	9	#MYDW1719828735	14:30	Rescheduled	03-07-2024	\N	Test	\N	2024-07-01 10:12:15	2024-07-02 19:50:30	12:30	2024-07-09	0	7	\N	\N	\N	\N	\N
+92	84	9	#MYDW1719822312	13:30	Rescheduled	2024-07-02	\N	not good	\N	2024-07-01 08:25:12	2024-07-01 08:26:51	13:30	2024-07-03	0	7	\N	\N	\N	\N	\N
+93	84	9	#MYDW1719822439	13:30	Rescheduled	2024-07-03	\N	Jot ok	\N	2024-07-01 08:27:19	2024-07-01 08:28:32	09:30	2024-07-03	0	7	\N	\N	\N	\N	\N
+94	84	9	#MYDW1719824336	09:30	Pending	2024-07-03	\N	\N	\N	2024-07-01 08:58:56	2024-07-01 08:58:56	\N	\N	0	7	\N	\N	\N	\N	\N
+96	84	9	#MYDW1719824429	10:30	Pending	2024-07-11	\N	\N	\N	2024-07-01 09:00:29	2024-07-01 09:00:29	\N	\N	61	7	\N	\N	\N	\N	\N
+97	84	9	#MYDW1719824450	12:30	Pending	2024-07-02	\N	\N	\N	2024-07-01 09:00:50	2024-07-01 09:00:50	\N	\N	60	7	\N	\N	\N	\N	\N
+98	84	9	#MYDW1719828378	14:00	Pending	2024-07-06	\N	\N	\N	2024-07-01 10:06:18	2024-07-01 10:06:18	\N	\N	0	7	\N	\N	\N	\N	\N
+104	96	5	#MYDW1719906285	15:00	Pending	2024-07-02	\N	\N	\N	2024-07-02 07:44:45	2024-07-02 07:44:45	\N	\N	65	4	\N	\N	\N	\N	\N
+107	27	9	#MYDW1719908570	16:00	Pending	2024-07-02	\N	\N	\N	2024-07-02 08:22:50	2024-07-02 08:22:50	\N	\N	0	7	\N	\N	\N	\N	\N
+109	96	15	#MYDW1719912225	08:00	Pending	2024-07-06	\N	\N	\N	2024-07-02 09:23:45	2024-07-02 09:23:45	\N	\N	0	7	\N	\N	\N	\N	\N
+110	96	15	#MYDW1719912496	08:30	Pending	2024-07-06	\N	\N	\N	2024-07-02 09:28:16	2024-07-02 09:28:16	\N	\N	68	7	\N	\N	\N	\N	\N
+105	96	14	#MYDW1719906893	15:00	Cancelled	2024-07-02	\N	\N	\N	2024-07-02 07:54:53	2024-07-02 08:58:10	\N	\N	65	7	\N	\N	\N	\N	\N
+60	60	6	#MYDW1719587945	09:30	Completed	2024-07-02	\N	\N	2024-07-02 09:37:15	2024-06-28 15:19:05	2024-07-02 09:37:15	\N	\N	0	4	\N	Test Follow Up details	2024-07-05 12:00:00	\N	\N
+112	96	15	#MYDW1719912613	08:30	Confirmed	2024-07-09	\N	\N	\N	2024-07-02 09:30:13	2024-07-02 09:30:51	\N	\N	65	7	\N	\N	\N	\N	\N
+111	96	15	#MYDW1719912583	08:30	Completed	2024-07-08	\N	\N	\N	2024-07-02 09:29:43	2024-07-02 09:30:58	\N	\N	66	7	\N	\N	\N	\N	\N
+106	96	9	#MYDW1719906958	17:30	Rescheduled	2024-07-02	\N	\N	\N	2024-07-02 07:55:58	2024-07-02 09:00:23	16:30	2024-07-02	66	7	\N	\N	\N	\N	\N
+16	23	6	#MYDW1440	08:30	pending	25-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-24 17:24:40	2024-07-02 09:37:15	\N	\N	\N	\N	\N	\N	\N	\N	\N
+17	28	6	#MYDW2094	09:00	pending	27-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-24 17:25:14	2024-07-02 09:37:15	\N	\N	\N	\N	\N	\N	\N	\N	\N
+19	28	6	#MYDW6478	08:00	pending	26-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-24 23:31:29	2024-07-02 09:37:15	\N	\N	\N	\N	\N	\N	\N	\N	\N
+20	28	6	#MYDW1585	09:00	pending	26-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-25 05:32:46	2024-07-02 09:37:15	\N	\N	\N	\N	\N	\N	\N	\N	\N
+22	27	6	#MYDW5047	13:00	Rescheduled	27-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-25 07:23:13	2024-07-02 09:37:15	13:30	\N	\N	\N	\N	\N	\N	\N	\N
+21	23	6	#MYDW6827	17:00	Confirmed	29-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-25 07:23:26	2024-07-02 09:37:15	17:00	\N	\N	\N	\N	\N	\N	\N	\N
+73	60	6	#MYDW1719646819	19:30	Rescheduled	02-07-2024	\N	testing reason for schedule	2024-07-02 09:37:15	2024-06-29 07:40:19	2024-07-02 09:37:15	15:00	2024-07-02	46	4	\N	\N	\N	\N	\N
+113	27	2	#MYDW1719912933	15:00	Pending	2024-07-02	\N	\N	2024-07-02 09:37:30	2024-07-02 09:35:33	2024-07-02 09:37:30	\N	\N	67	1	\N	\N	\N	\N	\N
+84	27	1	#MYDW1719691593	13:00	Pending	2024-07-31	\N	\N	2024-07-02 09:37:47	2024-06-29 20:06:33	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+100	84	1	#MYDW1719843892	14:30	Confirmed	2024-07-02	\N	\N	2024-07-02 09:37:47	2024-07-01 14:24:52	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+103	96	1	#MYDW1719906261	13:00	Pending	2024-07-02	\N	\N	2024-07-02 09:37:47	2024-07-02 07:44:21	2024-07-02 09:37:47	\N	\N	0	1	\N	\N	\N	\N	\N
+90	84	11	#MYDW1719821010	08:00	Cancelled	2024-07-14	\N	\N	\N	2024-07-01 08:03:30	2024-07-05 13:09:34	\N	\N	0	8	\N	\N	\N	\N	\N
+26	39	6	#MYDW1719313892	19:00	Cancelled	2024-06-25	nothing	\N	2024-07-02 09:37:15	2024-06-25 11:11:32	2024-07-02 09:37:15	\N	\N	0	4	\N	\N	\N	\N	\N
+25	39	6	#MYDW1719313867	20:00	Rescheduled	2024-06-25	\N	test	2024-07-02 09:37:15	2024-06-25 11:11:07	2024-07-02 09:37:15	18:00	2024-06-25	17	4	\N	\N	\N	\N	\N
+27	27	6	#MYDW7637	09:30	pending	26-06-2024	\N	\N	2024-07-02 09:37:15	2024-06-25 12:09:00	2024-07-02 09:37:15	\N	\N	\N	\N	\N	\N	\N	\N	\N
+61	60	6	#MYDW1719592819	10:00	Cancelled	2024-07-02	Cancelled due to testing.	\N	2024-07-02 09:37:15	2024-06-28 16:40:19	2024-07-02 09:37:15	\N	\N	0	4	\N	\N	\N	\N	\N
+62	60	6	#MYDW1719594060	13:00	Completed	2024-07-02	\N	\N	2024-07-02 09:37:15	2024-06-28 17:01:00	2024-07-02 09:37:15	\N	\N	0	4	\N	\N	\N	\N	\N
+79	60	6	#MYDW1719659797	19:00	Pending	2024-07-02	\N	\N	2024-07-02 09:37:15	2024-06-29 11:16:37	2024-07-02 09:37:15	\N	\N	46	4	\N	\N	\N	\N	\N
+83	60	6	#MYDW1719660429	10:00	Pending	2024-07-09	\N	\N	2024-07-02 09:37:15	2024-06-29 11:27:09	2024-07-02 09:37:15	\N	\N	42	4	\N	\N	\N	\N	\N
+72	60	6	#MYDW1719645994	20:00	Cancelled	2024-07-02	Test	test	2024-07-02 09:37:15	2024-06-29 07:26:34	2024-07-02 09:37:15	14:00	2024-07-02	0	4	\N	\N	\N	\N	\N
+114	99	14	#MYDW1719926078	11:30	Pending	2024-07-14	\N	\N	\N	2024-07-02 13:14:38	2024-07-02 13:14:38	\N	\N	70	7	\N	\N	\N	\N	\N
+115	99	14	#MYDW1719926130	14:00	Pending	2024-07-04	\N	\N	\N	2024-07-02 13:15:30	2024-07-02 13:15:30	\N	\N	0	7	\N	\N	\N	\N	\N
+144	96	11	#MYDW1720098699	08:30	Rescheduled	08-07-2024	\N	\N	\N	2024-07-04 13:29:31	2024-07-04 13:29:31	08:00	2024-07-08	0	8	\N	\N	\N	\N	\N
+116	60	3	#MYDW1719958789	08:00	Completed	2024-07-03	\N	\N	\N	2024-07-02 22:19:49	2024-07-02 22:46:41	\N	\N	46	4	\N	Test Follow UP	2024-07-04 12:00:00	\N	\N
+117	48	9	#MYDW1719974106	10:00	Rescheduled	04-07-2024	\N	The only way I could do that was if you wanted me too I could come and pick it out and then I can go pick up my	\N	2024-07-03 02:35:06	2024-07-03 02:36:55	18:30	2024-07-03	0	7	\N	\N	\N	\N	\N
+135	119	9	#MYDW1720084995	09:00	Rescheduled	06-07-2024	\N	gggh	\N	2024-07-04 09:39:59	2024-07-04 09:39:59	09:30	2024-07-06	0	7	\N	\N	\N	\N	\N
+141	96	15	#MYDW1720096761	08:00	Cancelled	2024-07-15	test	\N	\N	2024-07-04 12:39:21	2024-07-05 12:57:20	\N	\N	0	7	\N	\N	\N	\N	\N
+121	23	8	#MYDW1720027795	08:00	Pending	2024-07-04	\N	\N	\N	2024-07-03 17:29:55	2024-07-03 17:29:55	\N	\N	11	7	\N	\N	\N	\N	\N
+122	84	3	#MYDW1720034090	13:00	Pending	2024-07-04	\N	\N	\N	2024-07-03 19:14:50	2024-07-03 19:14:50	\N	\N	62	4	\N	\N	\N	\N	\N
+123	48	3	#MYDW1720037742	08:00	Pending	2024-07-25	\N	\N	\N	2024-07-03 20:15:42	2024-07-03 20:15:42	\N	\N	58	4	\N	\N	\N	\N	\N
+125	48	8	#MYDW1720059976	18:30	Cancelled	09-08-2024	The only way I could do that was if you wanted me too I could come and pick it out and then I can go pick up it from your place or you could	The first time the team had played a match was when they won a match in which the players had a goal in hand to uuyyy and were w	\N	2024-07-04 02:26:16	2024-07-04 02:34:34	08:30	26-07-2024	0	7	\N	\N	\N	\N	\N
+126	48	8	#MYDW1720065596	08:30	Pending	2024-07-19	\N	\N	\N	2024-07-04 03:59:56	2024-07-04 03:59:56	\N	\N	0	7	\N	\N	\N	\N	\N
+127	48	8	#MYDW1720065989	18:30	Pending	2024-07-19	\N	\N	\N	2024-07-04 04:06:29	2024-07-04 04:06:29	\N	\N	0	7	\N	\N	\N	\N	\N
+128	23	8	#MYDW1720070146	18:30	Pending	2024-07-05	\N	\N	\N	2024-07-04 05:15:46	2024-07-04 05:15:46	\N	\N	0	7	\N	\N	\N	\N	\N
+124	84	3	#MYDW1720039505	08:00	Cancelled	2024-07-04	dasda	\N	\N	2024-07-03 20:45:05	2024-07-04 05:36:05	\N	\N	60	4	\N	\N	\N	\N	\N
+139	103	15	#MYDW1720089401	08:30	Cancelled	2024-07-11	\N	\N	\N	2024-07-04 10:36:41	2024-07-04 10:58:19	\N	\N	0	7	\N	\N	\N	\N	\N
+120	103	56	#MYDW1720016507	18:00	Pending	2024-07-04	\N	\N	2024-07-04 06:19:53	2024-07-03 14:21:47	2024-07-04 06:19:53	\N	\N	\N	7	1	\N	\N	\N	\N
+118	103	9	#MYDW1719991327	15:30	Rescheduled	2024-07-04	\N		2024-07-04 06:20:19	2024-07-03 07:22:07	2024-07-04 06:20:19	14:30	2024-07-03	0	7	\N	\N	\N	\N	\N
+129	118	11	#MYDW1720078708	14:00	Pending	2024-07-04	\N	\N	\N	2024-07-04 07:38:28	2024-07-04 07:38:28	\N	\N	80	8	\N	\N	\N	\N	\N
+130	119	11	#MYDW1720078710	13:00	Pending	2024-07-04	\N	\N	\N	2024-07-04 07:38:30	2024-07-04 07:38:30	\N	\N	79	8	\N	\N	\N	\N	\N
+138	103	15	#MYDW1720089346	08:00	Cancelled	2024-07-11	\N	\N	\N	2024-07-04 10:35:46	2024-07-04 11:00:30	\N	\N	0	7	\N	\N	\N	\N	\N
+137	103	8	#MYDW1720087439	14:00	Cancelled	2024-07-08	\N	\N	\N	2024-07-04 10:03:59	2024-07-04 11:03:08	\N	\N	0	7	\N	\N	\N	\N	\N
+132	119	9	#MYDW1720080852	08:30	Confirmed	04-07-2024	\N	doctor not available	\N	2024-07-04 08:32:53	2024-07-04 08:38:43	20:00	2024-07-04	0	7	\N	\N	\N	\N	\N
+131	118	9	#MYDW1720080852	15:00	Completed	2024-07-04	\N	\N	\N	2024-07-04 08:14:12	2024-07-04 08:41:14	\N	\N	0	7	\N	\N	\N	\N	\N
+134	119	8	#MYDW1720084929	13:30	Pending	2024-07-05	\N	\N	\N	2024-07-04 09:22:09	2024-07-04 09:22:09	\N	\N	0	7	\N	\N	\N	\N	\N
+148	84	22	#MYDW1720099111	18:30	Confirmed	2024-07-04	\N	\N	\N	2024-07-04 13:18:31	2024-07-04 13:20:32	\N	\N	0	14	\N	\N	\N	\N	\N
+147	96	10	#MYDW1720098883	18:30	Cancelled	2024-07-05	\N	\N	\N	2024-07-04 13:14:43	2024-07-04 13:20:57	\N	\N	0	8	\N	\N	\N	\N	\N
+146	84	10	#MYDW1720098850	18:00	Cancelled	2024-07-05	\N	\N	\N	2024-07-04 13:14:10	2024-07-04 13:21:09	\N	\N	0	8	\N	\N	\N	\N	\N
+150	60	10	#MYDW1720099595	08:00	Pending	2024-07-11	\N	\N	\N	2024-07-04 13:26:35	2024-07-04 13:26:35	\N	\N	46	8	\N	\N	\N	\N	\N
+143	96	3	#MYDW1720098584	08:30	Completed	2024-07-07	\N	\N	\N	2024-07-04 13:09:44	2024-07-04 13:35:56	\N	\N	0	4	\N	follow up	2024-07-04 12:00:00	\N	\N
+145	84	11	#MYDW1720098705	10:00	Rescheduled	08-07-2024	\N	\N	\N	2024-07-04 13:28:52	2024-07-04 13:28:52	10:00	08-07-2024	0	8	\N	\N	\N	\N	\N
+151	84	10	#MYDW1720104978	18:00	Pending	2024-07-05	\N	\N	\N	2024-07-04 14:56:18	2024-07-04 14:56:18	\N	\N	0	8	\N	\N	\N	\N	\N
+152	96	10	#MYDW1720104979	18:30	Pending	2024-07-05	\N	\N	\N	2024-07-04 14:56:19	2024-07-04 14:56:19	\N	\N	0	8	\N	\N	\N	\N	\N
+153	20	28	#MYDW1629	09:30	Pending	2024-07-05	\N	\N	\N	2024-07-04 15:26:15	2024-07-04 15:26:15	\N	\N	0	16	6	\N	\N	\N	1
+142	84	3	#MYDW1720098567	08:00	Completed	2024-07-07	\N	\N	\N	2024-07-04 13:09:27	2024-07-04 13:35:45	\N	\N	0	4	\N	follow up	2024-07-05 12:00:00	\N	\N
+136	103	8	#MYDW1720087299	13:30	Cancelled	2024-07-08	\N	\N	\N	2024-07-04 10:01:39	2024-07-04 16:48:22	\N	\N	75	7	\N	\N	\N	\N	\N
+155	103	8	#MYDW1720112015	08:30	Cancelled	2024-07-05	\N	\N	\N	2024-07-04 16:53:35	2024-07-04 17:01:44	\N	\N	0	7	\N	\N	\N	\N	\N
+157	103	8	#MYDW1720113802	08:00	Cancelled	2024-07-18	\N	\N	\N	2024-07-04 17:23:22	2024-07-04 17:41:44	\N	\N	0	7	\N	\N	\N	\N	\N
+156	103	11	#MYDW1720112916	14:00	Cancelled	2024-07-18	\N	\N	\N	2024-07-04 17:08:36	2024-07-04 17:42:51	\N	\N	0	8	\N	\N	\N	\N	\N
+154	103	8	#MYDW1720111746	18:00	Cancelled	2024-07-11	\N	\N	\N	2024-07-04 16:49:06	2024-07-04 17:44:40	\N	\N	0	7	\N	\N	\N	\N	\N
+133	103	8	#MYDW1720082511	18:00	Cancelled	2024-07-04	\N	\N	\N	2024-07-04 08:41:51	2024-07-04 17:45:05	\N	\N	0	7	\N	\N	\N	\N	\N
+158	103	8	#MYDW1720115299	13:00	Cancelled	2024-07-18	\N	\N	\N	2024-07-04 17:48:19	2024-07-04 17:49:01	\N	\N	0	7	\N	\N	\N	\N	\N
+159	103	8	#MYDW1720116442	18:00	Cancelled	2024-07-18	\N	\N	\N	2024-07-04 18:07:22	2024-07-04 18:08:12	\N	\N	0	7	\N	\N	\N	\N	\N
+160	103	11	#MYDW1720117212	14:30	Cancelled	2024-07-18	\N	\N	\N	2024-07-04 18:20:12	2024-07-05 12:57:50	\N	\N	0	8	\N	\N	\N	\N	\N
+140	69	15	#MYDW1720093451	11:00	Cancelled	2024-07-06	Test	\N	\N	2024-07-04 11:44:11	2024-07-05 19:32:26	\N	\N	0	7	\N	\N	\N	\N	\N
+149	96	22	#MYDW1720099113	18:00	Completed	2024-07-04	\N	\N	\N	2024-07-04 13:18:33	2024-07-06 13:06:15	\N	\N	0	14	\N	\N	\N	\N	\N
+161	48	10	#MYDW1720145311	19:00	Cancelled	2024-07-05	I’m busy	\N	\N	2024-07-05 02:08:31	2024-07-05 02:09:24	\N	\N	0	8	\N	\N	\N	\N	\N
+163	65	23	#MYDW3856	10:30	Pending	2024-07-06	\N	\N	\N	2024-07-05 06:05:45	2024-07-05 06:05:45	\N	\N	0	13	1	\N	\N	\N	\N
+119	114	8	#MYDW1720008187	13:00	Cancelled	2024-07-04	\N	try	\N	2024-07-03 12:03:07	2024-07-05 06:53:29	08:00	2024-07-04	0	7	\N	\N	\N	\N	\N
+164	48	22	#MYDW1720170856	15:00	Rescheduled	05-07-2024	\N	Cvv	\N	2024-07-05 09:14:16	2024-07-05 09:14:36	13:00	2024-07-12	78	14	\N	\N	\N	\N	\N
+192	114	22	#MYDW1720190073	19:30	Confirmed	2024-07-05	\N	\N	\N	2024-07-05 14:34:33	2024-07-05 15:36:53	\N	\N	0	14	\N	\N	\N	\N	\N
+180	84	21	#MYDW1720183577	08:30	Confirmed	2024-07-17	\N	\N	\N	2024-07-05 12:46:17	2024-07-05 13:00:29	\N	\N	0	13	\N	\N	\N	\N	\N
+175	84	17	#MYDW1720177325	17:00	Confirmed	2024-07-05	\N	\N	\N	2024-07-05 11:08:09	2024-07-05 11:12:28	16:30	2024-07-05	0	7	\N	\N	\N	\N	\N
+176	96	10	#MYDW1720183494	19:00	Completed	2024-07-05	\N	\N	\N	2024-07-05 12:44:54	2024-07-05 13:05:58	\N	\N	0	8	\N	\N	\N	\N	\N
+174	96	17	#MYDW1720177160	16:00	Confirmed	2024-07-05	\N	\N	\N	2024-07-05 10:59:20	2024-07-05 12:23:23	\N	\N	0	7	\N	\N	\N	\N	\N
+173	84	17	#MYDW1720177097	16:30	Rescheduled	2024-07-05	\N	\N	\N	2024-07-05 12:24:43	2024-07-05 12:24:43	15:30	2024-07-05	63	7	\N	\N	\N	\N	\N
+172	96	17	#MYDW1720177079	15:30	Rescheduled	2024-07-05	\N	\N	\N	2024-07-05 12:25:03	2024-07-05 12:25:03	15:00	2024-07-05	76	7	\N	\N	\N	\N	\N
+171	96	21	#MYDW1720177034	18:30	Cancelled	2024-07-05	Doctor not available. Sorry	\N	\N	2024-07-05 10:57:14	2024-07-05 12:26:03	\N	\N	0	13	\N	\N	\N	\N	\N
+170	84	21	#MYDW1720177033	18:00	Cancelled	2024-07-05	Doctor not available. Sorry	\N	\N	2024-07-05 10:57:13	2024-07-05 12:26:45	\N	\N	0	13	\N	\N	\N	\N	\N
+169	96	18	#MYDW1720176883	13:00	Confirmed	2024-07-06	\N	\N	\N	2024-07-05 10:54:43	2024-07-05 12:27:03	\N	\N	0	7	\N	\N	\N	\N	\N
+168	84	18	#MYDW1720176882	18:00	Confirmed	2024-07-05	\N	\N	\N	2024-07-05 10:54:42	2024-07-05 12:27:19	\N	\N	0	7	\N	\N	\N	\N	\N
+165	96	14	#MYDW1720175879	18:30	Cancelled	2024-07-05	\N	\N	\N	2024-07-05 10:37:59	2024-07-05 13:11:00	\N	\N	0	7	\N	\N	\N	\N	\N
+167	96	14	#MYDW1720176536	15:30	Confirmed	2024-07-08	\N	\N	\N	2024-07-05 12:42:12	2024-07-05 12:43:55	10:30	2024-07-08	0	7	\N	\N	\N	\N	\N
+178	84	14	#MYDW1720183529	19:00	Pending	2024-07-11	\N	\N	\N	2024-07-05 12:45:29	2024-07-05 12:45:29	\N	\N	0	7	\N	\N	\N	\N	\N
+179	84	8	#MYDW1720183548	09:00	Pending	2024-07-17	\N	\N	\N	2024-07-05 12:45:48	2024-07-05 12:45:48	\N	\N	0	7	\N	\N	\N	\N	\N
+182	96	21	#MYDW1720183669	09:00	Pending	2024-07-16	\N	\N	\N	2024-07-05 12:47:49	2024-07-05 12:47:49	\N	\N	0	13	\N	\N	\N	\N	\N
+197	131	9	#MYDW1720194360	09:30	Pending	2024-07-06	\N	\N	\N	2024-07-05 15:46:00	2024-07-05 15:46:00	\N	\N	0	7	\N	\N	\N	\N	\N
+188	96	28	#MYDW1720184111	08:30	Rescheduled	2024-07-11	\N	\N	\N	2024-07-05 12:57:45	2024-07-05 12:57:45	09:30	2024-07-11	0	16	6	\N	\N	\N	\N
+187	84	28	#MYDW1720183937	09:00	Cancelled	2024-08-11	\N	\N	\N	2024-07-05 12:52:17	2024-07-05 12:58:27	\N	\N	0	16	6	\N	\N	\N	\N
+186	96	28	#MYDW1720183913	09:00	Cancelled	2024-07-11	sick	\N	\N	2024-07-05 12:51:53	2024-07-05 12:58:47	\N	\N	0	16	6	\N	\N	\N	\N
+195	131	15	#MYDW1720194060	09:00	Confirmed	2024-07-06	\N	\N	\N	2024-07-05 15:41:00	2024-07-05 15:46:21	\N	\N	0	7	\N	\N	\N	\N	\N
+183	96	8	#MYDW1720183747	13:30	Rescheduled	2024-07-08	\N	not available	\N	2024-07-05 12:49:07	2024-07-05 13:21:08	18:00	2024-07-11	0	7	\N	\N	\N	\N	\N
+189	84	28	#MYDW1720184121	08:00	Confirmed	2024-07-11	\N	\N	\N	2024-07-05 12:57:28	2024-07-05 13:21:43	08:30	2024-07-11	0	16	6	\N	\N	\N	\N
+196	131	11	#MYDW1720194084	08:30	Confirmed	2024-07-06	\N	\N	\N	2024-07-05 15:41:24	2024-07-05 15:46:30	\N	\N	0	8	\N	\N	\N	\N	\N
+181	96	22	#MYDW1720183633	15:00	Rescheduled	2024-07-25	\N	sick	\N	2024-07-05 12:47:13	2024-07-05 13:39:38	09:00	2024-07-25	0	14	\N	\N	\N	\N	\N
+162	25	27	#MYDW4008	09:30	Pending	2024-07-06	\N	\N	2024-07-08 08:21:39	2024-07-05 04:27:05	2024-07-08 08:21:39	\N	\N	0	15	5	\N	\N	3	\N
+190	103	14	#MYDW1720185226	18:30	Cancelled	2024-07-12	\N	\N	\N	2024-07-05 13:13:46	2024-07-05 13:48:51	\N	\N	0	7	\N	\N	\N	\N	\N
+184	96	10	#MYDW1720183781	18:00	Completed	2024-07-18	\N	\N	\N	2024-07-05 12:49:41	2024-07-05 13:51:06	\N	\N	0	8	\N	\N	\N	\N	\N
+185	96	9	#MYDW1720183817	11:00	Confirmed	2024-07-11	\N	\N	\N	2024-07-05 12:50:17	2024-07-05 13:51:29	\N	\N	0	7	\N	Follow up	2024-07-05 12:00:00	\N	\N
+166	84	28	#MYDW1720176535	08:00	Cancelled	2024-07-08	Not good	\N	\N	2024-07-05 10:48:55	2024-07-05 14:14:09	\N	\N	0	16	6	\N	\N	\N	\N
+194	96	28	#MYDW1720191323	09:30	Pending	2024-07-17	\N	\N	\N	2024-07-05 14:55:23	2024-07-05 14:55:23	\N	\N	0	16	6	\N	\N	\N	\N
+193	114	17	#MYDW1720190152	14:00	Confirmed	2024-07-06	\N	\N	\N	2024-07-05 14:35:52	2024-07-05 15:36:44	\N	\N	0	7	\N	\N	\N	\N	\N
+200	132	4	#MYDW1720194497	10:00	Pending	2024-07-06	\N	\N	\N	2024-07-05 15:48:17	2024-07-05 15:48:17	\N	\N	0	4	\N	\N	\N	\N	\N
+198	132	14	#MYDW1720194405	08:00	Confirmed	2024-07-06	\N	\N	\N	2024-07-05 15:46:45	2024-07-05 15:48:37	\N	\N	0	7	\N	\N	\N	\N	\N
+199	132	10	#MYDW1720194421	09:00	Confirmed	2024-07-06	\N	\N	\N	2024-07-05 15:47:01	2024-07-05 15:48:55	\N	\N	0	8	\N	\N	\N	\N	\N
+201	60	11	#MYDW1720209286	08:30	Pending	2024-07-13	\N	\N	\N	2024-07-05 19:54:46	2024-07-05 19:54:46	\N	\N	42	8	\N	\N	\N	\N	\N
+202	69	9	#MYDW1720209756	19:00	Pending	2024-07-06	\N	\N	\N	2024-07-05 20:02:36	2024-07-05 20:02:36	\N	\N	53	7	\N	\N	\N	\N	\N
+203	69	9	#MYDW1720210118	09:00	Pending	2024-07-06	\N	\N	\N	2024-07-05 20:08:38	2024-07-05 20:08:38	\N	\N	53	7	\N	\N	\N	\N	\N
+204	69	23	#MYDW1720210302	09:30	Pending	2024-07-06	\N	\N	\N	2024-07-05 20:11:42	2024-07-05 20:11:42	\N	\N	53	13	\N	\N	\N	\N	\N
+205	48	4	#MYDW1720229593	09:00	Pending	2024-07-06	\N	\N	\N	2024-07-06 01:33:13	2024-07-06 01:33:13	\N	\N	0	4	\N	\N	\N	\N	\N
+206	130	17	#MYDW1720240331	09:00	Completed	2024-07-06	\N	\N	\N	2024-07-06 04:32:11	2024-07-06 04:35:19	\N	\N	0	7	\N	\N	\N	\N	\N
+208	96	10	#MYDW1720249723	19:00	Pending	2024-07-10	\N	\N	\N	2024-07-06 07:08:43	2024-07-06 07:08:43	\N	\N	0	8	\N	\N	\N	\N	\N
+209	96	28	#MYDW1720249782	09:00	Pending	2024-07-09	\N	\N	\N	2024-07-06 07:09:42	2024-07-06 07:09:42	\N	\N	0	16	6	\N	\N	\N	\N
+210	96	21	#MYDW1720249844	09:30	Pending	2024-07-10	\N	\N	\N	2024-07-06 07:10:44	2024-07-06 07:10:44	\N	\N	0	13	\N	\N	\N	\N	\N
+213	84	4	#MYDW1720257346	14:00	Pending	2024-07-06	\N	\N	\N	2024-07-06 09:15:46	2024-07-06 09:15:46	\N	\N	0	4	\N	\N	\N	\N	\N
+212	130	23	#MYDW1720253327	12:30	Completed	2024-07-06	\N	\N	\N	2024-07-06 08:08:47	2024-07-06 08:10:59	\N	\N	0	13	\N	\N	\N	\N	\N
+214	96	4	#MYDW1720257348	13:30	Pending	2024-07-06	\N	\N	\N	2024-07-06 09:15:48	2024-07-06 09:15:48	\N	\N	0	4	\N	\N	\N	\N	\N
+215	130	7	#MYDW1720257891	14:00	Cancelled	06-07-2024	I’m busy with some other things		\N	2024-07-06 09:24:51	2024-07-06 09:31:01	13:30	2024-07-06	83	6	\N	\N	\N	\N	\N
+207	84	22	#MYDW1720246480	08:30	Rescheduled	06-10-2024	\N		\N	2024-07-06 06:14:40	2024-07-06 09:49:11	08:00	2024-10-06	0	14	\N	\N	\N	\N	\N
+211	103	14	#MYDW1720250022	18:00	Cancelled	2024-07-06	\N	\N	\N	2024-07-06 07:13:42	2024-07-06 10:11:34	\N	\N	0	7	\N	\N	\N	\N	\N
+177	84	27	#MYDW1720183511	08:00	Completed	2024-07-18	\N	\N	2024-07-08 08:21:39	2024-07-05 12:45:11	2024-07-08 08:21:39	\N	\N	0	15	\N	\N	\N	\N	\N
+216	130	7	#MYDW1720258461	14:00	Cancelled	2024-07-06	\N	\N	\N	2024-07-06 09:34:21	2024-07-06 09:34:47	\N	\N	0	6	\N	\N	\N	\N	\N
+217	84	22	#MYDW1720258702	08:00	Pending	2024-10-10	\N	\N	\N	2024-07-06 09:38:22	2024-07-06 09:38:22	\N	\N	0	14	\N	\N	\N	\N	\N
+218	84	22	#MYDW1720258962	09:00	Rescheduled	10-10-2024	\N		\N	2024-07-06 09:42:42	2024-07-06 09:46:46	08:30	2024-10-10	0	14	\N	\N	\N	\N	\N
+219	84	22	#MYDW1720259278	09:00	Rescheduled	06-10-2024	\N		\N	2024-07-06 09:47:58	2024-07-06 09:48:28	08:30	2024-10-06	0	14	\N	\N	\N	\N	\N
+221	96	3	#MYDW1720259688	08:00	Pending	2024-10-10	\N	\N	\N	2024-07-06 09:54:48	2024-07-06 09:54:48	\N	\N	76	4	\N	\N	\N	\N	\N
+222	84	20	#MYDW1720260050	09:30	Rescheduled	06-11-2024	\N		\N	2024-07-06 10:00:50	2024-07-06 10:01:14	09:00	2024-11-06	0	14	\N	\N	\N	\N	\N
+223	103	14	#MYDW1720260671	12:00	Pending	2024-07-14	\N	\N	\N	2024-07-06 10:11:11	2024-07-06 10:11:11	\N	\N	0	7	\N	\N	\N	\N	\N
+224	103	14	#MYDW1720260722	08:30	Pending	2024-07-19	\N	\N	\N	2024-07-06 10:12:02	2024-07-06 10:12:02	\N	\N	0	7	\N	\N	\N	\N	\N
+225	103	11	#MYDW1720260810	13:00	Pending	2024-07-11	\N	\N	\N	2024-07-06 10:13:30	2024-07-06 10:13:30	\N	\N	0	8	\N	\N	\N	\N	\N
+226	130	3	#MYDW1720260986	08:00	Pending	2024-10-13	\N	\N	\N	2024-07-06 10:16:26	2024-07-06 10:16:26	\N	\N	0	4	\N	\N	\N	\N	\N
+227	130	3	#MYDW1720261207	08:30	Pending	2024-10-13	\N	\N	\N	2024-07-06 10:20:07	2024-07-06 10:20:07	\N	\N	0	4	\N	\N	\N	\N	\N
+228	130	3	#MYDW1720261333	09:00	Pending	2024-10-13	\N	\N	\N	2024-07-06 10:22:13	2024-07-06 10:22:13	\N	\N	0	4	\N	\N	\N	\N	\N
+229	130	3	#MYDW1720261467	09:30	Pending	2024-10-13	\N	\N	\N	2024-07-06 10:24:27	2024-07-06 10:24:27	\N	\N	0	4	\N	\N	\N	\N	\N
+240	96	28	#MYDW1720262607	08:00	Cancelled	2024-11-06	sick	\N	\N	2024-07-06 10:43:27	2024-07-06 12:19:11	\N	\N	66	16	6	\N	\N	\N	\N
+230	130	20	#MYDW1720261797	09:30	Rescheduled	06-11-2024	\N		\N	2024-07-06 10:29:57	2024-07-06 10:35:11	09:30	06-11-2024	0	14	\N	\N	\N	\N	\N
+232	103	11	#MYDW1720262122	10:00	Rescheduled	2024-07-07	\N		\N	2024-07-06 10:35:22	2024-07-06 10:35:52	10:30	2024-07-10	0	8	\N	\N	\N	\N	\N
+234	103	8	#MYDW1720262183	08:00	Cancelled	2024-07-15	\N	\N	\N	2024-07-06 10:36:23	2024-07-06 10:36:34	\N	\N	0	7	\N	\N	\N	\N	\N
+233	130	20	#MYDW1720262142	09:30	Rescheduled	06-11-2024	\N		\N	2024-07-06 10:35:42	2024-07-06 10:37:05	09:00	06-11-2024	83	14	\N	\N	\N	\N	\N
+236	103	8	#MYDW1720262309	08:00	Cancelled	2024-07-22	\N	\N	\N	2024-07-06 10:38:29	2024-07-06 10:38:51	\N	\N	0	7	\N	\N	\N	\N	\N
+191	84	22	#MYDW1720186651	18:00	Completed	25-07-2024	\N	Sick	\N	2024-07-05 13:37:31	2024-07-06 12:31:25	13:30	2024-07-25	0	14	\N	Conclusion: Review the exercise regimen in the next visit.	2024-07-06 12:00:00	\N	\N
+237	84	20	#MYDW1720262316	09:30	Rescheduled	06-11-2024	\N		\N	2024-07-06 10:38:36	2024-07-06 10:39:32	09:00	06-11-2024	63	14	\N	\N	\N	\N	\N
+238	103	8	#MYDW1720262387	13:30	Cancelled	2024-07-15	\N	\N	\N	2024-07-06 10:39:47	2024-07-06 10:43:20	\N	\N	0	7	\N	\N	\N	\N	\N
+241	103	8	#MYDW1720262625	13:30	Cancelled	2024-07-19	\N		\N	2024-07-06 10:43:45	2024-07-08 10:53:46	09:30	2024-07-17	0	7	\N	\N	\N	\N	\N
+247	96	3	#MYDW1720268566	10:00	Rescheduled	2024-10-13	\N	available now	\N	2024-07-06 12:22:46	2024-07-06 13:05:43	10:30	2024-10-13	0	4	\N	\N	\N	\N	\N
+248	143	7	#MYDW1720274977	18:30	Pending	2024-07-06	\N	\N	\N	2024-07-06 14:09:37	2024-07-06 14:09:37	\N	\N	0	6	\N	\N	\N	\N	\N
+246	140	10	#MYDW1720264637	08:30	Pending	2024-07-23	\N	\N	\N	2024-07-06 11:17:17	2024-07-06 11:17:17	\N	\N	0	8	\N	\N	\N	\N	\N
+220	96	3	#MYDW1720259582	13:00	Completed	2024-10-10	\N		\N	2024-07-06 09:53:02	2024-07-06 13:07:11	08:00	2024-10-10	76	4	\N	Conclusion: Review the exercise regimen in the next visit.	2024-07-06 02:00:00	\N	\N
+249	60	4	#MYDW1720277805	20:00	Completed	2024-07-06	\N	\N	\N	2024-07-06 14:56:45	2024-07-06 14:59:44	\N	\N	46	4	\N	\N	\N	\N	\N
+231	96	20	#MYDW1720261800	14:00	Completed	2024-11-06	\N		\N	2024-07-06 10:30:00	2024-07-06 13:09:02	09:00	2024-11-06	0	14	\N	Conclusion: Review the exercise regimen in the next visit.	2024-07-06 00:15:00	\N	\N
+262	130	7	#MYDW1720322244	09:00	Pending	2024-07-07	\N	\N	\N	2024-07-07 03:17:24	2024-07-07 03:17:24	\N	\N	0	6	\N	\N	\N	\N	\N
+242	84	28	#MYDW1720262684	09:00	Completed	2024-11-06	\N	\N	\N	2024-07-06 10:44:44	2024-07-06 13:34:42	\N	\N	62	16	6	Conclusion: Review the exercise regimen in the next visit.	2024-07-06 11:25:00	\N	\N
+235	103	8	#MYDW1720262231	08:00	Cancelled	2024-07-15	\N	\N	\N	2024-07-06 10:37:11	2024-07-08 10:55:00	\N	\N	0	7	\N	\N	\N	\N	\N
+239	96	28	#MYDW1720262534	08:30	Cancelled	2024-11-06	Doctor unavailable	\N	\N	2024-07-06 10:42:14	2024-07-06 13:38:32	\N	\N	68	16	6	\N	\N	\N	\N
+250	60	4	#MYDW1720278054	19:30	Completed	2024-07-06	\N	\N	\N	2024-07-06 15:00:54	2024-07-06 15:01:35	\N	\N	46	4	\N	\N	\N	\N	\N
+251	84	18	#MYDW1720278957	08:00	Pending	2024-07-07	\N	\N	\N	2024-07-06 15:15:57	2024-07-06 15:15:57	\N	\N	0	7	\N	\N	\N	\N	\N
+252	96	18	#MYDW1720278961	08:30	Pending	2024-07-07	\N	\N	\N	2024-07-06 15:16:01	2024-07-06 15:16:01	\N	\N	0	7	\N	\N	\N	\N	\N
+253	146	4	#MYDW1720279584	08:30	Pending	2024-07-07	\N	\N	\N	2024-07-06 15:26:24	2024-07-06 15:26:24	\N	\N	0	4	\N	\N	\N	\N	\N
+254	144	4	#MYDW1720279588	08:00	Pending	2024-07-07	\N	\N	\N	2024-07-06 15:26:28	2024-07-06 15:26:28	\N	\N	0	4	\N	\N	\N	\N	\N
+255	146	11	#MYDW1720279637	08:30	Pending	2024-07-07	\N	\N	\N	2024-07-06 15:27:17	2024-07-06 15:27:17	\N	\N	0	8	\N	\N	\N	\N	\N
+256	144	11	#MYDW1720279640	09:00	Pending	2024-07-07	\N	\N	\N	2024-07-06 15:27:20	2024-07-06 15:27:20	\N	\N	0	8	\N	\N	\N	\N	\N
+258	144	27	#MYDW1720279734	08:30	Pending	2024-07-08	\N	\N	2024-07-08 08:21:39	2024-07-06 15:28:54	2024-07-08 08:21:39	\N	\N	0	15	\N	\N	\N	\N	\N
+259	146	27	#MYDW1720279761	08:00	Pending	2024-07-07	\N	\N	2024-07-08 08:21:39	2024-07-06 15:29:21	2024-07-08 08:21:39	\N	\N	0	15	\N	\N	\N	\N	\N
+244	96	27	#MYDW1720263260	08:30	Completed	2024-09-06	\N	\N	2024-07-08 08:21:39	2024-07-06 10:54:20	2024-07-08 08:21:39	\N	\N	76	15	\N	Completed following up	2024-07-06 12:00:00	\N	\N
+245	84	27	#MYDW1720263347	09:00	Pending	2024-09-06	\N	\N	2024-07-08 08:21:39	2024-07-06 10:55:47	2024-07-08 08:21:39	\N	\N	61	15	\N	\N	\N	\N	\N
+260	146	27	#MYDW1720279788	09:00	Pending	2024-07-08	\N	\N	2024-07-08 08:21:39	2024-07-06 15:29:48	2024-07-08 08:21:39	\N	\N	0	15	\N	\N	\N	\N	\N
+261	144	27	#MYDW1720279810	08:30	Pending	2024-07-07	\N	\N	2024-07-08 08:21:39	2024-07-06 15:30:10	2024-07-08 08:21:39	\N	\N	0	15	\N	\N	\N	\N	\N
+243	84	27	#MYDW1720263196	09:00	Cancelled	06-09-2024	doctor unavailable		2024-07-08 08:21:39	2024-07-06 10:53:16	2024-07-08 08:21:39	08:00	2024-09-06	62	15	\N	\N	\N	\N	\N
+257	144	27	#MYDW1720279706	08:00	Pending	2024-07-08	\N	\N	2024-07-08 08:21:39	2024-07-06 15:28:26	2024-07-08 08:21:39	\N	\N	0	15	\N	\N	\N	\N	\N
+279	21	18	#MYDW7175	10:00	Cancelled	2024-07-10	Not well	\N	\N	2024-07-08 13:51:11	2024-07-09 12:24:12	\N	\N	0	4	3	\N	\N	\N	\N
+278	158	28	#MYDW1720445769	09:00	Completed	2024-07-10	\N	\N	\N	2024-07-08 13:36:09	2024-07-09 12:28:37	\N	\N	86	16	6	\N	\N	\N	\N
+286	14	35	#MYDW1387	08:30	Pending	2024-07-10	\N	\N	\N	2024-07-09 13:23:03	2024-07-09 13:23:03	\N	\N	0	22	12	\N	\N	\N	\N
+263	157	21	#MYDW1720436078	15:30	Rescheduled	08-07-2024	\N		\N	2024-07-08 10:54:38	2024-07-08 11:00:57	15:30	08-07-2024	0	13	\N	\N	\N	\N	\N
+287	20	35	#MYDW5315	13:00	Confirmed	2024-07-10	\N	\N	\N	2024-07-09 13:28:36	2024-07-09 13:29:22	08:00	2024-07-10	0	22	12	\N	\N	\N	\N
+266	158	12	#MYDW1720436963	19:00	Rescheduled	2024-07-08	\N		\N	2024-07-08 11:09:23	2024-07-08 11:10:00	20:00	2024-07-08	0	9	\N	\N	\N	\N	\N
+265	157	12	#MYDW1720436745	16:00	Rescheduled	08-07-2024	\N		\N	2024-07-08 11:05:45	2024-07-08 11:10:01	15:30	2024-07-08	0	9	\N	\N	\N	\N	\N
+267	157	28	#MYDW1720437860	09:30	Pending	2024-07-09	\N	\N	\N	2024-07-08 11:24:20	2024-07-08 11:24:20	\N	\N	0	16	6	\N	\N	\N	\N
+288	96	34	#MYDW1720533480	08:00	Pending	2024-07-10	\N	\N	\N	2024-07-09 13:58:00	2024-07-09 13:58:00	\N	\N	66	20	\N	\N	\N	\N	\N
+270	157	3	#MYDW1720441696	08:30	Cancelled	2024-07-15	Doctor is on leave	\N	\N	2024-07-08 12:28:16	2024-07-08 12:29:21	\N	\N	0	4	\N	\N	\N	\N	\N
+289	130	34	#MYDW1720577402	08:30	Pending	2024-07-10	\N	\N	\N	2024-07-10 02:10:02	2024-07-10 02:10:02	\N	\N	0	20	\N	\N	\N	\N	\N
+269	157	34	#MYDW1720441644	18:30	Completed	2024-07-08	\N	\N	\N	2024-07-08 12:27:24	2024-07-08 12:31:08	\N	\N	0	20	\N	next visit : next week\r\nDo blood test including blood pressure and blood sugar	2024-07-08 08:15:00	\N	\N
+268	157	10	#MYDW1720441620	08:30	Rescheduled	2024-10-08	\N	reshedule to past time	\N	2024-07-08 12:31:46	2024-07-08 12:31:46	08:30	2024-10-08	0	8	\N	\N	\N	\N	\N
+272	157	8	#MYDW3746	08:30	Pending	2024-07-10	\N	\N	\N	2024-07-08 12:32:33	2024-07-08 12:32:33	\N	\N	0	7	2	\N	\N	\N	\N
+271	157	18	#MYDW1720441730	08:30	Confirmed	2024-07-15	\N	\N	\N	2024-07-08 12:28:50	2024-07-08 12:32:59	\N	\N	0	7	\N	\N	\N	\N	\N
+273	157	20	#MYDW1720442048	18:30	Pending	2024-07-08	\N	\N	\N	2024-07-08 12:34:08	2024-07-08 12:34:08	\N	\N	0	14	\N	\N	\N	\N	\N
+274	157	15	#MYDW1720442077	09:00	Confirmed	2024-07-09	\N	\N	\N	2024-07-08 12:34:37	2024-07-08 12:34:54	\N	\N	0	7	\N	\N	\N	\N	\N
+276	157	14	#MYDW1720442286	10:30	Pending	2024-07-15	\N	\N	\N	2024-07-08 12:38:06	2024-07-08 12:38:06	\N	\N	0	7	\N	\N	\N	\N	\N
+275	157	33	#MYDW1720442248	08:00	Completed	2024-07-15	\N	\N	\N	2024-07-08 12:37:28	2024-07-08 12:38:46	\N	\N	0	19	\N	\N	\N	\N	\N
+277	157	28	#MYDW1720445718	09:00	Pending	2024-07-18	\N	\N	\N	2024-07-08 13:35:18	2024-07-08 13:35:18	\N	\N	85	16	6	\N	\N	\N	\N
+264	158	21	#MYDW1720436195	15:30	Confirmed	2024-07-08	\N		\N	2024-07-08 10:56:35	2024-07-08 13:40:13	20:00	2024-07-08	0	13	\N	\N	\N	\N	\N
+281	169	22	#MYDW1720520309	09:00	Completed	18-07-2024	\N		\N	2024-07-09 10:18:29	2024-07-09 10:29:05	14:30	2024-07-09	0	14	\N	\N	\N	\N	\N
+282	169	22	#MYDW1720520984	19:00	Completed	2024-07-09	\N	\N	\N	2024-07-09 10:29:44	2024-07-09 10:30:50	\N	\N	0	14	\N	\N	\N	\N	\N
+283	169	28	#MYDW1720523427	09:00	Rescheduled	26-07-2024	\N		\N	2024-07-09 11:10:27	2024-07-09 11:25:04	08:30	2024-07-10	87	16	6	\N	\N	\N	\N
+284	158	18	#MYDW6194	08:00	Pending	2024-07-10	\N	\N	\N	2024-07-09 12:06:37	2024-07-09 12:06:37	\N	\N	0	4	2	\N	\N	\N	8
+285	43	18	#MYDW6568	08:30	Pending	2024-07-10	\N	\N	\N	2024-07-09 12:19:31	2024-07-09 12:19:31	\N	\N	0	7	2	\N	\N	\N	8
+280	21	12	#MYDW4941	20:00	Confirmed	2024-07-08	\N	\N	\N	2024-07-08 13:51:42	2024-07-09 12:23:32	\N	\N	0	4	3	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: doctor_qualifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_qualifications (id, doctor_id, qualification_id, deleted_at, created_at, updated_at) FROM stdin;
+1	1	4	2024-06-11 04:33:20	2024-06-06 06:48:23	2024-06-11 04:33:20
+2	1	3	2024-06-11 04:33:20	2024-06-06 06:48:24	2024-06-11 04:33:20
+4	1	4	2024-06-11 04:42:20	2024-06-11 04:33:20	2024-06-11 04:42:20
+5	1	3	2024-06-11 04:42:20	2024-06-11 04:33:20	2024-06-11 04:42:20
+6	1	4	\N	2024-06-11 04:42:20	2024-06-11 04:42:20
+7	1	3	\N	2024-06-11 04:42:20	2024-06-11 04:42:20
+3	2	3	2024-06-11 04:43:06	2024-06-06 11:45:14	2024-06-11 04:43:06
+8	2	3	2024-06-11 05:43:29	2024-06-11 04:43:06	2024-06-11 05:43:29
+9	2	3	\N	2024-06-11 05:43:29	2024-06-11 05:43:29
+310	35	4	\N	2024-07-09 06:09:36	2024-07-09 06:09:36
+314	37	4	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+246	23	3	\N	2024-07-05 07:38:28	2024-07-05 07:38:28
+247	17	4	\N	2024-07-05 07:43:50	2024-07-05 07:43:50
+248	17	3	\N	2024-07-05 07:43:50	2024-07-05 07:43:50
+249	17	1	\N	2024-07-05 07:43:50	2024-07-05 07:43:50
+250	17	5	\N	2024-07-05 07:43:50	2024-07-05 07:43:50
+251	11	1	\N	2024-07-05 07:44:37	2024-07-05 07:44:37
+19	6	3	\N	2024-06-26 04:38:47	2024-06-26 04:38:47
+20	6	1	\N	2024-06-26 04:38:47	2024-06-26 04:38:47
+252	4	3	\N	2024-07-05 08:05:34	2024-07-05 08:05:34
+253	4	1	\N	2024-07-05 08:05:34	2024-07-05 08:05:34
+254	10	1	\N	2024-07-05 08:06:17	2024-07-05 08:06:17
+255	16	4	\N	2024-07-05 08:09:13	2024-07-05 08:09:13
+256	16	3	\N	2024-07-05 08:09:13	2024-07-05 08:09:13
+257	16	1	\N	2024-07-05 08:09:13	2024-07-05 08:09:13
+258	16	5	\N	2024-07-05 08:09:13	2024-07-05 08:09:13
+315	37	3	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+316	37	1	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+317	37	5	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+318	37	6	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+263	9	1	\N	2024-07-05 08:12:32	2024-07-05 08:12:32
+264	9	5	\N	2024-07-05 08:12:32	2024-07-05 08:12:32
+319	37	7	\N	2024-07-09 15:51:23	2024-07-09 15:51:23
+320	36	4	\N	2024-07-09 15:53:35	2024-07-09 15:53:35
+321	36	1	\N	2024-07-09 15:53:35	2024-07-09 15:53:35
+322	36	5	\N	2024-07-09 15:53:35	2024-07-09 15:53:35
+269	22	3	\N	2024-07-05 08:15:47	2024-07-05 08:15:47
+270	22	1	\N	2024-07-05 08:15:47	2024-07-05 08:15:47
+271	22	5	\N	2024-07-05 08:15:47	2024-07-05 08:15:47
+203	15	4	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+204	15	3	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+205	15	1	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+206	15	5	\N	2024-07-04 10:26:43	2024-07-04 10:26:43
+207	3	3	\N	2024-07-04 10:27:54	2024-07-04 10:27:54
+208	3	1	\N	2024-07-04 10:27:54	2024-07-04 10:27:54
+212	7	3	\N	2024-07-04 10:29:55	2024-07-04 10:29:55
+213	7	1	\N	2024-07-04 10:29:55	2024-07-04 10:29:55
+214	7	5	\N	2024-07-04 10:29:55	2024-07-04 10:29:55
+276	28	1	\N	2024-07-05 09:01:30	2024-07-05 09:01:30
+277	27	4	\N	2024-07-05 09:01:58	2024-07-05 09:01:58
+278	26	3	\N	2024-07-05 09:02:26	2024-07-05 09:02:26
+215	8	3	\N	2024-07-04 10:30:45	2024-07-04 10:30:45
+216	8	1	\N	2024-07-04 10:30:45	2024-07-04 10:30:45
+286	21	4	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+287	21	3	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+288	21	1	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+289	21	5	\N	2024-07-05 10:13:27	2024-07-05 10:13:27
+290	14	4	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+291	14	3	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+292	14	1	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+293	14	5	\N	2024-07-05 10:14:09	2024-07-05 10:14:09
+294	29	6	\N	2024-07-06 14:22:28	2024-07-06 14:22:28
+298	33	90	\N	2024-07-07 07:32:54	2024-07-07 07:32:54
+301	34	82	\N	2024-07-07 12:03:24	2024-07-07 12:03:24
+302	19	3	\N	2024-07-08 08:45:25	2024-07-08 08:45:25
+152	13	3	\N	2024-07-03 10:12:00	2024-07-03 10:12:00
+153	12	1	\N	2024-07-03 10:12:35	2024-07-03 10:12:35
+303	19	1	\N	2024-07-08 08:45:25	2024-07-08 08:45:25
+304	19	5	\N	2024-07-08 08:45:25	2024-07-08 08:45:25
+226	20	4	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+227	20	3	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+228	20	1	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+229	20	5	\N	2024-07-04 10:37:11	2024-07-04 10:37:11
+305	5	3	\N	2024-07-08 10:19:54	2024-07-08 10:19:54
+306	18	4	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+307	18	3	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+308	18	1	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+309	18	5	\N	2024-07-08 12:17:32	2024-07-08 12:17:32
+\.
+
+
+--
+-- Data for Name: doctor_reschedule_appointments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_reschedule_appointments (id, patient_appointment_id, doctor_id, reschedule_patient_booking_date, reschedule_patient_time_slot, deleted_at, created_at, updated_at, reason) FROM stdin;
+1	3	7	27-06-2024	13:00	\N	2024-06-15 16:59:54	2024-06-15 16:59:54	\N
+2	22	6	27-06-2024	13:00	\N	2024-06-25 07:23:13	2024-06-25 07:23:13	\N
+3	21	6	29-06-2024	17:00	\N	2024-06-25 07:23:27	2024-06-25 07:23:27	\N
+4	25	6	2024-06-25	18:00	\N	2024-06-25 11:14:00	2024-06-25 11:14:00	test
+5	46	11	26-07-2024	16:30	\N	2024-06-28 06:42:54	2024-06-28 06:42:54	\N
+6	46	11	26-07-2024	16:30	\N	2024-06-28 06:45:29	2024-06-28 06:45:29	\N
+7	73	6	2024-07-02	15:00	\N	2024-06-29 10:20:37	2024-06-29 10:20:37	testing reason for schedule
+8	72	6	2024-07-02	14:00	\N	2024-06-29 10:47:14	2024-06-29 10:47:14	test
+9	63	9	2024-06-30	14:00	\N	2024-06-29 17:54:31	2024-06-29 17:54:31	test
+10	85	3	2024-07-01	08:00	\N	2024-06-30 07:02:01	2024-06-30 07:02:01	not able to travel
+11	88	8	2024-07-03	08:30	\N	2024-07-01 08:19:12	2024-07-01 08:19:12	not well
+12	87	9	2024-07-02	12:00	\N	2024-07-01 08:22:23	2024-07-01 08:22:23	nit well
+13	92	9	2024-07-03	09:30	\N	2024-07-01 08:26:33	2024-07-01 08:26:33	not goods
+14	92	9	2024-07-03	13:30	\N	2024-07-01 08:26:51	2024-07-01 08:26:51	not good
+15	93	9	2024-07-03	09:30	\N	2024-07-01 08:28:32	2024-07-01 08:28:32	Jot ok
+16	99	9	2024-07-09	12:30	\N	2024-07-02 19:50:30	2024-07-02 19:50:30	Test
+17	117	9	2024-07-03	18:30	\N	2024-07-03 02:36:55	2024-07-03 02:36:55	The only way I could do that was if you wanted me too I could come and pick it out and then I can go pick up my
+18	118	9	2024-07-03	14:30	\N	2024-07-03 11:02:18	2024-07-03 11:02:18	
+19	119	8	2024-07-04	08:00	\N	2024-07-03 12:04:31	2024-07-03 12:04:31	try
+20	125	8	2024-07-12	13:30	\N	2024-07-04 02:30:37	2024-07-04 02:30:37	The first time the team had yyyyyyy I had a bad dream and y
+21	125	8	26-07-2024	08:30	\N	2024-07-04 02:31:28	2024-07-04 02:31:28	The first time the team had played a match was when they won a match in which the players had a goal in hand to uuyyy and were w
+22	132	9	04-07-2024	08:30	\N	2024-07-04 08:32:53	2024-07-04 08:32:53	\N
+23	135	9	06-07-2024	09:00	\N	2024-07-04 09:39:59	2024-07-04 09:39:59	\N
+24	145	11	08-07-2024	10:00	\N	2024-07-04 13:28:49	2024-07-04 13:28:49	\N
+25	145	11	08-07-2024	10:00	\N	2024-07-04 13:28:52	2024-07-04 13:28:52	\N
+26	144	11	08-07-2024	08:30	\N	2024-07-04 13:29:31	2024-07-04 13:29:31	\N
+27	164	22	2024-07-12	13:00	\N	2024-07-05 09:14:36	2024-07-05 09:14:36	Cvv
+28	175	17	2024-07-05	17:00	\N	2024-07-05 11:08:09	2024-07-05 11:08:09	\N
+29	173	17	2024-07-05	16:30	\N	2024-07-05 12:24:43	2024-07-05 12:24:43	\N
+30	172	17	2024-07-05	15:30	\N	2024-07-05 12:25:04	2024-07-05 12:25:04	\N
+31	167	14	2024-07-08	15:30	\N	2024-07-05 12:42:12	2024-07-05 12:42:12	\N
+32	189	28	2024-07-11	08:00	\N	2024-07-05 12:57:28	2024-07-05 12:57:28	\N
+33	188	28	2024-07-11	08:30	\N	2024-07-05 12:57:45	2024-07-05 12:57:45	\N
+34	183	8	2024-07-11	18:00	\N	2024-07-05 13:21:08	2024-07-05 13:21:08	not available
+35	181	22	2024-07-25	09:00	\N	2024-07-05 13:39:38	2024-07-05 13:39:38	sick
+36	191	22	2024-07-25	13:30	\N	2024-07-05 13:39:44	2024-07-05 13:39:44	Sick
+37	215	7	2024-07-06	13:30	\N	2024-07-06 09:28:43	2024-07-06 09:28:43	
+38	218	22	2024-10-10	08:30	\N	2024-07-06 09:46:46	2024-07-06 09:46:46	
+39	219	22	2024-10-06	08:30	\N	2024-07-06 09:48:28	2024-07-06 09:48:28	
+40	207	22	2024-10-06	08:00	\N	2024-07-06 09:49:11	2024-07-06 09:49:11	
+41	220	3	2024-10-10	08:00	\N	2024-07-06 09:53:52	2024-07-06 09:53:52	
+42	222	20	2024-11-06	09:00	\N	2024-07-06 10:01:14	2024-07-06 10:01:14	
+43	230	20	2024-11-06	09:30	\N	2024-07-06 10:30:57	2024-07-06 10:30:57	
+44	231	20	2024-11-06	09:00	\N	2024-07-06 10:30:59	2024-07-06 10:30:59	
+45	230	20	06-11-2024	14:00	\N	2024-07-06 10:31:26	2024-07-06 10:31:26	
+46	230	20	06-11-2024	09:30	\N	2024-07-06 10:35:11	2024-07-06 10:35:11	
+47	232	11	2024-07-10	10:30	\N	2024-07-06 10:35:52	2024-07-06 10:35:52	
+48	233	20	2024-11-06	09:30	\N	2024-07-06 10:36:44	2024-07-06 10:36:44	
+49	233	20	06-11-2024	09:00	\N	2024-07-06 10:37:05	2024-07-06 10:37:05	
+50	237	20	2024-11-06	09:30	\N	2024-07-06 10:39:08	2024-07-06 10:39:08	
+51	237	20	06-11-2024	09:00	\N	2024-07-06 10:39:32	2024-07-06 10:39:32	
+52	241	8	2024-07-15	14:00	\N	2024-07-06 10:52:28	2024-07-06 10:52:28	
+53	241	8	2024-07-18	13:00	\N	2024-07-06 10:52:51	2024-07-06 10:52:51	
+54	243	27	2024-09-06	08:00	\N	2024-07-06 10:54:38	2024-07-06 10:54:38	
+55	241	8	2024-07-17	08:30	\N	2024-07-06 11:02:41	2024-07-06 11:02:41	
+56	241	8	2024-07-17	09:30	\N	2024-07-06 11:02:57	2024-07-06 11:02:57	
+57	247	3	2024-10-13	19:30	\N	2024-07-06 13:05:20	2024-07-06 13:05:20	
+58	247	3	2024-10-13	10:30	\N	2024-07-06 13:05:43	2024-07-06 13:05:43	available now
+59	263	21	2024-07-08	15:00	\N	2024-07-08 10:55:26	2024-07-08 10:55:26	
+60	264	21	2024-07-08	15:00	\N	2024-07-08 10:57:23	2024-07-08 10:57:23	
+61	264	21	2024-07-08	18:30	\N	2024-07-08 10:58:48	2024-07-08 10:58:48	
+62	264	21	2024-07-08	18:00	\N	2024-07-08 10:59:16	2024-07-08 10:59:16	
+63	264	21	2024-07-08	15:30	\N	2024-07-08 11:00:48	2024-07-08 11:00:48	
+64	263	21	08-07-2024	15:30	\N	2024-07-08 11:00:57	2024-07-08 11:00:57	
+65	264	21	2024-07-08	20:00	\N	2024-07-08 11:01:19	2024-07-08 11:01:19	
+66	266	12	2024-07-08	20:00	\N	2024-07-08 11:10:00	2024-07-08 11:10:00	
+67	265	12	2024-07-08	15:30	\N	2024-07-08 11:10:01	2024-07-08 11:10:01	
+68	268	10	2024-10-08	08:30	\N	2024-07-08 12:31:45	2024-07-08 12:31:45	\N
+69	268	10	2024-10-08	08:30	\N	2024-07-08 12:31:46	2024-07-08 12:31:46	\N
+70	281	22	2024-07-09	14:30	\N	2024-07-09 10:19:06	2024-07-09 10:19:06	
+71	283	28	2024-07-10	08:30	\N	2024-07-09 11:25:04	2024-07-09 11:25:04	
+72	287	35	2024-07-10	13:00	\N	2024-07-09 13:28:36	2024-07-09 13:28:36	\N
+\.
+
+
+--
+-- Data for Name: doctor_specialities; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_specialities (id, doctor_id, speciality_id, created_at, updated_at, deleted_at) FROM stdin;
+1	1	1	2024-06-06 06:48:24	2024-06-11 04:33:20	2024-06-11 04:33:20
+3	1	1	2024-06-11 04:33:20	2024-06-11 04:42:20	2024-06-11 04:42:20
+4	1	1	2024-06-11 04:42:20	2024-06-11 04:42:20	\N
+2	2	2	2024-06-06 11:45:14	2024-06-11 04:43:06	2024-06-11 04:43:06
+5	2	2	2024-06-11 04:43:06	2024-06-11 05:43:29	2024-06-11 05:43:29
+6	2	2	2024-06-11 05:43:29	2024-06-11 05:43:29	\N
+152	17	1	2024-07-05 07:43:50	2024-07-05 07:43:50	\N
+153	17	2	2024-07-05 07:43:50	2024-07-05 07:43:50	\N
+154	11	2	2024-07-05 07:44:37	2024-07-05 07:44:37	\N
+155	4	1	2024-07-05 08:05:34	2024-07-05 08:05:34	\N
+156	10	1	2024-07-05 08:06:17	2024-07-05 08:06:17	\N
+157	16	1	2024-07-05 08:09:13	2024-07-05 08:09:13	\N
+158	16	2	2024-07-05 08:09:13	2024-07-05 08:09:13	\N
+90	13	1	2024-07-03 10:12:00	2024-07-03 10:12:00	\N
+14	6	1	2024-06-26 04:38:47	2024-06-26 04:38:47	\N
+15	6	2	2024-06-26 04:38:47	2024-06-26 04:38:47	\N
+91	12	1	2024-07-03 10:12:35	2024-07-03 10:12:35	\N
+161	9	2	2024-07-05 08:12:32	2024-07-05 08:12:32	\N
+164	22	2	2024-07-05 08:15:47	2024-07-05 08:15:47	\N
+167	28	1	2024-07-05 09:01:30	2024-07-05 09:01:30	\N
+168	27	1	2024-07-05 09:01:58	2024-07-05 09:01:58	\N
+169	26	1	2024-07-05 09:02:26	2024-07-05 09:02:26	\N
+173	21	1	2024-07-05 10:13:27	2024-07-05 10:13:27	\N
+174	21	2	2024-07-05 10:13:27	2024-07-05 10:13:27	\N
+175	14	1	2024-07-05 10:14:09	2024-07-05 10:14:09	\N
+176	14	2	2024-07-05 10:14:09	2024-07-05 10:14:09	\N
+177	29	5	2024-07-06 14:22:28	2024-07-06 14:22:28	\N
+184	33	21	2024-07-07 07:32:54	2024-07-07 07:32:54	\N
+187	34	22	2024-07-07 12:03:24	2024-07-07 12:03:24	\N
+121	15	1	2024-07-04 10:26:43	2024-07-04 10:26:43	\N
+188	19	2	2024-07-08 08:45:25	2024-07-08 08:45:25	\N
+189	5	2	2024-07-08 10:19:54	2024-07-08 10:19:54	\N
+122	15	2	2024-07-04 10:26:43	2024-07-04 10:26:43	\N
+123	3	1	2024-07-04 10:27:54	2024-07-04 10:27:54	\N
+190	18	1	2024-07-08 12:17:32	2024-07-08 12:17:32	\N
+191	18	2	2024-07-08 12:17:32	2024-07-08 12:17:32	\N
+126	7	1	2024-07-04 10:29:55	2024-07-04 10:29:55	\N
+127	7	2	2024-07-04 10:29:55	2024-07-04 10:29:55	\N
+128	8	1	2024-07-04 10:30:45	2024-07-04 10:30:45	\N
+192	35	18	2024-07-09 06:09:36	2024-07-09 06:09:36	\N
+129	8	2	2024-07-04 10:30:45	2024-07-04 10:30:45	\N
+194	37	1	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+195	37	2	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+196	37	3	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+197	37	4	2024-07-09 15:51:23	2024-07-09 15:51:23	\N
+198	36	3	2024-07-09 15:53:35	2024-07-09 15:53:35	\N
+136	20	1	2024-07-04 10:37:11	2024-07-04 10:37:11	\N
+137	20	2	2024-07-04 10:37:11	2024-07-04 10:37:11	\N
+150	23	1	2024-07-05 07:38:28	2024-07-05 07:38:28	\N
+151	23	2	2024-07-05 07:38:28	2024-07-05 07:38:28	\N
+\.
+
+
+--
+-- Data for Name: doctor_temporary_unavailables; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctor_temporary_unavailables (id, doctor_id, unavailable_timeslot, unavailable_date, deleted_at, created_at, updated_at) FROM stdin;
+1	11	["10:30"]	2024-07-07	\N	2024-07-06 09:28:23	2024-07-06 09:28:23
+2	11	["13:00","13:30"]	2024-07-06	\N	2024-07-06 09:28:43	2024-07-06 09:28:43
+3	34	["18:00"]	2024-07-07	\N	2024-07-07 12:16:12	2024-07-07 12:16:12
+4	22	["09:00","09:30"]	2024-07-08	\N	2024-07-07 13:43:15	2024-07-07 13:43:15
+5	18	["15:30"]	2024-07-10	\N	2024-07-09 13:03:54	2024-07-09 13:03:54
+6	35	["09:00","09:30"]	2024-07-10	\N	2024-07-09 13:15:27	2024-07-09 13:15:27
+7	34	["08:00"]	2024-07-14	\N	2024-07-09 16:12:48	2024-07-09 16:12:48
+\.
+
+
+--
+-- Data for Name: doctors; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.doctors (id, user_id, hospital_id, year_of_experiance, license_no, license_type_id, country_id, appointment_dial_code, appointment_phone, country_of_orgin, gender, insurence_id, sub_insurence_id, profile_desciription, created_at, updated_at, deleted_at, department_id, license_no_doh, license_no_moh, agent_id, callcenter_id) FROM stdin;
+11	61	8	10	DHA123	0	357	971	5055555555555	0	2	0	0	<p>&nbsp;</p><p>Doctors&nbsp;have many duties&nbsp;toward their patients.&nbsp;Their responsibilities cover&nbsp;their&nbsp;own&nbsp;actions, as well as&nbsp;orders they give to their assistants, such as nurses, medical students and residents.&nbsp;Here&nbsp;are the doctor’s obligations toward patients.</p>	2024-06-28 06:09:11	2024-07-05 07:44:37	\N	\N	DOH123	MOH123	\N	\N
+15	97	7	1	DHA400	0	386	971	505500559	0	1	0	0	<p>A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury.A doctor is <strong>someone who is experienced and certified to practice medicine to help maintain or restore physical and mental health</strong>. A doctor is tasked with interacting with patients, diagnosing medical problems and successfully treating illness or injury</p>	2024-07-02 09:07:54	2024-07-04 10:26:43	\N	\N	DOH400	MOH400	\N	\N
+1	16	1	10	MDMD3628	["1"]	98	971	3453535345	0	1	0	0	<p>Envisioned for those who seek fine medical care in even finer surroundings, <a href="https://www.asterdmhealthcare.com/about-us/our-services/medcarehospital">Medcare Hospitals</a> and Clinics are the most <a href="https://www.asterdmhealthcare.com/">premium healthcare</a> facilities in the UAE.</p>	2024-06-06 06:48:23	2024-07-02 09:37:47	2024-07-02 09:37:47	\N	\N	\N	\N	\N
+18	108	7	5	DHA500	0	442	971	69868689698	0	1	0	0	<p>A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.</p>	2024-07-03 09:39:55	2024-07-08 12:17:32	\N	\N	DOH700	MOH600	\N	\N
+4	35	4	12	yru8758585	0	386	971	23525253253	0	1	0	0	<p>Dr. Unni Mooppan, MD is a urology specialist in Brooklyn, NY. Dr. Mooppan has extensive experience in Male Reproductive Disorders &amp; Procedures and Urinary Conditions. He is affiliated with Brookdale Hospital Medical Center.</p>	2024-06-22 06:36:52	2024-07-04 10:28:23	\N	\N	DD47294	DFGDG793053	\N	\N
+6	37	4	4	345egse	0	229	971		0	1	0	0	<p>cvxvx</p>	2024-06-24 06:45:45	2024-07-02 09:37:15	2024-07-02 09:37:15	\N	456547	dgdeyer	\N	\N
+9	57	7	9	DHA4556	0	357	971	5555555535	0	1	0	0	<p><strong>a person skilled or specializing in healing arts</strong>. especially : one (as a physician, dentist, or veterinarian) who holds an advanced degree and is licensed to practice. 2. a. : a person who has earned one of the highest academic degrees (as a PhD) conferred by a university</p>	2024-06-27 13:24:11	2024-07-04 10:25:57	\N	\N	DOH67	MOH45	\N	\N
+2	17	1	12	2312312	["1"]	229	971	2312311444	0	2	0	0	<p>test</p>	2024-06-06 11:45:14	2024-07-02 09:37:30	2024-07-02 09:37:30	\N	\N	\N	\N	\N
+5	36	4	5	234DSSFDS	0	366	\N		0	2	0	0	<p>My testing profile</p>	2024-06-24 06:14:24	2024-07-04 10:29:15	\N	\N	\N	\N	\N	\N
+13	68	9	9	DHA676	0	228	971	50505095	0	1	0	0	\N	2024-06-28 14:20:00	2024-07-03 10:12:00	\N	\N	DOH765	MOH6777	\N	\N
+12	67	9	7	DHA234	0	229	971	5050056767	0	2	0	0	<p>hospital, an institution that is built, staffed, and equipped for the diagnosis of disease; for the treatment, both medical and surgical, of the sick and the injured; and for their housing during this process. The modern hospital also often serves as a centre for investigation and for teaching.</p>	2024-06-28 14:18:16	2024-07-03 10:12:35	\N	\N	DOH456	MOH234	\N	\N
+7	55	6	4	DHA464646	0	487	971	565656	0	2	0	0	<p><strong>a person skilled or specializing in healing arts</strong>. especially : one (as a physician, dentist, or veterinarian) who holds an advanced degree and is licensed to practice. 2. a. : a person who has earned one of the highest academic degrees (as a PhD) conferred by a university</p>	2024-06-27 13:14:21	2024-07-04 10:29:55	\N	\N	DOHA464646	MOHA464646	\N	\N
+8	56	7	2	DHA1	0	386	971	5745454545773722	0	2	0	0	<p><strong>a person skilled or specializing in healing arts</strong>. especially : one (as a physician, dentist, or veterinarian) who holds an advanced degree and is licensed to practice. 2. a. : a person who has earned one of the highest academic degrees (as a PhD) conferred by a university</p>	2024-06-27 13:21:51	2024-07-04 10:30:45	\N	\N	DOH1	MOH1	\N	\N
+10	59	8	8	DHA123	0	386	971		0	1	0	0	<p><strong>a person skilled or specializing in healing arts</strong>. especially : one (as a physician, dentist, or veterinarian) who holds an advanced degree and is licensed to practice. 2. a. : a person who has earned one of the highest academic degrees (as a PhD) conferred by a university</p>	2024-06-27 14:18:27	2024-07-04 10:31:22	\N	\N	DOH456554	MOH1243	\N	\N
+16	104	7	5	DHA499	0	357	971		0	1	0	0	<h3>Responsibilities for Doctor</h3><ul><li>Perform routine check ups on patients</li><li>Keep detailed notes of the patient</li><li>Perform diagnostic tests to diagnose patients</li><li>Recommend patients to see a specialist</li><li>Provide quality healthcare to patients</li><li>Take part in further education opportunities</li><li>Treat patients in the office for minor injuries</li><li>Create a care plan for a patient</li></ul><h3>Qualifications for Doctor</h3><ul><li>Doctorate degree from an accredited medical school</li><li>Board certification and state license</li><li>Exceptional time management and attention to detail</li><li>Strong leadership skills</li><li>Great communication skills to talk with patients about treatment options</li><li>Ability to remain calm in stressful situations</li><li>Ability to evaluate data and information</li><li>Willingness to work long hours</li><li>Focused on customer service to create a great experience</li></ul>	2024-07-03 07:57:47	2024-07-05 08:09:13	\N	\N	DOH499	MOH499	\N	\N
+26	117	4	4	42342	0	357	971	1234567890	0	1	0	0	<p>asdasd</p>	2024-07-03 12:56:11	2024-07-05 07:37:45	\N	3	3423	2342	\N	1
+22	112	14	19	SDASD21312312	0	357	971	34234234342	0	1	0	0	<p>test description</p>	2024-07-03 10:31:27	2024-07-04 10:35:20	\N	\N	FW4534R3WR2	DSF3R23R4	\N	\N
+17	105	7	5	DHA500	0	357	971	6677866778	0	1	0	0	<h3>Responsibilities for Doctor</h3><ul><li>Perform routine check ups on patients</li><li>Keep detailed notes of the patient</li><li>Perform diagnostic tests to diagnose patients</li><li>Recommend patients to see a specialist</li><li>Provide quality healthcare to patients</li><li>Take part in further education opportunities</li><li>Treat patients in the office for minor injuries</li><li>Create a care plan for a patient</li></ul><h3>Qualifications for Doctor</h3><ul><li>Doctorate degree from an accredited medical school</li><li>Board certification and state license</li><li>Exceptional time management and attention to detail</li><li>Strong leadership skills</li><li>Great communication skills to talk with patients about treatment options</li><li>Ability to remain calm in stressful situations</li><li>Ability to evaluate data and information</li><li>Willingness to work long hours</li><li>Focused on customer service to create a great experience</li></ul>	2024-07-03 08:00:10	2024-07-05 07:43:50	\N	\N	DOH500	MOH500	\N	\N
+20	110	14	5	DHA4444	0	357	971	68787635698	0	1	0	0	\N	2024-07-03 10:22:09	2024-07-04 10:37:11	\N	\N	DOH4444	MOH4444	\N	\N
+23	113	13	19	DWR324	0	487	971	2363323265	0	2	0	0	<p>TESTING PROFILE</p>	2024-07-03 10:33:56	2024-07-04 10:34:33	\N	\N	FRT43	WER343	\N	\N
+19	109	4	20	DSER23323	0	357	971	135548787978	0	1	0	0	<p>هنالك العديد من الأنواع المتوفرة لنصوص لوريم إيبسوم، ولكن الغالبية تم تعديلها بشكل ما عبر إدخال بعض النوادر أو الكلمات العشوائية إلى النص. إن كنت تريد أن تستخدم نص لوريم إيبسوم ما، عليك أن تتحقق أولاً أن ليس هناك أي كلمات أو عبارات محرجة أو غير لائقة مخبأة في هذا النص. بينما تعمل جميع مولّدات نصوص لوريم إيبسوم على الإنترنت على إعادة تكرار مقاطع من نص لوريم إيبسوم نفسه عدة مرات بما تتطلبه الحاجة، يقوم مولّدنا هذا باستخدام كلمات من قاموس يحوي على أكثر من 200 كلمة لا تينية، مضاف إليها مجموعة من الجمل النموذجية، لتكوين نص لوريم إيبسوم ذو شكل منطقي قريب إلى النص الحقيقي. وبالتالي يكون النص الناتح خالي من التكرار، أو أي كلمات أو عبارات غير لائقة أو ما شابه. وهذا ما يجعله أول مولّد نص لوريم إيبسوم حقيقي على الإنترنت.1215</p>	2024-07-03 09:48:00	2024-07-05 09:04:34	\N	\N	SDFR43543	DSF32432	\N	\N
+14	86	7	5	DHA123	0	488	971	507788778	0	1	0	0	<p>Doctors are people who practice medicine. Doctors are trained to keep people healthy and to heal the sick.</p><p>There are many parts to a doctor’s job. Doctors first need to identify what is making a person sick. Then they decide on a treatment. They also predict when the patient will feel better. In addition, doctors try to prevent illnesses. When treating patients, doctors work with many other people, including nurses, therapists, and physician assistants.</p><p>Becoming a doctor involves years of education and training. Medical students first attend college, where they take classes in biology, chemistry, and physics in addition to general studies. Then they spend three to four years in medical school. Students usually earn a Doctor of Medicine degree in medical school.</p><p>After medical school, most graduates enter a residency, which is a training program usually in a hospital. During a residency, experienced doctors train the new doctors for three to seven years. During this time, new doctors can specialize in a particular type of medicine. They may choose to focus on a particular area of medicine, such as internal medicine. Or they may choose to focus on a particular part of the body, such as bones or the heart. Finally, new doctors must pass a test to get a license to practice medicine.Doctors are people who practice medicine. Doctors are trained to keep people healthy and to heal the sick.</p><p>There are many parts to a doctor’s job. Doctors first need to identify what is making a person sick. Then they decide on a treatment. They also predict when the patient will feel better. In addition, doctors try to prevent illnesses. When treating patients, doctors work with many other people, including nurses, therapists, and physician assistants.</p><p>Becoming a doctor involves years of education and training. Medical students first attend college, where they take classes in biology, chemistry, and physics in addition to general studies. Then they spend three to four years in medical school. Students usually earn a Doctor of Medicine degree in medical school.</p><p>After medical school, most graduates enter a residency, which is a training program usually in a hospital. During a residency, experienced doctors train the new doctors for three to seven years. During this time, new doctors can specialize in a particular type of medicine. They may choose to focus on a particular area of medicine, such as internal medicine . Or they may choose to focus on a particular part of the body, such as bones or the heart. Finally, new doctors must pass a test to get a license to practice medicine.</p>	2024-07-01 11:11:17	2024-07-05 10:14:09	\N	\N	DOH123	MOH123	\N	\N
+3	31	4	12	ef4353453	0	386	971	5335235235	0	1	0	0	<p>Aster DM Healthcare was founded in 1987 in Dubai, the United Arab Emirates, by Azad Moopen, a doctor turned entrepreneur. The company is a private sector healthcare provider in the Middle East. The India registered healthcare conglomerate covers an array of healthcare verticals, including hospitals, clinics, pharmacies and healthcare consultancy service.</p><p>In May 2011, Aster DM Healthcare opened its first medical centre in Sharjah, United Arab Emirates. The new centre was officially inaugurated by the veteran Indian play back singer K. J. Yesudas and various guests from the Government of Sharjah and Ministry of Health.</p><p>In February 2013, Aster DM Healthcare announced the interest of investing in the Philippines' healthcare sector. Initially, the company would start with the establishment of pharmacies and possibly hospitals in the later time. Moopen told reporters in a press conference for the launch of the DM Healthcare Foundation Philippines Inc., which is providing free paediatric cardiac surgery to at least 50 Filipino children in two years.In December, they launched its fifth Access Clinic in Jebel Ali Free Zone, or Jafza South, aimed at catering to the day-to-day healthcare needs of the employees in the neighbourhood.</p>	2024-06-20 05:22:07	2024-07-04 10:27:54	\N	\N	rty88568	dfgd457457	\N	\N
+28	126	16	4	42342	0	357	971	123456789	0	1	0	0	<p>doctor</p>	2024-07-04 15:24:11	2024-07-05 07:36:29	\N	6	3423	2342	\N	1
+21	111	13	3	DHA4009	0	357	971	507788778	0	1	0	0	<p>A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.A doctor is responsible for all sides of care of a patient. They diagnose, educate, and treat patients to ensure that they have the best possible care. A few of the main duties of a doctor are performing diagnostic tests, recommending specialists for patients, document patient's medical history, and educating patients. They also have to administer vaccines and other treatments. Some of the jobs titles that a doctor could grow into are head of research or hospital president.<br><br>A doctor should have at least 4 years of experience in residency as well as a doctorate degree from an accredited medical school. One of the most important skills that a doctor will have is their ability to diagnose their patients. Another skill is empathy as the doctor will need to relate to their patients. They also need to be able to multitask by working with several different patients.</p>	2024-07-03 10:31:04	2024-07-05 10:13:27	\N	\N	DOH4009	MOH4009	\N	\N
+33	154	19	30	0054966	0	357	\N		0	2	0	0	<p>SPECIALIST DERMATOLOGIST<br>Dermato-Venerology in Paris 7 Paris 1979-1983<br>Faulty of Medicines of the University of Algiers Algeria 1970-1976<br>&nbsp;Baccalaureate Classifies Final (3rd secondary year) series sciences Algeria 1969-1970<br>First Baccalaureate in secondary year (class of 1st) Algeria 1968-1969<br>Esthetics Dermatology:Botox, Filler,Hair Removal(Laser)<br>Mesotherapy<br>Nail, Scalp &amp; Skin Diseases<br>Small Dermatological Surgeries<br>Defined of Skin Type; Peeling<br>Scleroses of Varicose<br>Wart Removal</p>	2024-07-07 07:12:27	2024-07-07 07:12:27	\N	\N	\N	\N	\N	\N
+34	156	20	11	15192376	0	388	971		0	2	0	0	<p>11 -years experience in medicine and being in close contact with human weaknesses and strengths, it taught me that Surgery is not a profession. It is a way of life.when I see rays of hopes coming after a dark night, I feel it has been valuable all the pressures and tenses bore&nbsp;in&nbsp;this&nbsp;career</p>	2024-07-07 08:14:06	2024-07-07 08:24:41	\N	\N	\N	\N	\N	\N
+27	124	15	4	42342	0	357	971	123456789	0	1	0	0	<p>123456789</p>	2024-07-04 12:48:01	2024-07-08 08:21:39	2024-07-08 08:21:39	\N	3423	2342	3	\N
+29	145	16	4	42342	0	229	971	123456789	0	1	0	0	<p>123456789</p>	2024-07-06 14:22:28	2024-07-08 08:47:01	2024-07-08 08:47:01	6	3423	2342	\N	1
+35	163	22	8	454	0	386	971	53434434434	0	1	0	0	<p>Highly qualified orthopedic surgeon with 40 years of experience in the industry . Compassionate doctor who always considers my patients’ needs and comfort levels during diagnosis and treatment, and works to ensure they have the best possible experience.</p>	2024-07-09 06:09:36	2024-07-09 06:09:36	\N	\N	4534	4656	\N	\N
+37	178	24	7	DHA4556	0	360	971	56565656	0	1	0	0	\N	2024-07-09 15:51:23	2024-07-09 15:51:23	\N	\N	\N	\N	\N	\N
+36	177	24	7	DHA4556	0	360	971		0	1	0	0	\N	2024-07-09 15:42:19	2024-07-09 15:53:35	\N	\N	DHA4556	DHA4556	\N	\N
+\.
+
+
+--
+-- Data for Name: emirates; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.emirates (id, name_en, name_ar, active, deleted_at, created_at, updated_at, country_id) FROM stdin;
+2	Dubai	دبي	1	\N	2024-05-24 06:49:07	2024-05-24 06:49:07	229
+3	Abudhabi	abudhabi	1	\N	2024-06-28 04:47:25	2024-06-28 04:47:25	229
+4	Ajman	Ajman	1	\N	2024-07-06 07:07:27	2024-07-06 07:07:27	229
+5	Fujairah	Fujairah	1	\N	2024-07-06 07:07:57	2024-07-06 07:08:09	229
+6	Ras Al-Khaimah	Ras Al-Khaimah	1	\N	2024-07-06 07:08:37	2024-07-06 07:08:37	229
+7	Sharjah	Sharjah	1	\N	2024-07-06 07:09:06	2024-07-06 07:09:06	229
+8	Umm Al Quwain	Umm Al Quwain	1	\N	2024-07-06 07:09:41	2024-07-06 07:09:41	229
+\.
+
+
+--
+-- Data for Name: failed_jobs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.failed_jobs (id, uuid, connection, queue, payload, exception, failed_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: faq; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.faq (id, title, description, created_by, updated_by, active, created_at, updated_at) FROM stdin;
+3	How do I register/create an account?	You can register/create an account simply using your mobile or WhatsApp number. However, adding your full name, email, insurance details, date of birth is optional, but we encourage to do so.	1	1	1	2024-04-09 07:30:57	2024-07-02 03:30:48
+1	Can I add my family members and friends on my account?	You can add your family members and friends within your account without a separate registration.	1	1	1	2024-03-25 07:08:32	2024-07-02 03:31:50
+\.
+
+
+--
+-- Data for Name: help; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.help (id, title, description, created_by, updated_by, active, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: hospital_doctor_feedback; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_doctor_feedback (id, doctor_id, hospital_id, user_id, rating, feeback_message, deleted_at, created_at, updated_at, appointment_id) FROM stdin;
+1	6	4	60	3	Testing Feedback	\N	2024-06-28 19:32:28	2024-06-28 19:32:28	61
+2	6	4	60	3	Testing Feedback reviews.	\N	2024-06-28 20:33:47	2024-06-28 20:33:47	62
+3	3	4	48	4	Sdvvh hnj  hjvnn	\N	2024-06-30 07:05:35	2024-06-30 07:05:35	85
+4	15	7	96	5	very well mannered appointment	\N	2024-07-02 10:03:35	2024-07-02 10:03:35	111
+5	3	4	60	1	Test	\N	2024-07-02 23:15:50	2024-07-02 23:15:50	116
+6	3	4	96	5	Nice appointment	\N	2024-07-05 13:46:17	2024-07-05 13:46:17	143
+7	10	8	96	5	Nice appointment	\N	2024-07-05 13:46:34	2024-07-05 13:46:34	176
+8	10	8	96	5	completed	\N	2024-07-05 13:52:22	2024-07-05 13:52:22	184
+9	17	7	130	2	The first time the team had a game in a major tournament in which the players had a game of the	\N	2024-07-06 04:38:45	2024-07-06 04:38:45	206
+10	23	13	130	2	\N	\N	2024-07-06 08:53:33	2024-07-06 08:53:33	212
+11	27	15	84	5	Nice hospital	\N	2024-07-06 12:25:43	2024-07-06 12:25:43	177
+12	22	14	84	5	Good behaviour	\N	2024-07-06 12:32:09	2024-07-06 12:32:09	191
+13	20	14	96	5	Good behaviour	\N	2024-07-06 13:09:43	2024-07-06 13:09:43	231
+14	22	14	96	5	Nice atmosphere	\N	2024-07-06 13:10:00	2024-07-06 13:10:00	149
+15	28	16	84	5	Nice appointment	\N	2024-07-06 13:35:21	2024-07-06 13:35:21	242
+16	27	15	96	3	good behaviour	\N	2024-07-06 13:43:32	2024-07-06 13:43:32	244
+17	27	15	96	3	good behaviour	\N	2024-07-06 13:43:37	2024-07-06 13:43:37	244
+18	4	4	60	3	test feedback	\N	2024-07-06 15:00:13	2024-07-06 15:00:13	249
+19	4	4	60	3	testing again	\N	2024-07-06 15:01:50	2024-07-06 15:01:50	250
+20	34	20	157	5	\N	\N	2024-07-08 12:33:33	2024-07-08 12:33:33	269
+\.
+
+
+--
+-- Data for Name: hospital_images; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_images (id, hospital_id, image_name, created_at, updated_at, deleted_at) FROM stdin;
+7	4	1719312522667aa08a67137.jfif	2024-06-25 10:48:42	2024-06-25 10:48:42	\N
+8	4	1719401351667bfb87df912.jpg	2024-06-26 11:29:12	2024-06-26 11:29:12	\N
+10	6	1719487940667d4dc4acbfa.jpg	2024-06-27 11:32:21	2024-06-27 11:32:21	\N
+11	6	1719487941667d4dc516c46.jpg	2024-06-27 11:32:21	2024-06-27 11:32:21	\N
+12	6	1719487941667d4dc5384f6.jpg	2024-06-27 11:32:21	2024-06-27 11:32:21	\N
+13	7	1719491232667d5aa0a8357.jpeg	2024-06-27 12:27:12	2024-06-27 12:27:12	\N
+14	8	1719497364667d72945f228.jpeg	2024-06-27 14:09:24	2024-06-27 14:09:24	\N
+15	9	1719582990667ec10ed340f.jpeg	2024-06-28 13:56:30	2024-06-28 13:56:30	\N
+16	9	1719582990667ec10ef0b3e.jpeg	2024-06-28 13:56:31	2024-06-28 13:56:31	\N
+17	9	1719582991667ec10f1010c.jpeg	2024-06-28 13:56:31	2024-06-28 13:56:31	\N
+19	7	17198411146682b15ab853c.jpeg	2024-07-01 13:38:35	2024-07-01 13:38:35	\N
+20	13	172008604966866e214d6dd.jpeg	2024-07-04 09:40:49	2024-07-04 09:40:49	\N
+21	13	172008604966866e2155172.jpeg	2024-07-04 09:40:49	2024-07-04 09:40:49	\N
+22	13	172008604966866e215c631.jpeg	2024-07-04 09:40:49	2024-07-04 09:40:49	\N
+23	14	172008616266866e92b0182.jpeg	2024-07-04 09:42:42	2024-07-04 09:42:42	\N
+24	14	172008616266866e92b7600.jpeg	2024-07-04 09:42:42	2024-07-04 09:42:42	\N
+25	14	172008616266866e92c342a.jpeg	2024-07-04 09:42:42	2024-07-04 09:42:42	\N
+27	22	1720502067668cc73338460.jpg	2024-07-09 05:14:27	2024-07-09 05:14:27	\N
+28	23	1720533970668d43d25702c.jpeg	2024-07-09 14:06:10	2024-07-09 14:06:10	\N
+29	24	1720535048668d480881f55.jpeg	2024-07-09 14:24:08	2024-07-09 14:24:08	\N
+30	25	1720539103668d57df6357e.jpeg	2024-07-09 15:31:43	2024-07-09 15:31:43	\N
+31	26	1720541029668d5f65b7288.jpeg	2024-07-09 16:03:49	2024-07-09 16:03:49	\N
+\.
+
+
+--
+-- Data for Name: hospital_insurance_policies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_insurance_policies (id, hospital_id, insurance_id, sub_insurance_id, created_at, updated_at) FROM stdin;
+1	4	4	5	2024-06-20 05:04:28	2024-06-20 05:04:28
+2	4	4	6	2024-06-20 05:04:28	2024-06-20 05:04:28
+3	4	4	7	2024-06-20 05:04:28	2024-06-20 05:04:28
+4	4	1	3	2024-06-20 05:06:50	2024-06-20 05:06:50
+5	4	1	1	2024-06-20 05:06:50	2024-06-20 05:06:50
+6	4	1	4	2024-06-20 05:06:50	2024-06-20 05:06:50
+7	8	4	6	2024-06-27 14:31:32	2024-06-27 14:31:32
+8	7	4	6	2024-06-28 11:28:36	2024-06-28 11:28:36
+12	8	1	3	2024-07-04 06:27:11	2024-07-04 06:27:11
+13	8	1	1	2024-07-04 06:27:11	2024-07-04 06:27:11
+14	8	1	4	2024-07-04 06:27:11	2024-07-04 06:27:11
+15	7	4	5	2024-07-04 06:32:17	2024-07-04 06:32:17
+16	7	4	7	2024-07-04 06:32:17	2024-07-04 06:32:17
+17	14	1	3	2024-07-05 09:31:10	2024-07-05 09:31:10
+18	14	1	1	2024-07-05 09:31:10	2024-07-05 09:31:10
+19	14	1	4	2024-07-05 09:31:10	2024-07-05 09:31:10
+20	13	4	5	2024-07-05 09:31:41	2024-07-05 09:31:41
+22	13	4	7	2024-07-05 09:31:41	2024-07-05 09:31:41
+23	13	4	6	2024-07-05 09:33:34	2024-07-05 09:33:34
+24	6	4	6	2024-07-06 09:26:32	2024-07-06 09:26:32
+25	16	1	1	2024-07-06 13:02:52	2024-07-06 13:02:52
+26	16	1	4	2024-07-06 13:02:52	2024-07-06 13:02:52
+27	16	1	9	2024-07-06 13:02:52	2024-07-06 13:02:52
+28	16	1	10	2024-07-06 13:02:52	2024-07-06 13:02:52
+29	16	4	6	2024-07-06 13:03:39	2024-07-06 13:03:39
+30	22	1	3	2024-07-09 07:06:44	2024-07-09 07:06:44
+31	22	8	76	2024-07-09 07:07:38	2024-07-09 07:07:38
+32	22	8	77	2024-07-09 07:12:20	2024-07-09 07:12:20
+33	22	7	63	2024-07-09 07:22:21	2024-07-09 07:22:21
+\.
+
+
+--
+-- Data for Name: hospital_insurances; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_insurances (id, hospital_id, insurance_id, sub_insurance_id, created_at, updated_at, deleted_at) FROM stdin;
+4	4	4	7,6	2024-06-26 11:29:36	2024-06-26 11:29:36	\N
+\.
+
+
+--
+-- Data for Name: hospital_locations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_locations (id, hospital_id, location, latitude, longitude, created_at, updated_at, deleted_at) FROM stdin;
+9	1	Dubai International Airport (DXB) - Dubai - United Arab Emirates	25.2566932	55.36431779999999	2024-06-26 09:21:04	2024-06-26 09:21:04	\N
+10	3	68GQ+24H - Al Jaddaf - Jaddaf Waterfront - Dubai - United Arab Emirates	25.2250683	55.3378531	2024-06-26 09:21:27	2024-06-26 09:21:27	\N
+11	4	22 Kuwait St - Al Karama - Dubai - United Arab Emirates	25.1972295	55.27974699999999	2024-06-26 11:29:11	2024-06-26 11:29:11	\N
+17	6	Street - 4C Sheikh Khalifa Bin Zayed St - Al Karama - Dubai - United Arab Emirates	25.204819	55.270931	2024-06-27 14:12:00	2024-06-27 14:12:00	\N
+18	8	10 26 St - Za'abeel - Za'abeel 2 - Dubai - United Arab Emirates	25.204819	55.270931	2024-06-28 05:17:10	2024-06-28 05:17:10	\N
+35	9	685V+GG - Ras Al Khor - Dubai Creek Harbour - Dubai - United Arab Emirates	25.204819	55.270931	2024-07-02 05:08:15	2024-07-02 05:08:15	\N
+36	10	198 Airport Rd - Dubai - United Arab Emirates	25.23852528484163	55.37643792689357	2024-07-02 05:09:02	2024-07-02 05:09:02	\N
+41	12	80 شارع - ٣١٢ - Za'abeel - Za'abeel 2 - Dubai - United Arab Emirates	25.20810004240003	55.27966427255247	2024-07-03 11:36:00	2024-07-03 11:36:00	\N
+45	11	4763+RVM - Dubai - United Arab Emirates	\N	\N	2024-07-04 06:47:54	2024-07-04 06:47:54	\N
+51	13	Abu Dhabi Mall, Al Maiyani St, 3rd Floor, Abu Dhabi Mall - مول أبو ظبي - الطابق - Al Zahiyah - Abu Dhabi - United Arab Emirates	24.4959241	54.3832259	2024-07-04 09:40:49	2024-07-04 09:40:49	\N
+52	14	304 19A St - Al Nahda - Al Nahda 2 - Dubai - United Arab Emirates	25.29134944808692	55.384124992065416	2024-07-04 09:42:42	2024-07-04 09:42:42	\N
+55	16	6739+8F2 - Al Badaa' St - Al Wasl - Dubai - United Arab Emirates	25.20345861689348	55.268471263721004	2024-07-04 15:19:39	2024-07-04 15:19:39	\N
+56	17	672C+GR Dubai - United Arab Emirates	25.201258237408787	55.27207615263702	2024-07-04 15:33:54	2024-07-04 15:33:54	\N
+57	18	6746+3H8 City Walk 2, outdoor parking - Al Wasl - Dubai - United Arab Emirates	25.205080831140663	55.261175655200496	2024-07-05 04:31:23	2024-07-05 04:31:23	\N
+60	7	F9WM+97 - Al Zahiyah - Abu Dhabi - United Arab Emirates	24.49597474948846	54.383182525634766	2024-07-05 10:02:28	2024-07-05 10:02:28	\N
+62	19	Halim St,Next to Mall Of Emirates,Ajyal Building, S01, Opp Lulu Hypermarket - البرشاء - البرشاء 1 - دبي - United Arab Emirates	25.117425	55.20470999999999	2024-07-07 05:44:50	2024-07-07 05:44:50	\N
+63	20	d94 Jumeirah St - الميناء - ميناء راشد - Dubai - United Arab Emirates	25.2256962	55.2588433	2024-07-07 07:51:36	2024-07-07 07:51:36	\N
+66	15	6749+9VX - Trade Centre - Dubai - United Arab Emirates	25.205848786590412	55.269415401294246	2024-07-08 06:00:58	2024-07-08 06:00:58	\N
+68	21	F9Q6+9V6 - Sheikh Hamdan Bin Mohammed St - Al Danah - Zone 1 - Abu Dhabi - United Arab Emirates	24.4883882	54.3621522	2024-07-09 05:09:53	2024-07-09 05:09:53	\N
+69	22	F9Q6+9V6 - Sheikh Hamdan Bin Mohammed St - Al Danah - Zone 1 - Abu Dhabi - United Arab Emirates	24.4883882	54.3621522	2024-07-09 05:14:27	2024-07-09 05:14:27	\N
+74	23	59 24 St - Za'abeel - Za'abeel 2 - Dubai - United Arab Emirates	25.204819	55.270931	2024-07-09 14:32:25	2024-07-09 14:32:25	\N
+75	24	CHH8+323 - Khalifa City - SE-1 - Abu Dhabi - United Arab Emirates	24.4275614	54.5645097	2024-07-09 15:28:12	2024-07-09 15:28:12	\N
+76	25	Al Kawakeb Building Block A - Sheikh Zayed Rd - Trade Centre - DIFC - Dubai - United Arab Emirates	25.207299204410983	55.273906462994056	2024-07-09 15:31:43	2024-07-09 15:31:43	\N
+77	26	317 Jumeirah St - Jumeirah - Jumeirah 2 - Dubai - United Arab Emirates	25.202976206931517	55.24167703947111	2024-07-09 16:03:49	2024-07-09 16:03:49	\N
+\.
+
+
+--
+-- Data for Name: hospital_services; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_services (id, hospital_id, service_id, created_at, updated_at, deleted_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: hospital_specialities; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospital_specialities (id, hospital_id, speciality_id, created_at, updated_at, deleted_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: hospitals; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.hospitals (id, user_id, country_id, emirate_id, area_id, address, website, profile_description, trade_licenece, created_at, updated_at, deleted_at, name_en, name_ar, appointment_dial_code, appointment_phone, profile_description_ar, latitude, longitude, txt_location, agent_id, callcenter_id, type) FROM stdin;
+4	30	229	2	2	Almanra tower	https://www.asterdmhealthcare.com/	<p>"We’ll Treat you Well"<br>We live by this promise that sums up what we do and why we exist. This is our guiding philosophy in our interactions with patients, doctors, employees and society at large.</p><p>Our Values<br>We, at Aster DM Healthcare, abide by a core set of values that guide our organisational behaviour and decision making, and that create the u</p>	17187960626672bf1eb5e56.pdf	2024-06-19 11:21:02	2024-06-26 11:29:11	\N	Aster	\N	971		\N	25.1972295	55.27974699999999	57WH+VV - Downtown Dubai - Dubai - United Arab Emirates	\N	\N	10
+3	24	229	2	1	Al Jaddaf, Dubai, UAE	dxbitprojects.com	<p>Strategically located in the heart of Abu Dhabi city, yet nestled in a quiet setting that provides both convenience and privacy, Aster Hospital is your go-to dentistry boutique offering a range of comprehensive services in a friendly and relaxed atmosphere.</p>	1718273307666ac51b92b87.jpg	2024-06-13 10:08:27	2024-07-06 09:22:44	2024-07-06 09:22:44	Al Jalila Children's Hospital	Al Jalila Children's Hospital	971	12313123123	<p>Strategically located in the heart of Abu Dhabi city, yet nestled in a quiet setting that provides both convenience and privacy, Aster Hospital is your go-to dentistry boutique offering a range of comprehensive services in a friendly and relaxed atmosphere.</p>	25.2250683	55.3378531	68GQ+24H - Al Jaddaf - Jaddaf Waterfront - Dubai - United Arab Emirates	\N	\N	10
+8	58	229	2	2	Al Nahda	jpjup.c	<p>A Clinic is a health care center where you <strong>receive routine preventative care when you are healthy or visit your Doctor/Primary Care Provider when you are sick</strong>. A clinic is smaller than a hospital where patients are less sick and do not stay overnight.</p>	1719497364667d7294094dd.jpeg	2024-06-27 14:09:24	2024-06-28 05:17:09	\N	Jupiter Clinic	Jupiter Clinic	971	098989898	<p>A Clinic is a health care center where you <strong>receive routine preventative care when you are healthy or visit your Doctor/Primary Care Provider when you are sick</strong>. A clinic is smaller than a hospital where patients are less sick and do not stay overnight.</p>	25.204819	55.270931	10 26 St - Za'abeel - Za'abeel 2 - Dubai - United Arab Emirates	\N	\N	20
+7	54	229	3	4	Al Ohood Street - Sheikh Mohammed bin Rashid Blvd - Downtown Dubai - Dubai-United Arab Emirates	aniXaniXaniX.com	<p>ccording to the American Hospital Association (AHA), hospitals are <strong>licensed institutions with at least six beds whose primary function is to provide diagnostic and therapeutic patient services for medical conditions</strong>; they have an organized physician staff; and they provide continuous nursing services under the ...</p>	1719491232667d5aa044331.jpeg	2024-06-27 12:27:12	2024-07-05 10:02:28	\N	AniX Hospital	AniX Hospital	971	889900887	\N	24.49597474948846	54.383182525634766	F9WM+97 - Al Zahiyah - Abu Dhabi - United Arab Emirates	\N	\N	10
+5	40	229	2	2	9 15th St - Jumeirah - Jumeirah 2 - Dubai - United Arab Emirates	\N	<p>Hospital/Clinic Profile</p>	1719323116667ac9ec19b06.jpeg	2024-06-25 13:45:16	2024-07-06 08:34:37	2024-07-06 08:34:37	Hospital	\N	\N	223232323	\N	25.203281344725088	55.246675245602965	\N	\N	\N	10
+1	15	229	2	2	Corporate HQ 33rd Floor, Aspect Towers, Business Bay, Dubai, UAE	https://www.asterdmhealthcare.com/	<p>Brand Promise<br>"We’ll Treat you Well"<br>We live by this promise that sums up what we do and why we exist. This is our guiding philosophy in our interactions with patients, doctors, employees and society at large.</p><p>Our Values<br>We, at Aster DM Healthcare, abide by a core set of values that guide our organisational behaviour and decision making, and that create the unique ethos that is imbibed in every Asterian.</p>	17176556106661583a5a28e.jpg	2024-06-06 06:33:30	2024-07-06 09:23:11	2024-07-06 09:23:11	Aster Medcity	\N	971	067738993	<p>وعد العلامة التجارية<br>"سنعاملك بشكل جيد"<br>نحن نعيش بهذا الوعد الذي يلخص ما نقوم به ولماذا نحن موجودون. هذه هي فلسفتنا التوجيهية في تفاعلاتنا مع المرضى والأطباء والموظفين والمجتمع ككل.</p><p>قيمنا<br>نحن، في Aster DM Healthcare، نلتزم بمجموعة أساسية من القيم التي توجه سلوكنا التنظيمي وصنع القرار لدينا، والتي تخلق الروح الفريدة المتشربة في كل Asterian.</p>	25.2566932	55.36431779999999	Dubai International Airport (DXB) - Dubai - United Arab Emirates	\N	\N	10
+2	18	229	2	1	testtt	google.com	<p>test</p>	\N	2024-06-07 03:54:30	2024-07-06 08:35:14	2024-07-06 08:35:14	Cmh	cmh	971	1234567890	<p>tes</p>	\N	\N	\N	\N	\N	10
+6	52	229	2	2	Al Jaber Building - 1st Floor - 4C St - near City Corner Supermarket	joseph.com	<p>We, at Dr. Joseph Polyclinic, commit ourselves to providing high-quality health service &amp; safe environment at an affordable price to all. At Dr. Joseph's Polyclinic, the health service is provided by a dedicated team of qualified experienced doctors, from the best medical colleges in India and abroad. The doctors are assisted by well-trained service-oriented compassionate and supporting staff. We strive to excel in anticipating &amp; meeting our community's needs, wants &amp; expectations in an environment conducive to teamwork incorporating the best professional staff, facility &amp; equipment for diagnosis &amp; best possible management in all our departments.</p>	1719487384667d4b98d921e.jpg	2024-06-27 11:23:05	2024-06-27 14:12:00	\N	Joseph Clinic	\N	971	696969869896	\N	25.204819	55.270931	Street - 4C Sheikh Khalifa Bin Zayed St - Al Karama - Dubai - United Arab Emirates	\N	\N	20
+12	87	229	2	1	Al Ohood Street - Sheikh Mohammed bin Rashid Blvd - World Trade Center Dubai - Dubai - United Arab Emirates	lourde.com	\N	17198342696682969de7e79.jpeg	2024-07-01 11:44:30	2024-07-02 05:10:48	\N	Lourde Matha Hospital	\N	971	999999999999	\N	25.20810004240003	55.27966427255247	80 شارع - ٣١٢ - Za'abeel - Za'abeel 2 - Dubai - United Arab Emirates	\N	\N	10
+11	82	229	2	2	Al Ohood Street - Sheikh Mohammed bin Rashid Blvd - Downtown Sharjah - Sharjah - United Arab Emirates	h.c	\N	17198126466682422619962.jpeg	2024-07-01 05:44:06	2024-07-06 08:35:44	2024-07-06 08:35:44	Amstor Hospital	Amstor Hospital	971	55056789786	\N	\N	\N	4763+RVM - Dubai - United Arab Emirates	\N	\N	10
+13	120	229	3	4	2nd Street, Tourist Club Area , Abu Dhabi, UAE	nmc.c	<p>NMC Healthcare is one of the <a href="https://nmc.ae/en">largest private healthcare networks in the United Arab Emirates</a>, and the third largest in Oman. Since 1975, we have provided high quality, personalised, and compassionate care to our patients and are proud to have earned the trust of millions of people in the UAE and around the world.</p><p>&nbsp;</p><p>Our network is made up of 85 medical facilities, including JCI-accredited, multi-specialty hospitals in Abu Dhabi, Dubai, Sharjah, and Al Ain, as well as medical centres, community clinics, day surgery centres, fertility clinics, home health services, and long-term care facilities throughout the UAE. The NMC Healthcare Group also includes the <a href="https://nmc.ae/en/hospitals/abu-dhabi/nmc-provita-international-medical-centre-8">ProVita International Medical Centre</a>, CosmeSurge, and <a href="https://nmc.ae/en/hospitals/dubai/fakih-ivf-18">Fakih IVF Fertility Centre</a> brands. NMC’s Fakih IVF is ranked as one of the leading in-vitro fertilization service providers worldwide.</p><p>&nbsp;</p><p>Whether it is providing comprehensive medical services directly to patients, or in collaboration with healthcare providers internationally, NMC Healthcare is committed to delivering high quality, personalised care that matters.</p><p>NMC has played an integral part in providing comprehensive healthcare services in the UAE since 1974.</p><p>We take pride in doing what’s best for our patients. We do this by fostering a positive internal culture that encourages collaboration, innovation and continuous learning.</p><p>We believe that healthcare is not simply about detecting, diagnosing and treating our patients, but is also about helping our communities to lead a healthy lifestyle.</p><p><strong>Our Purpose</strong> is to deliver personalised care that matters. It is the reason we exist and the difference we make in the world.</p><p><strong>Our Vision</strong> is to be the preferred healthcare system in our communities. It is the future we see for our company and the destination we are working towards.</p><p><strong>Our Goals</strong> are to deliver quality patient outcomes by becoming an integrated healthcare system, driven by operational efficiency across our geographical network and services.</p><p>Safety, excellence, ethics, trust, and collaboration form our Values, and these are the principles that we live by every day. They are the standards we hold ourselves to and the expectations we have for one another. Our values guide our behaviour and decision-making processes to ensure we act with integrity and professionalism, in our aspirations to remain the leading healthcare brand in the region.</p>	172008604966866e21144c0.jpeg	2024-07-04 09:40:49	2024-07-04 09:40:49	\N	NMC Healthcare Hospital	NMC Healthcare Hospital	971	509988776	<p>NMC Healthcare is one of the <a href="https://nmc.ae/en">largest private healthcare networks in the United Arab Emirates</a>, and the third largest in Oman. Since 1975, we have provided high quality, personalised, and compassionate care to our patients and are proud to have earned the trust of millions of people in the UAE and around the world.</p><p>&nbsp;</p><p>Our network is made up of 85 medical facilities, including JCI-accredited, multi-specialty hospitals in Abu Dhabi, Dubai, Sharjah, and Al Ain, as well as medical centres, community clinics, day surgery centres, fertility clinics, home health services, and long-term care facilities throughout the UAE. The NMC Healthcare Group also includes the <a href="https://nmc.ae/en/hospitals/abu-dhabi/nmc-provita-international-medical-centre-8">ProVita International Medical Centre</a>, CosmeSurge, and <a href="https://nmc.ae/en/hospitals/dubai/fakih-ivf-18">Fakih IVF Fertility Centre</a> brands. NMC’s Fakih IVF is ranked as one of the leading in-vitro fertilization service providers worldwide.</p><p>&nbsp;</p><p>Whether it is providing comprehensive medical services directly to patients, or in collaboration with healthcare providers internationally, NMC Healthcare is committed to delivering high quality, personalised care that matters.</p><p>NMC has played an integral part in providing comprehensive healthcare services in the UAE since 1974.</p><p>We take pride in doing what’s best for our patients. We do this by fostering a positive internal culture that encourages collaboration, innovation and continuous learning.</p><p>We believe that healthcare is not simply about detecting, diagnosing and treating our patients, but is also about helping our communities to lead a healthy lifestyle.</p><p><strong>Our Purpose</strong> is to deliver personalised care that matters. It is the reason we exist and the difference we make in the world.</p><p><strong>Our Vision</strong> is to be the preferred healthcare system in our communities. It is the future we see for our company and the destination we are working towards.</p><p><strong>Our Goals</strong> are to deliver quality patient outcomes by becoming an integrated healthcare system, driven by operational efficiency across our geographical network and services.</p><p>Safety, excellence, ethics, trust, and collaboration form our Values, and these are the principles that we live by every day. They are the standards we hold ourselves to and the expectations we have for one another. Our values guide our behaviour and decision-making processes to ensure we act with integrity and professionalism, in our aspirations to remain the leading healthcare brand in the region.</p>	24.4959241	54.3832259	\N	\N	\N	10
+9	66	229	3	4	Al Ohood Street - Sheikh Mohammed bin Rashid Blvd - Al Nahda Dubai - Dubai - United Arab Emirates	l.c	<p><strong>hospital, an institution that is built, staffed, and equipped for the diagnosis of disease; for the treatment, both medical and surgical, of the sick and the injured; and for their housing during this process. The modern hospital also often serves as a centre for investigation and for teaching.</strong></p>	1719582928667ec0d013b40.jpeg	2024-06-28 13:55:28	2024-07-02 05:08:15	\N	Lourde Hospital	\N	971	858585855	<p>hospital, an institution that is built, staffed, and equipped for the diagnosis of disease; for the treatment, both medical and surgical, of the sick and the injured; and for their housing during this process. The modern hospital also often serves as a centre for investigation and for teaching.</p>	25.204819	55.270931	685V+GG - Ras Al Khor - Dubai Creek Harbour - Dubai - United Arab Emirates	\N	\N	10
+14	121	229	2	3	Opp Al Nahda Park - 204th Rd - Al Nahda - Al Nahda 2 - Dubai	zulekha.c	<p>The Zulekha Healthcare Group found its roots in 1964 when its creator Dr. Zulekha Daud moved from her native India to Sharjah, UAE in order to pursue her dream of serving people in need and offer affordable medical facilities to all.</p><p>From a young medical graduate to a practicing physician serving patients from all walks of life, Dr. Zulekha soon became a household name. After years of dedicated service, Zulekha Hospital was first established in Sharjah in 1992.</p><p>Today, the Zulekha Healthcare Group includes two multidisciplinary hospitals in Dubai and Sharjah, as well as three UAE medical centres and three pharmacies providing specialised treatments in over 30 disciplines. The Group has also established a multidisciplinary Hospital in Nagpur, Central India - Alexis.</p><p>Zulekha Hospital Sharjah is a full-fledged, multi-disciplinary hospital with Out-patient and In-patient facilities. What started off as a 30 bed set up with basic facilities for gynecology, obstetrics, surgery, medicine and pediatrics in 1992, today boasts of 185 beds, sprawled over an area of 290,000 square ft.</p><p>Zulekha Hospital Dubai is a 140 bed hospital established in 2004 which offers both inpatient and outpatient care covering a wide range of medical and surgical specialties. The facility boasts state-of-the-art operation theatre arrangements, emergency services, labor rooms and includes multiple centers of excellence such as Cardiology, Plastic Surgery, General Surgery, Oncology, Ophthalmology, Orthopedics, Urology, Gastroenterology, Dermatology and Physiotherapy.</p><p>Both facilities are specialized in following key services: Cardiac Catheterization Laboratory, Neonatal Intensive Care Units, ICU, Dialysis, Advanced radiology &amp; Laboratory services, Minimal Invasive surgeries, Bariatric Surgeries, Joint Replacement Surgeries, Specialised Cancer Care, Cardio Thoracic and Vascular Surgery, Plastic and Reconstruction Surgery, Pediatric Cardiology, Pulmonology and Chest Diseases, etc</p><p>Alexis Multispeciality Hospital in Nagpur, India is an offering and initiative of the Zulekha Healthcare Group, UAE to help serve the entire Central India community by providing the highest quality of medical care across various disciplines. The hospital has a team of renowned specialists and medical personnel supported by latest cutting-edge technology offering all-round care and comfort.</p><p>This state-of-the-art distinctive 210 bedded set up offers end-to-end multispecialty services in the areas of Comprehensive Oncology Care &amp; Radiotherapy, Cardiac Sciences, Neurosciences, Orthopedics, Critical Care, Minimal Invasive Surgery, Urology, Nephrology, Gastroenterology, Endocrinology, Gynecology, Pediatrics&amp; Neonatology, Critical Care (CCU, ICU, NICU, SICU) &amp; Internal Medicine, Joint Replacement &amp; Arthroscopy, Trauma Services, Interventional Radiology &amp; Preventive Medicines. To address the clinical requirement of Central India, Alexis Multispecialty Hospital will also have a Comprehensive Organ Transplant Unit in future.</p><p>The hospitals represent Dr Zulekha's personality of care and compassion. Regarded as the Zulekha spirit, it can be found in the doctors and staff at all times. Under her eminent leadership, Zulekha Healthcare Group is now one of the largest private healthcare networks in the Gulf. With more than 3000 personnel including over 300 qualified doctors, staff nurses and a host of paramedical staff, the Group represents comprehensive healthcare that is accessible to anyone in need of medical attention – delivered through three multi-speciality hospitals, three medical centres and three pharmacies.</p><p>The Group has contributed richly in recent years to set benchmarks in continuing medical education programmes for the entire Gulf region with its consistent interactive workshops and seminars on various medical and surgical topics.</p>	172008616266866e924a9f0.jpeg	2024-07-04 09:42:42	2024-07-04 09:42:42	\N	Zulekha Hospital Dubai	Zulekha Hospital Dubai	971	505566778	<p>The Zulekha Healthcare Group found its roots in 1964 when its creator Dr. Zulekha Daud moved from her native India to Sharjah, UAE in order to pursue her dream of serving people in need and offer affordable medical facilities to all.</p><p>From a young medical graduate to a practicing physician serving patients from all walks of life, Dr. Zulekha soon became a household name. After years of dedicated service, Zulekha Hospital was first established in Sharjah in 1992.</p><p>Today, the Zulekha Healthcare Group includes two multidisciplinary hospitals in Dubai and Sharjah, as well as three UAE medical centres and three pharmacies providing specialised treatments in over 30 disciplines. The Group has also established a multidisciplinary Hospital in Nagpur, Central India - Alexis.</p><p>Zulekha Hospital Sharjah is a full-fledged, multi-disciplinary hospital with Out-patient and In-patient facilities. What started off as a 30 bed set up with basic facilities for gynecology, obstetrics, surgery, medicine and pediatrics in 1992, today boasts of 185 beds, sprawled over an area of 290,000 square ft.</p><p>Zulekha Hospital Dubai is a 140 bed hospital established in 2004 which offers both inpatient and outpatient care covering a wide range of medical and surgical specialties. The facility boasts state-of-the-art operation theatre arrangements, emergency services, labor rooms and includes multiple centers of excellence such as Cardiology, Plastic Surgery, General Surgery, Oncology, Ophthalmology, Orthopedics, Urology, Gastroenterology, Dermatology and Physiotherapy.</p><p>Both facilities are specialized in following key services: Cardiac Catheterization Laboratory, Neonatal Intensive Care Units, ICU, Dialysis, Advanced radiology &amp; Laboratory services, Minimal Invasive surgeries, Bariatric Surgeries, Joint Replacement Surgeries, Specialised Cancer Care, Cardio Thoracic and Vascular Surgery, Plastic and Reconstruction Surgery, Pediatric Cardiology, Pulmonology and Chest Diseases, etc</p><p>Alexis Multispeciality Hospital in Nagpur, India is an offering and initiative of the Zulekha Healthcare Group, UAE to help serve the entire Central India community by providing the highest quality of medical care across various disciplines. The hospital has a team of renowned specialists and medical personnel supported by latest cutting-edge technology offering all-round care and comfort.</p><p>This state-of-the-art distinctive 210 bedded set up offers end-to-end multispecialty services in the areas of Comprehensive Oncology Care &amp; Radiotherapy, Cardiac Sciences, Neurosciences, Orthopedics, Critical Care, Minimal Invasive Surgery, Urology, Nephrology, Gastroenterology, Endocrinology, Gynecology, Pediatrics&amp; Neonatology, Critical Care (CCU, ICU, NICU, SICU) &amp; Internal Medicine, Joint Replacement &amp; Arthroscopy, Trauma Services, Interventional Radiology &amp; Preventive Medicines. To address the clinical requirement of Central India, Alexis Multispecialty Hospital will also have a Comprehensive Organ Transplant Unit in future.</p><p>The hospitals represent Dr Zulekha's personality of care and compassion. Regarded as the Zulekha spirit, it can be found in the doctors and staff at all times. Under her eminent leadership, Zulekha Healthcare Group is now one of the largest private healthcare networks in the Gulf. With more than 3000 personnel including over 300 qualified doctors, staff nurses and a host of paramedical staff, the Group represents comprehensive healthcare that is accessible to anyone in need of medical attention – delivered through three multi-speciality hospitals, three medical centres and three pharmacies.</p><p>The Group has contributed richly in recent years to set benchmarks in continuing medical education programmes for the entire Gulf region with its consistent interactive workshops and seminars on various medical and surgical topics.</p>	25.29134944808692	55.384124992065416	\N	\N	\N	10
+16	125	229	2	2	Dubai - United Arab Emirates	noori@gmail.com	<p>hosiptal</p>	\N	2024-07-04 15:19:39	2024-07-04 15:19:39	\N	Noori hospital	Noori hospital	971	123456789	<p>hosiptal</p>	25.20345861689348	55.268471263721004	6739+8F2 - Al Badaa' St - Al Wasl - Dubai - United Arab Emirates	\N	1	10
+17	127	229	2	3	672C+GR Dubai - United Arab Emirates	wahabclinic.com	<p>123456789</p>	\N	2024-07-04 15:33:54	2024-07-04 15:33:54	\N	wahab clinic	wahab clinic	971	123456789	<p>123456789</p>	25.201258237408787	55.27207615263702	672C+GR Dubai - United Arab Emirates	\N	1	20
+18	128	229	2	2	6746+3H8 City Walk 2, outdoor parking - Al Wasl - Dubai - United Arab Emirates	mirzaclinic.com	<p>123456789</p>	\N	2024-07-05 04:31:23	2024-07-05 04:31:23	\N	mirza clinic	mirza clinic	971	123456789	<p>123456789</p>	25.205080831140663	55.261175655200496	6746+3H8 City Walk 2, outdoor parking - Al Wasl - Dubai - United Arab Emirates	3	\N	20
+10	79	229	2	2	Al Ohood Street - Sheikh Mohammed bin Rashid Blvd - Etisalat by the End Dubai - Dubai - United Arab Emirates	kns,com	\N	1719663049667ff9c92db13.jpg	2024-06-29 12:10:49	2024-07-06 08:37:33	2024-07-06 08:37:33	K N S Hospital	\N	971	123355666	\N	25.23852528484163	55.37643792689357	198 Airport Rd - Dubai - United Arab Emirates	\N	\N	10
+15	123	229	2	2	alshifa international	alshifa.com	<p>123456789</p>	\N	2024-07-04 12:45:42	2024-07-08 08:21:39	2024-07-08 08:21:39	345	76978667969	971	3453434343	<p>123456789</p>	25.205848786590412	55.269415401294246	6749+9VX - Trade Centre - Dubai - United Arab Emirates	3	\N	10
+19	150	229	2	79	G floor,Ajyal building,al barsha 1	www.trucareclinics.ae	<p>TRUCARE CLINIC is an exquisitely designed facility established at 2012 in very accessible area of Albarsha1, Dubai, UAE. We offer multiple specialties and an outstanding service through our group of highly experienced medical staff. We implement the latest cutting-edge techniques, laser therapy, skin care and state of art dentistry, blending relaxing elements of luxury and cure with the expertise and technology involved through. in other word, we have set up a comprehensive framework of possibilities adding to an overall experience that we look forward to providing you.<br>we provide skin consultation, cosmetics, hair removal, mesotherapy, slimming and body contouring and dental treatments by our expert dentists, dermatologists, and Skin and body therapists. We at TruCare like to communicate with our customers to understand their specific needs and give them the best advice to suit their requirements.<br>We aim at making all latest and effective clinic treatments available to the middle east. You will experience flawless, younger-looking and glowing skin with our fully trained and qualified practitioners. Our other offerings include massage and reflexology sessions, filler injections, chemical peel, diamond peel, thread lift etc. As the best skin care in Dubai, We offer you a space that is dedicated to revitalize your body mind and soul.</p>	1720331089668a2b5192b68.pdf	2024-07-07 05:44:50	2024-07-07 05:44:50	\N	Trucare Clinics LLC	\N	971	6745775885	\N	25.117425	55.20470999999999	Halim St,Next to Mall Of Emirates,Ajyal Building, S01, Opp Lulu Hypermarket - البرشاء - البرشاء 1 - دبي - United Arab Emirates	\N	\N	10
+20	155	229	2	80	Villa 4, Jumeirah Road, Jumeirah	https://heliaclinic.com/en/	<p>11 -years experience in medicine and being in close contact with human weaknesses and strengths, it taught me that Surgery is not a profession. It is a way of life. When I see rays of hopes coming after a dark night, I feel it has been valuable all the pressures and tenses bore&nbsp;in&nbsp;this&nbsp;career</p>	1720338696668a4908cc4de.pdf	2024-07-07 07:51:36	2024-07-07 07:51:36	\N	Helia Clinic	\N	971	561004050	\N	25.2256962	55.2588433	d94 Jumeirah St - الميناء - ميناء راشد - Dubai - United Arab Emirates	\N	\N	20
+22	162	229	3	11	SHEIKH HAMDAN BIN MOHAMMED STREET (HAMDAN STREET)-AL DANAH-ZONE 1-ABUDHABI	asd	<p>dsfsdg</p>	1720502066668cc7329ce17.jpg	2024-07-09 05:14:27	2024-07-09 05:14:27	\N	Al Naseem Medical Center	Al Naseem Medical Center	971	45345355545	<p>sdfsdf</p>	24.4883882	54.3621522	\N	\N	\N	10
+21	161	229	3	11	SHEIKH HAMDAN BIN MOHAMMED STREET (HAMDAN STREET)-AL DANAH-ZONE 1-ABUDHABI	sas	<p>AT AL NASEEM MEDICAL CENTRE, OUR PATIENTS ARE OUR MAIN FOCUS-WE PROVIDE A COMFORTABLE, PRIVATE,WARM,AND FRIENDLY ENVIRONMENT WHILE ATTENDING TO THE DISTINCTIVE NEED OF EACH INDIVIDUAL. EVERYDAY, WE CARE FOR YOU.</p>	1720501615668cc56f3c434.jpg	2024-07-09 05:06:55	2024-07-09 13:21:05	2024-07-09 13:21:05	Al Naseem Medical Center	Al Naseem Medical Center	971	34554454545	<p>AT AL NASEEM MEDICAL CENTRE, OUR PATIENTS ARE OUR MAIN FOCUS-WE PROVIDE A COMFORTABLE, PRIVATE,WARM,AND FRIENDLY ENVIRONMENT WHILE ATTENDING TO THE DISTINCTIVE NEED OF EACH INDIVIDUAL. EVERYDAY, WE CARE FOR YOU.</p>	24.4883882	54.3621522	F9Q6+9V6 - Sheikh Hamdan Bin Mohammed St - Al Danah - Zone 1 - Abu Dhabi - United Arab Emirates	\N	\N	10
+23	174	229	2	3	Dubai	h	\N	1720533969668d43d1ef4de.jpeg	2024-07-09 14:06:10	2024-07-09 14:09:15	\N	Harshan Clinic	Harshan Clinic	971	1235454878	\N	25.204819	55.270931	59 24 St - Za'abeel - Za'abeel 2 - Dubai - United Arab Emirates	\N	\N	20
+24	175	229	3	25	Das Tower, Sultan Bin Zayed Street, Abu Dhabi, United Arab Emirates	seha.c	\N	1720535047668d4807e25ad.jpeg	2024-07-09 14:24:08	2024-07-09 14:28:22	\N	Seha Hospital	Seha Hospital	971	0502233221	\N	24.4275614	54.5645097	CHH8+323 - Khalifa City - SE-1 - Abu Dhabi - United Arab Emirates	\N	8	10
+25	176	229	3	4	Dubai	h.c	\N	1720539103668d57df5c5b6.jpeg	2024-07-09 15:31:43	2024-07-09 15:31:43	\N	Haridwar Clinic	\N	971	502233223	\N	25.207299204410983	55.273906462994056	Al Kawakeb Building Block A - Sheikh Zayed Rd - Trade Centre - DIFC - Dubai - United Arab Emirates	\N	\N	20
+26	180	229	2	2	dubai	salha.c	\N	1720541029668d5f65ab946.jpeg	2024-07-09 16:03:49	2024-07-09 16:03:49	\N	Salha Hospital	\N	971	564545895	\N	25.202976206931517	55.24167703947111	\N	\N	\N	10
+\.
+
+
+--
+-- Data for Name: insurence_policies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.insurence_policies (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+2	National Helth	\N	1	1	1	2024-04-11 06:13:40	2024-04-11 06:13:52	2024-04-11 06:13:52
+3	National	nationa	1	1	1	2024-04-11 08:56:15	2024-04-11 08:57:56	2024-04-11 08:57:56
+1	Aafiya Insurance	Aafiya Insurance	1	1	1	2024-04-11 06:13:14	2024-07-06 10:47:59	\N
+4	ABU DHABI NATIONAL HEALTH INSURANCE COMPANY (DAMAN)	ABU DHABI NATIONAL HEALTH INSURANCE COMPANY (DAMAN)	1	1	1	2024-06-17 17:16:47	2024-07-06 10:48:19	\N
+5	ABU DHABI NATIONAL INSURANCE CO	ABU DHABI NATIONAL INSURANCE CO	1	1	1	2024-06-28 09:33:25	2024-07-06 10:48:39	\N
+6	ABU DHABI NATIONAL TAKAFUL COMPANY-TAKAFUL	ABU DHABI NATIONAL TAKAFUL COMPANY-TAKAFUL	1	1	1	2024-07-06 10:49:00	2024-07-06 10:49:00	\N
+7	AL AIN AHLIA INSURANCE COMPANY	AL AIN AHLIA INSURANCE COMPANY	1	1	1	2024-07-06 10:49:14	2024-07-06 10:49:14	\N
+8	AL KHAZNA INSURANCE COMPANY	AL KHAZNA INSURANCE COMPANY	1	1	1	2024-07-06 10:49:32	2024-07-06 10:49:32	\N
+9	AL SAGR NATIONAL INSURANCE COMPANY	AL SAGR NATIONAL INSURANCE COMPANY	1	1	1	2024-07-06 10:49:47	2024-07-06 10:49:47	\N
+10	AL-BUHAIRA NATIONAL INSURANCE COMPANY	AL-BUHAIRA NATIONAL INSURANCE COMPANY	1	1	1	2024-07-06 10:49:57	2024-07-06 10:49:57	\N
+11	ALLIANS INSURANCE COMPANY	ALLIANS INSURANCE COMPANY	1	1	1	2024-07-06 10:50:13	2024-07-06 10:50:13	\N
+12	ALLIANZ - ORIENT	ALLIANZ - ORIENT	1	1	1	2024-07-06 10:50:25	2024-07-06 10:50:25	\N
+13	ARABIA INSURANCE COMPANY	ARABIA INSURANCE COMPANY	1	1	1	2024-07-06 10:50:38	2024-07-06 10:50:38	\N
+14	ARABIAN SCANDINAVIAN INSURANCE COMPANY	ARABIAN SCANDINAVIAN INSURANCE COMPANY	1	1	1	2024-07-06 12:16:40	2024-07-06 12:16:40	\N
+15	AMERICAN HOME ASSURANCE COMPANY	AMERICAN HOME ASSURANCE COMPANY	1	1	1	2024-07-06 12:16:55	2024-07-06 12:16:55	\N
+16	AL-ITTIHAD ALWATANI GENERAL INSURANCE COMPANY	AL-ITTIHAD ALWATANI GENERAL INSURANCE COMPANY	1	1	1	2024-07-06 12:17:10	2024-07-06 12:17:10	\N
+17	AL WATHBA NATIONAL INSURANCE COMPANY	AL WATHBA NATIONAL INSURANCE COMPANY	1	1	1	2024-07-06 12:17:19	2024-07-06 12:17:19	\N
+18	AL HILAL TAKAFUL - PSC	AL HILAL TAKAFUL - PSC	1	1	1	2024-07-06 12:17:30	2024-07-06 12:17:30	\N
+19	AL FUJAIRAH NATIONAL INSURANCE COMPANY	AL FUJAIRAH NATIONAL INSURANCE COMPANY	1	1	1	2024-07-06 12:17:39	2024-07-06 12:17:39	\N
+20	AL DHAFRA INSURANCE COMPANY	AL DHAFRA INSURANCE COMPANY	1	1	1	2024-07-06 12:17:52	2024-07-06 12:17:52	\N
+21	AIG Japan	AIG Japan	1	1	1	2024-07-06 12:18:07	2024-07-06 12:18:07	\N
+22	Africa Assist	Africa Assist	1	1	1	2024-07-06 12:18:34	2024-07-06 12:18:34	\N
+23	cmb	\N	1	1	1	2024-07-09 07:22:39	2024-07-09 07:22:39	\N
+\.
+
+
+--
+-- Data for Name: job_batches; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.job_batches (id, name, total_jobs, pending_jobs, failed_jobs, failed_job_ids, options, cancelled_at, created_at, finished_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: jobs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jobs (id, queue, payload, attempts, reserved_at, available_at, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: languages; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.languages (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+3	Malayalam	المالايالامية	1	1	1	2024-04-11 05:26:21	2024-04-11 05:26:21	\N
+1	English	إنجليزي	1	1	1	2024-04-11 05:25:23	2024-04-11 05:26:43	\N
+2	Hindi	الهندية	1	1	1	2024-04-11 05:25:48	2024-04-11 05:26:58	\N
+4	Arabic	Arabic	1	1	1	2024-07-07 07:17:11	2024-07-07 07:17:11	\N
+5	French	French	1	1	1	2024-07-07 07:17:26	2024-07-07 07:17:26	\N
+8	Persian	Persian	1	1	1	2024-07-07 12:01:35	2024-07-07 12:01:35	\N
+9	Tamil	Tamil	1	1	1	2024-07-07 12:01:50	2024-07-07 12:01:50	\N
+10	Marathi	Marathi	1	1	1	2024-07-07 12:02:07	2024-07-07 12:02:07	\N
+11	Telugu	Telugu	1	1	1	2024-07-07 12:02:21	2024-07-07 12:02:21	\N
+12	Bangala	Bangala	1	1	1	2024-07-07 12:02:34	2024-07-07 12:02:34	\N
+7	Urdu	Urdu	1	1	1	2024-07-07 12:01:22	2024-07-08 05:39:29	\N
+6	Kashmiri	Kashmiri	1	1	1	2024-07-07 12:01:08	2024-07-08 05:47:15	\N
+\.
+
+
+--
+-- Data for Name: licence_types; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.licence_types (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+2	MBBS	IMA Registrations	0	1	1	2024-04-11 04:47:07	2024-04-11 04:47:20	2024-04-11 04:47:20
+3	cas	asda	1	1	1	2024-04-11 06:32:31	2024-04-11 06:32:38	2024-04-11 06:32:38
+1	DHA	DHA	1	1	1	2024-04-11 04:46:10	2024-06-17 17:21:24	\N
+4	MOH	MOH	1	1	1	2024-06-17 17:21:40	2024-06-17 17:21:40	\N
+5	DOH	DOH	1	1	1	2024-06-17 17:21:55	2024-06-17 17:21:55	\N
+6	MOHA	MOHA	1	1	1	2024-07-09 10:47:57	2024-07-09 11:59:40	2024-07-09 11:59:40
+\.
+
+
+--
+-- Data for Name: locations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.locations (id, txt_location, latitude, longitude, user_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: medical_conditions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.medical_conditions (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+1	Allergians	الحساسية	1	1	1	2024-04-11 05:39:57	2024-04-11 05:40:43	\N
+2	Allergianss	\N	1	1	1	2024-04-11 05:40:09	2024-04-11 05:40:52	2024-04-11 05:40:52
+\.
+
+
+--
+-- Data for Name: members; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.members (id, user_id, full_name, gender, age, insurence_id, sub_insurence_id, created_at, updated_at, deleted_at, full_name_ar, user_image) FROM stdin;
+1	14	sooraj	1	30	1	3	2024-06-06 04:51:22	2024-06-06 04:51:22	\N	\N	\N
+3	14	amruth	1	30	0	0	2024-06-06 04:51:22	2024-06-06 04:51:51	2024-06-06 04:51:51	\N	\N
+2	14	dady	2	25	1	1	2024-06-06 04:51:22	2024-06-06 04:52:19	\N	\N	\N
+4	19	test	1	40	1	3	2024-06-13 17:47:50	2024-06-13 17:47:50	\N	\N	\N
+5	19	test2	2	50	1	1	2024-06-13 17:47:50	2024-06-13 17:47:50	\N	\N	\N
+6	23	sooraj	1	30	1	3	2024-06-14 06:02:56	2024-06-14 06:02:56	\N	\N	\N
+7	23	sooraj	1	30	1	3	2024-06-14 06:02:56	2024-06-14 06:02:56	\N	\N	\N
+9	23	sooraj	1	30	1	3	2024-06-14 06:03:36	2024-06-14 06:03:36	\N	\N	\N
+10	23	sooraj	1	30	1	3	2024-06-14 06:03:36	2024-06-14 06:03:36	\N	\N	\N
+8	23	sooraj	1	30	0	0	2024-06-14 06:02:56	2024-06-14 06:05:55	2024-06-14 06:05:55	\N	\N
+11	23	Hamid	1	29	1	1	2024-06-14 06:03:36	2024-06-14 06:08:12	\N	\N	\N
+12	23	sooraj	1	30	1	3	2024-06-15 05:07:08	2024-06-15 05:07:08	\N	\N	\N
+13	23	sooraj	1	30	1	3	2024-06-15 05:07:08	2024-06-15 05:07:08	\N	\N	\N
+15	39	sooraj	1	30	1	3	2024-06-25 11:09:01	2024-06-25 11:09:01	\N	\N	\N
+16	39	sooraj	1	30	1	3	2024-06-25 11:09:01	2024-06-25 11:09:01	\N	\N	\N
+17	39	sooraj	1	30	0	0	2024-06-25 11:09:01	2024-06-25 11:09:01	\N	\N	\N
+18	44	anil son	1	25	1	3	2024-06-26 10:24:23	2024-06-26 10:24:23	\N	\N	\N
+19	39	dev	1	30	1	3	2024-06-26 10:26:10	2024-06-26 10:26:10	\N	\N	\N
+20	39	sooraj	1	30	1	3	2024-06-26 10:26:10	2024-06-26 10:26:10	\N	\N	\N
+21	44	shhsjd	1	12	1	3	2024-06-26 10:52:28	2024-06-26 10:52:28	\N	\N	\N
+24	47	sooraj	1	30	0	0	2024-06-27 04:07:17	2024-06-27 04:24:19	2024-06-27 04:24:19	\N	\N
+22	47	sooraj	1	30	1	3	2024-06-27 04:07:17	2024-06-27 04:25:06	2024-06-27 04:25:06	\N	\N
+23	47	sooraj	1	30	1	3	2024-06-27 04:07:17	2024-06-27 04:25:11	2024-06-27 04:25:11	\N	\N
+25	47	sooraj	1	30	1	3	2024-06-27 04:29:04	2024-06-27 04:29:04	\N	\N	\N
+26	47	sooraj	1	30	1	3	2024-06-27 04:29:04	2024-06-27 04:29:04	\N	\N	\N
+27	47	sooraj	1	30	0	0	2024-06-27 04:29:04	2024-06-27 04:29:04	\N	\N	\N
+53	69	test	1	50	1	1	2024-06-28 20:34:14	2024-06-28 20:34:14	\N	\N	\N
+28	51	Aliya	2	22	\N	\N	2024-06-27 11:13:45	2024-06-27 11:31:41	2024-06-27 11:31:41	Ali	\N
+29	50	test	1	30	1	3	2024-06-27 15:47:16	2024-06-27 15:48:52	2024-06-27 15:48:52	\N	\N
+30	50	test	1	30	0	0	2024-06-27 15:49:11	2024-06-27 16:32:31	2024-06-27 16:32:31	\N	\N
+31	50	Test 1	1	21	4	7	2024-06-27 16:33:21	2024-06-27 16:38:53	2024-06-27 16:38:53	\N	\N
+32	50	Test 2	2	22	0	0	2024-06-27 16:33:21	2024-06-27 16:38:58	2024-06-27 16:38:58	\N	\N
+33	50	Test 1	1	21	4	7	2024-06-27 16:33:21	2024-06-27 16:39:03	2024-06-27 16:39:03	\N	\N
+34	50	Test 2	2	22	0	0	2024-06-27 16:33:21	2024-06-27 16:39:09	2024-06-27 16:39:09	\N	\N
+35	50	Test 1	1	21	4	6	2024-06-27 16:45:17	2024-06-27 16:46:55	2024-06-27 16:46:55	\N	\N
+36	50	Test 2	2	22	0	0	2024-06-27 16:45:17	2024-06-27 16:46:59	2024-06-27 16:46:59	\N	\N
+37	50	Test 1	1	21	4	6	2024-06-27 16:45:17	2024-06-27 16:47:03	2024-06-27 16:47:03	\N	\N
+38	50	Test 2	2	22	0	0	2024-06-27 16:45:17	2024-06-27 16:47:07	2024-06-27 16:47:07	\N	\N
+40	50	Test 2	2	22	0	0	2024-06-27 16:48:37	2024-06-27 17:45:09	2024-06-27 17:45:09	\N	\N
+54	70	Test	2	26	1	4	2024-06-28 20:39:33	2024-06-28 20:39:33	\N	\N	\N
+49	42	test new	1	30	1	3	2024-06-28 09:50:14	2024-06-28 22:05:22	\N	\N	1719612322667f33a269f0d.jpg
+41	50	Test Two E	2	26	0	0	2024-06-27 17:52:52	2024-06-27 20:43:23	2024-06-27 20:43:23	\N	\N
+39	50	Test 1	1	21	4	6	2024-06-27 16:48:37	2024-06-27 20:43:38	2024-06-27 20:43:38	\N	\N
+42	60	Test	3	15	0	0	2024-06-27 20:50:04	2024-06-27 20:50:04	\N	\N	\N
+45	42	dady	2	25	1	0	2024-06-28 04:32:52	2024-06-28 08:31:14	2024-06-28 08:31:14	\N	1719549335667e3d97ab898.jpeg
+47	48	ani	1	22	4	5	2024-06-28 09:27:59	2024-06-28 09:27:59	\N	\N	\N
+48	42	zain	1	25	4	7	2024-06-28 09:49:14	2024-06-28 09:49:14	\N	\N	\N
+50	42	sooraj	1	30	1	0	2024-06-28 10:07:08	2024-06-28 10:07:08	\N	\N	\N
+51	42	dev	1	30	1	0	2024-06-28 10:07:41	2024-06-28 10:07:41	\N	\N	\N
+52	48	rtg	1	28	1	3	2024-06-28 10:42:34	2024-06-28 10:42:34	\N	\N	\N
+57	72	shhs	2	22	4	7	2024-06-29 07:42:16	2024-06-29 07:46:10	\N	\N	1719647170667fbbc28561b.jpg
+44	27	HAMID 002	2	25	1	4	2024-06-27 22:19:19	2024-06-29 18:08:56	2024-06-29 18:08:56	\N	\N
+43	27	Hamid 001	1	25	1	4	2024-06-27 22:19:19	2024-06-29 18:09:01	2024-06-29 18:09:01	\N	\N
+58	48	DAVID	1	50	1	4	2024-06-30 07:08:22	2024-06-30 07:08:22	\N	\N	\N
+56	48	gggh	2	222	0	0	2024-06-29 01:48:36	2024-06-30 07:08:41	\N	\N	\N
+55	48	gg	1	30	0	0	2024-06-29 01:48:36	2024-06-30 07:09:24	\N	\N	\N
+59	78	Raza 1	1	12	\N	\N	2024-07-01 05:25:38	2024-07-01 05:25:38	\N	Raza 1	\N
+60	84	Maria Anna	2	45	0	0	2024-07-01 07:12:14	2024-07-01 07:12:14	\N	\N	\N
+61	84	Joseph Anna	1	50	0	0	2024-07-01 08:01:21	2024-07-01 08:01:21	\N	\N	\N
+64	89	Varun	1	55	0	0	2024-07-01 12:07:25	2024-07-01 12:07:25	\N	\N	\N
+14	23	sooraj	1	30	1	4	2024-06-15 05:07:08	2024-07-01 15:10:43	\N	\N	17198466436682c6f3c1cb2.jpg
+65	96	Celeena	2	22	0	0	2024-07-02 07:38:50	2024-07-02 07:38:50	\N	\N	\N
+66	96	Chacko	1	55	0	0	2024-07-02 07:38:50	2024-07-02 07:38:50	\N	\N	\N
+67	27	Patient Two	1	25	1	3	2024-07-02 08:24:43	2024-07-02 08:24:43	\N	\N	\N
+68	96	Catherin	2	45	0	0	2024-07-02 08:35:16	2024-07-02 08:35:16	\N	\N	\N
+70	99	cathrina	2	55	0	0	2024-07-02 13:10:35	2024-07-02 13:10:35	\N	\N	\N
+74	103	Patient 2	1	25	0	0	2024-07-02 19:35:47	2024-07-02 19:36:02	2024-07-02 19:36:02	\N	\N
+73	103	New Age	2	35	0	0	2024-07-02 17:55:44	2024-07-02 19:36:05	2024-07-02 19:36:05	\N	\N
+72	103	Age 2	2	30	1	6	2024-07-02 17:54:57	2024-07-02 19:36:08	2024-07-02 19:36:08	\N	\N
+71	103	AGE test	1	25	4	5	2024-07-02 17:54:57	2024-07-02 19:36:10	2024-07-02 19:36:10	\N	\N
+75	103	Patient 001	1	25	1	3	2024-07-02 19:36:59	2024-07-02 19:36:59	\N	\N	\N
+76	96	Joseph	1	55	0	0	2024-07-03 07:29:51	2024-07-03 14:03:27	\N	\N	172001540766855a2f886fc.jpg
+78	48	hh	1	50	1	4	2024-07-04 02:21:03	2024-07-04 02:21:03	\N	\N	\N
+77	48	hehe	1	22	5	0	2024-07-04 02:21:03	2024-07-04 02:21:20	2024-07-04 02:21:20	\N	\N
+79	119	Ameer Nasar	1	35	4	5	2024-07-04 07:26:53	2024-07-04 07:26:53	\N	\N	\N
+80	118	Noornisa Noorjahan	2	50	4	6	2024-07-04 07:27:13	2024-07-04 07:27:13	\N	\N	\N
+69	96	Catherin	2	55	0	0	2024-07-02 13:09:41	2024-07-04 12:21:37	2024-07-04 12:21:37	\N	\N
+46	60	Aliya	2	12	0	0	2024-06-28 05:50:55	2024-07-05 07:29:36	\N	Aliya	1719646726667fba0610076.jpg
+82	48	Fatima	2	130	5	0	2024-07-05 10:05:29	2024-07-05 10:05:29	\N	\N	\N
+63	84	Hany Anna	2	25	0	0	2024-07-01 08:02:32	2024-07-06 05:41:49	\N	\N	17202445096688d91db122b.jpg
+62	84	Jordan Anna	1	50	0	0	2024-07-01 08:02:32	2024-07-06 05:42:07	\N	\N	17202445276688d92f7abe1.jpg
+81	48	Ann Ma	2	120	4	6	2024-07-05 10:05:29	2024-07-05 10:19:51	\N	\N	17201739756687c5976d0b4.jpg
+83	130	Sunil	1	51	1	3	2024-07-06 09:23:48	2024-07-06 09:23:48	\N	\N	\N
+84	149	Raj	1	100	4	6	2024-07-07 10:49:51	2024-07-07 10:49:51	\N	Raj	\N
+85	157	Shobha	2	50	0	0	2024-07-08 13:35:00	2024-07-08 13:35:00	\N	\N	\N
+86	158	Rajalekshmi	2	55	0	0	2024-07-08 13:36:03	2024-07-08 13:36:03	\N	\N	\N
+87	169	ram	2	25	7	73	2024-07-09 10:27:04	2024-07-09 10:27:04	\N	\N	\N
+88	170	Quadar	2	22	\N	\N	2024-07-09 16:06:22	2024-07-09 16:06:22	\N	Quadar	1720541182668d5ffe2ea46.jpg
+\.
+
+
+--
+-- Data for Name: migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.migrations (id, migration, batch) FROM stdin;
+1	0001_01_01_000000_create_users_table	1
+2	0001_01_01_000001_create_cache_table	1
+3	0001_01_01_000002_create_jobs_table	1
+4	2024_03_21_122103_add_indexes_to_tables	1
+5	2024_03_25_044414_create_user_role_table	2
+6	2024_03_25_044939_create_table_role-permissions	2
+12	2022_08_11_065227_create_articles	3
+13	2022_08_11_071259_create_faq	3
+14	2022_08_14_152538_create_contact_us_settings	3
+15	2022_08_14_154810_create_settings	4
+16	2022_10_04_021553_create_profile_bios_table	4
+17	2022_09_19_132546_create_help_table	5
+22	2024_03_25_072719_create_products_table	6
+23	2024_03_25_123647_alter_add_user_code_to_users	7
+24	2022_07_22_072324_create_country_models_table	8
+26	2024_03_26_064619_create_orders_table	9
+28	2024_04_09_094109_create_qualifications_table	10
+29	2024_04_11_042918_create_licence_types_table	11
+30	2024_04_11_045117_create_special_intrests_table	12
+31	2024_04_11_051647_create_languages_table	13
+32	2024_04_11_053038_create_medical_conditions_table	14
+33	2024_04_11_055604_create_insurence_policies_table	15
+34	2024_04_11_082912_create_sub_insurence_policies_table	16
+35	2024_04_09_091042_create_specialties_table	17
+36	2024_04_12_062038_add_name_ar_to_country_table	17
+37	2024_04_12_062540_create_emirates_table	17
+38	2024_04_12_081710_create_areas_table	17
+39	2024_04_12_083227_create_services_table	17
+40	2024_04_12_090415_create_hospitals_table	17
+41	2024_04_12_090625_alter_add_fields_to_users	17
+42	2024_04_12_091144_create_hospital_specialities_table	17
+43	2024_04_12_091347_create_hospital_locations_table	17
+44	2024_04_12_091527_create_hospital_images_table	17
+45	2024_04_12_091558_create_hospital_services_table	17
+47	2024_04_12_104239_create_doctor_specialities_table	17
+48	2024_04_12_104410_create_doctor_intrests_table	17
+49	2024_04_13_054259_add_columns_to_hospitals_table	18
+50	2024_04_13_093226_add_columns_to_hospital_specialities_table	18
+51	2024_04_15_182519_add_fields_to_doctors_table	18
+52	2024_05_08_063756_alter_add_country_id_to_emirates	18
+53	2024_05_08_063846_alter_add_country_id_and_emirate_id_to_areas	18
+54	2024_05_14_053557_alter_add_phone_fileds_to_hospitals	18
+55	2024_05_23_031925_add_agent_user_details_table	18
+56	2024_06_03_043651_create_doctors_availability_table	19
+57	2024_06_03_053737_create_doctors_qualifications_table	19
+58	2024_06_03_053754_create_doctors_language_spoken_table	19
+59	2024_06_04_045341_create_temp_users_table	19
+60	2024_06_04_070312_create_personal_access_tokens_table	19
+61	2024_06_05_041357_create_doctor_holidays_table	19
+62	2024_06_05_041507_create_doctors_temporary_unavailables_table	19
+63	2024_06_05_063538_alter_add_fields_to_users	19
+64	2024_06_05_081134_create_doctor_instant_appointment_table	19
+65	2024_06_05_104759_create_members_table	19
+66	2024_04_12_102945_create_doctors_table	20
+67	2024_06_06_081747_create_doctor_patients_appointments_table	21
+68	2024_06_06_150700_create_appointments_table	21
+69	2024_06_08_112900_create_departments_table	21
+70	2024_06_10_005326_add_department_id_to_doctors_table	21
+71	2024_06_10_104835_add_fileds_to_patient_appointments_table	22
+72	2024_06_13_070141_update_departments_table	23
+73	2024_06_13_075021_create_department_hospital_table	23
+74	2024_06_13_115510_create_doctor_reschedule_appointments_table	24
+75	2024_06_13_121352_create_department_doctor_table	24
+76	2024_06_14_112130_add_filed_to_patient_appointments_table	24
+77	2024_06_15_113500_create_hospital_doctor_feedback	25
+78	2024_06_15_113557_create_mydrworld_service_feedback	25
+79	2024_06_15_141350_add_hospital_id_and_department_id_to_doctor_patient_appointments_table	26
+80	2024_06_19_053322_add_full_name_ar_to_members_table	26
+81	2024_06_19_063734_add_license_numbers_to_doctors_table	26
+82	2024_06_19_104605_add_manager_details_to_department_hospital_table	27
+83	2024_06_19_144317_create_hospital_insurance_policies_table	27
+84	2024_06_11_000937_create_hospital_insurances_table	28
+85	2024_06_14_111022_add_columns_to_department_hospital_table	29
+86	2024_06_14_111340_add_soft_delete_to_department_hospital_table	29
+87	2024_06_20_113930_create_callcenter_user_details	30
+88	2024_06_25_100001_locations	31
+89	2024_06_25_100331_latitude	31
+90	2024_06_25_081957_alter_add_followup_details_to_doctor_patient_appointments	32
+91	2024_06_25_094135_alter_add_reson_to_doctor_reschedule_appointments	32
+92	2024_06_25_095722_alter_add_appointment_id_to_hospital_doctor_feedback	32
+93	2024_06_26_050352_typeart	33
+94	2024_06_26_055257_txt_location	33
+95	2024_06_26_080043_add_followup_date_to_doctor_patient_appointments_table	34
+96	2024_06_26_054444_alter_add_fields_to_settings	35
+97	2024_06_26_101608_change_instant_appointment_date_to_date_in_doctor_instant_appointments_table	36
+98	2024_06_26_115909_change_holiday_date_to_date_in_doctor_holidays_table	37
+99	2024_06_26_110446_add_filed_to_doctors_table	38
+100	2024_06_26_120317_add_filed_to_hospitals_table	38
+101	2024_06_26_131658_add_filed_to_doctor_patient_appointments	38
+102	2024_06_26_132009_add_type_to_hospitals_table	38
+103	2024_06_27_043436_alter_add_instant_appoitment_number_to_settings	39
+104	2024_06_27_121116_role_id	40
+105	2024_06_27_121315_active_field	40
+106	2024_06_28_040838_alter_add_user_image_to_members	41
+107	2024_06_29_114345_user_email_otp	42
+108	2024_06_29_120550_is_social_user	42
+109	2024_06_29_132620_add_filed_to_agents_users_details_table	43
+110	2024_07_01_085559_contact_us	43
+111	2024_07_02_063257_create_country_of_origins_table	44
+112	2024_07_04_050010_add_filled_to_doctor_patient_appointments_table	45
+113	2024_07_05_161715_change_unavailable_date_in_doctor_temporary_unavailables_table	46
+114	2024_07_06_111557_add_filled_to_agent_user_detials_table	47
+115	2024_07_06_135852_alter_apoiments_	48
+116	2024_07_08_133018_face_login_id	49
+\.
+
+
+--
+-- Data for Name: mydrworld_service_feedback; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.mydrworld_service_feedback (id, user_id, rating, feeback_message, deleted_at, created_at, updated_at) FROM stdin;
+1	60	4	test service feedback	\N	2024-07-01 08:14:42	2024-07-01 08:14:42
+2	96	5	Very user friendly application	\N	2024-07-02 08:35:57	2024-07-02 08:35:57
+3	22	3	rtyuuii	\N	2024-07-02 08:51:54	2024-07-02 08:51:54
+4	69	1	sdfsdf	\N	2024-07-02 21:30:41	2024-07-02 21:30:41
+5	103	4	Great applicatio	\N	2024-07-03 12:24:10	2024-07-03 12:24:10
+6	103	4	great	\N	2024-07-03 12:24:22	2024-07-03 12:24:22
+7	106	1	Test	\N	2024-07-03 19:38:07	2024-07-03 19:38:07
+8	106	1	Test	\N	2024-07-03 19:39:25	2024-07-03 19:39:25
+9	84	5	Good Application	\N	2024-07-06 08:21:39	2024-07-06 08:21:39
+10	96	5	Nice Application	\N	2024-07-06 08:21:40	2024-07-06 08:21:40
+11	144	5	Nice application	\N	2024-07-08 07:02:40	2024-07-08 07:02:40
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.orders (id, ticket_number, user_id, product_id, drow_date, price, is_winner, product_type, created_at, updated_at) FROM stdin;
+1	BLT-15656556	8	1	2024-03-26	100	0	daily	2024-03-26 12:24:06	2024-03-26 12:24:06
+2	BLT-1565653	8	1	2024-03-26	100	0	monthly	2024-03-26 12:38:43	2024-03-26 12:38:43
+\.
+
+
+--
+-- Data for Name: personal_access_tokens; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.personal_access_tokens (id, tokenable_type, tokenable_id, name, token, abilities, last_used_at, expires_at, created_at, updated_at) FROM stdin;
+1	App\\Models\\User	14	14sooraj sabu	78381a400e6467b9350cf8397c7e66c3002ef82ace1342c34981004d65437b3b	["*"]	\N	\N	2024-06-06 04:50:17	2024-06-06 04:50:17
+2	App\\Models\\User	14	14sooraj sabu	df262694e184551446a001992fde608fe6969a70ecca0f114aae0163dfeb0595	["*"]	\N	\N	2024-06-06 04:51:05	2024-06-06 04:51:05
+3	App\\Models\\User	19	19aja nanatest30@gmail.com	2ba9bdd5da3fae4b8c492ecfc5dec8ab30fb6e2a3f0b872ea5ac639f8d352e99	["*"]	\N	\N	2024-06-11 20:18:56	2024-06-11 20:18:56
+4	App\\Models\\User	20	20abv baab	2348d822c78d5dc776d8836dbd7d688d9e331d9b07639269cf7696b8ac049b98	["*"]	\N	\N	2024-06-11 21:08:17	2024-06-11 21:08:17
+5	App\\Models\\User	21	21na abvh	cadd6845d388fefe7a0ab8ea9600266d27aa4aea93049dd204b21b944c0e3b9d	["*"]	\N	\N	2024-06-11 21:13:57	2024-06-11 21:13:57
+6	App\\Models\\User	19	19aja nanatest30@gmail.com	1a4ada9634b61aa5b49fd7e6949828b214ca005229d80e6d493654910f786fbf	["*"]	\N	\N	2024-06-11 21:17:47	2024-06-11 21:17:47
+7	App\\Models\\User	19	19aja nanatest30@gmail.com	092c84ae245c6dd759939434ac0325cd93fdcd7e067e85e1431262f906c74a1d	["*"]	\N	\N	2024-06-11 22:00:44	2024-06-11 22:00:44
+8	App\\Models\\User	22	22anil navis	33c5df90eb478a8239ea75eab06cfaec7a9d093fa368aa3470a19d6e23009dbc	["*"]	\N	\N	2024-06-12 02:37:22	2024-06-12 02:37:22
+9	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	6771137143629252e0bba40f1731f04d78e2863c0509ee3b0e03f85db0f4ef6b	["*"]	\N	\N	2024-06-13 06:07:22	2024-06-13 06:07:22
+10	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	8dbbafb24138280886375014eefe77c41bb85c1515a7070acd24737b46584e20	["*"]	\N	\N	2024-06-13 06:08:43	2024-06-13 06:08:43
+11	App\\Models\\User	25	25Hamid Razarazahamd34@gmail.com	719db4040667a56d5ee8642dc96cd51780373c768a5f5500fd27a816c3a4acb1	["*"]	\N	\N	2024-06-14 03:45:22	2024-06-14 03:45:22
+12	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	dc2215cbeb9be0e06e0cd1640b36c3dd24d7e805ec68b7893efa44dc75a5c775	["*"]	\N	\N	2024-06-14 05:51:12	2024-06-14 05:51:12
+13	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	0d15e38c18360603ecc41f7b61d3a91d295336cf7d2f639995e3618bff6dd095	["*"]	\N	\N	2024-06-15 05:06:41	2024-06-15 05:06:41
+14	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	90751278254ba95aed32c36b9aaa7c6ac65ada4474200d14f810e44a7352fed6	["*"]	\N	\N	2024-06-15 22:42:51	2024-06-15 22:42:51
+15	App\\Models\\User	28	28Hamid Razarazahamid349@gmail.com	0c7b20463bb514877704b17da6ec9f8b9fc4ac7d3664cb03ec1a6e5627f7c9ea	["*"]	\N	\N	2024-06-17 08:16:49	2024-06-17 08:16:49
+16	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	2a6c9d7d9d98889cd2a0a81c000536c0f39766983a9b7da2e2377a3dab3bc4a3	["*"]	\N	\N	2024-06-20 15:33:01	2024-06-20 15:33:01
+17	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	20a947c36bf23edd4b15c5165c53ab652500132729e3eb416b8553803039850a	["*"]	\N	\N	2024-06-21 11:20:49	2024-06-21 11:20:49
+18	App\\Models\\User	34	34anil navis	a19767c5609cd4ecf6d87b74f50bdcbfcda157c46b60273041f115b340737f55	["*"]	\N	\N	2024-06-22 02:56:42	2024-06-22 02:56:42
+19	App\\Models\\User	39	39sooraj sabusooraj@yopmail.com	82e89198fe83038e2d0d0d7bc60b3d77c141e3527adaa6029915fd456ec7d9be	["*"]	\N	\N	2024-06-25 11:08:27	2024-06-25 11:08:27
+20	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	ba900fe7890a307b249a84e20511dc7c7a6a86e6f05e8ac830bae733e7e9102a	["*"]	\N	\N	2024-06-25 15:31:01	2024-06-25 15:31:01
+21	App\\Models\\User	41	41Hamid Razarazahamid334@gmail.com	c4db8c5cfb64fa42009e1f5a160eb3555d1f31118d109437f6c5a63d1bba6f2c	["*"]	\N	\N	2024-06-25 15:57:49	2024-06-25 15:57:49
+22	App\\Models\\User	42	42test anctest71@gmail.com	ae522626bd3a9b9b1cdceee6330b3392e0b2b136593f159000671dfbf5403d36	["*"]	\N	\N	2024-06-26 07:27:18	2024-06-26 07:27:18
+23	App\\Models\\User	43	43Hamid Razap1@gmail.com	b1b0418e08b55fea9e59d5977effb5152be9625a8dc378b4424011a60b4e84c7	["*"]	\N	\N	2024-06-26 08:17:36	2024-06-26 08:17:36
+24	App\\Models\\User	44	44anil navis	c0560cc24cbbf3d377613b69492356b5289fa75d8a361c11c592c3da43487dad	["*"]	\N	\N	2024-06-26 10:07:29	2024-06-26 10:07:29
+25	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	60d4fe3e27a10e4a4fa2b79996659a49722d2f07a356996386fa3b969e33d96e	["*"]	\N	\N	2024-06-26 11:50:45	2024-06-26 11:50:45
+26	App\\Models\\User	45	45Hamid Razarazahamid001@gmail.com	fbfcc6d44014dd4586dd7475be82bbf65d00d6f6f9a3083de26ccea45666d94b	["*"]	\N	\N	2024-06-26 18:07:23	2024-06-26 18:07:23
+27	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	8511ac1964432024f639d3c9a69c2ac404748c45a6416cfbd031847a59b5d0c2	["*"]	\N	\N	2024-06-26 18:09:13	2024-06-26 18:09:13
+28	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	3d830ca510a56c263df67121b2b3b010b31cfeeb0249e899d311700dd2d5b071	["*"]	\N	\N	2024-06-26 18:10:37	2024-06-26 18:10:37
+29	App\\Models\\User	42	42test anctest71@gmail.com	61ba35ea73bd39d0f605a2fa973ae632aad2af107e5113a5e8b9e0373f6b4e39	["*"]	\N	\N	2024-06-26 21:22:20	2024-06-26 21:22:20
+30	App\\Models\\User	46	46anil navis	96818df085126a8d796ad872d38bb3eca2dc2b23ebfc04444796c2b34e043b1a	["*"]	\N	\N	2024-06-27 03:50:36	2024-06-27 03:50:36
+31	App\\Models\\User	47	47Sooraj Sabussss@yopmail.com	307676396f7747e63595837c209c29a93493b7c3402689d726c22b95f5c59f14	["*"]	\N	\N	2024-06-27 03:54:13	2024-06-27 03:54:13
+32	App\\Models\\User	48	48Anil Navisfh@fgg.com	c4ca666274e19502e5840badd770bc6e2789df1a88114c9f966a1138d710b1ad	["*"]	\N	\N	2024-06-27 03:55:53	2024-06-27 03:55:53
+33	App\\Models\\User	48	48Anil Navisfh@fgg.com	66d73d1ab415dc7195c8088fee477ffb69e08ba50a48fcd920c8d090381efd6f	["*"]	\N	\N	2024-06-27 05:31:25	2024-06-27 05:31:25
+34	App\\Models\\User	49	49Asad Nazir	d660ef264f33fd44f332ac9fcf75ec589504ca4870afca94e230f6636d1f7eb3	["*"]	\N	\N	2024-06-27 08:52:18	2024-06-27 08:52:18
+35	App\\Models\\User	50	50Hunain Devhunain88@gmail.com	aacae596fde9b3a144e2e9a947c1a4edc3109ed848650fade46ce75ac05c0b5d	["*"]	\N	\N	2024-06-27 08:55:45	2024-06-27 08:55:45
+36	App\\Models\\User	49	49Asad Nazir	8d97d019076a4d048db9d0cdbc68bae4d54ab4b4bb0611b193411b5c1a0db391	["*"]	\N	\N	2024-06-27 09:20:23	2024-06-27 09:20:23
+37	App\\Models\\User	42	42test anctest71@gmail.com	40a60dad47a95cc507137f31b8215a1a746994e61550f954e3af87d38c837cbb	["*"]	\N	\N	2024-06-27 15:18:06	2024-06-27 15:18:06
+38	App\\Models\\User	42	42test anctest71@gmail.com	a0f4e7b4df62e890d86884e3a87c74b291c5ebed4a6350637bea9a25b3026bb9	["*"]	\N	\N	2024-06-27 17:54:15	2024-06-27 17:54:15
+39	App\\Models\\User	60	60Test Onetest@gmail.com	014df908011c2babca4f0e7efe6801bfd352a313a065d566e0ba0152ae6b186c	["*"]	\N	\N	2024-06-27 20:45:09	2024-06-27 20:45:09
+40	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	33f60cb1d6cca66e7d527a910d4c565a1fdec06dbe906c5da7fd864ec93651dd	["*"]	\N	\N	2024-06-27 21:47:10	2024-06-27 21:47:10
+41	App\\Models\\User	48	48Anil Navisfh@fgg.com	a6f952300ca6e9981bc58f259e2e640d1ab7c77cb65803f845ffc13bb2f660e4	["*"]	\N	\N	2024-06-28 05:20:36	2024-06-28 05:20:36
+42	App\\Models\\User	64	64Anil Bb	c64cf240e382acdbd9918e0a56681fa0c32543c672a76b80f0e907e1bc9e045f	["*"]	\N	\N	2024-06-28 09:31:56	2024-06-28 09:31:56
+43	App\\Models\\User	48	48Anil Navisfh@fgg.com	220113e33525158cd3a9921263405241f307ad2fbb2e936cc041e38403cbcd4c	["*"]	\N	\N	2024-06-28 10:08:32	2024-06-28 10:08:32
+44	App\\Models\\User	48	48Anil Navisfh@fgg.com	3e1bfddeee95ef721c807f8021981a7cea76ac32ee87102ff0d7ab6fcc601a10	["*"]	\N	\N	2024-06-28 10:38:38	2024-06-28 10:38:38
+45	App\\Models\\User	42	42test anctest71@gmail.com	b246f0b756eaf618d73333823c803139ed83215dd535ce3531798a5f27c8af8a	["*"]	\N	\N	2024-06-28 19:01:54	2024-06-28 19:01:54
+46	App\\Models\\User	69	69moin testtest91@gmail.com	33dbb0f42c5a66ee6a39bb22ebd385fcd095a185a2dd1127d16d8d35944b096f	["*"]	\N	\N	2024-06-28 20:06:54	2024-06-28 20:06:54
+47	App\\Models\\User	70	70Test Twotest2@gmail.com	ca41763fd3dc44e6d3aeed3004c152b335c2992bbb8d07a1b715f8a35e382be7	["*"]	\N	\N	2024-06-28 20:38:53	2024-06-28 20:38:53
+48	App\\Models\\User	69	69moin testtest91@gmail.com	3718dd0903e46fe81287f3f241464084851e7a78c1ce154a591fb9f53c813196	["*"]	\N	\N	2024-06-28 20:38:59	2024-06-28 20:38:59
+49	App\\Models\\User	60	60Test Onetest@gmail.com	fd0b7d5f8011f48b99b26344f21b7431dce4e78a2f42decf526ae080cc72d245	["*"]	\N	\N	2024-06-28 20:41:55	2024-06-28 20:41:55
+50	App\\Models\\User	69	69moin testtest91@gmail.com	6547f3e44a9ab1429172ed755856ab4e7f546eae4176aa1713e3e1511daa00ab	["*"]	\N	\N	2024-06-28 20:45:49	2024-06-28 20:45:49
+51	App\\Models\\User	42	42test anctest71@gmail.com	1024140dc6e68e8f4593f4a9a3058207a6aca4f0caf1ced25c05e8c899388d37	["*"]	\N	\N	2024-06-28 20:50:16	2024-06-28 20:50:16
+52	App\\Models\\User	71	71Test Threetest3@gmail.com	9610da00a38e1e8f8076461979e24d0aaddd99b5a9a875cc449ffcfa9911de0b	["*"]	\N	\N	2024-06-28 20:50:49	2024-06-28 20:50:49
+53	App\\Models\\User	60	60Test Onetest@gmail.com	74d38eacc2c132b909a6aaacd2dbc17c929e3d477f6d685ae137e7e46d921a53	["*"]	\N	\N	2024-06-28 20:58:36	2024-06-28 20:58:36
+54	App\\Models\\User	48	48Anil Navisfh@fgg.com	10ba7f6d0238f6a6bcc1e11b6720e578253b0c091fb927529847ed0acd03a21d	["*"]	\N	\N	2024-06-29 01:39:36	2024-06-29 01:39:36
+55	App\\Models\\User	72	72Davis john	ae7a1a337a38cb01fe21fdcb37977717138763592933ef10a690595ab523df58	["*"]	\N	\N	2024-06-29 01:51:21	2024-06-29 01:51:21
+56	App\\Models\\User	73	73sooraj sabusooraj.a2solution2@gmail.com	fb16e47347da75fcc6d7552c6aec58cd92ebb4c9d5d321986c997e2f246fc78e	["*"]	\N	\N	2024-06-29 04:57:39	2024-06-29 04:57:39
+57	App\\Models\\User	74	74abc tehstest101@gmail.com	d66982c188b55a48d9c9cbdb1129a3f934c224e3818054b0257859d0d601e786	["*"]	\N	\N	2024-06-29 06:11:01	2024-06-29 06:11:01
+58	App\\Models\\User	48	48Anil Navisfh@fgg.com	2d847aeb533ecb6b40b3c86875fd61aa72bb6739be1ec23bf75689c93dc33e2e	["*"]	\N	\N	2024-06-29 07:53:52	2024-06-29 07:53:52
+59	App\\Models\\User	48	48Anil Navisfh@fgg.com	f662082fe6d437ebcc9ebbe8d936078a3eff8af7b95d4366d10d817d979f3d87	["*"]	\N	\N	2024-06-30 06:53:09	2024-06-30 06:53:09
+60	App\\Models\\User	83	83Albi Mariamdev	329cf0df2e589c286ea3b20afd19b3f0ad08f0e7ef3193548737ab75def1da1b	["*"]	\N	\N	2024-07-01 06:51:52	2024-07-01 06:51:52
+61	App\\Models\\User	84	84Anna Mariadeva	bb64aa7bf6a911580c8262b5cbbd17cb89553456f0b88a93a52cb57841cbdebd	["*"]	\N	\N	2024-07-01 07:00:08	2024-07-01 07:00:08
+62	App\\Models\\User	84	84Anna Mariadeva	825233db30ec6e990107d2c34525fa761739a36fd9b036e1d64ef6daa280e995	["*"]	\N	\N	2024-07-01 07:08:33	2024-07-01 07:08:33
+63	App\\Models\\User	60	60Test Onetest@gmail.com	7f89e0d5da1d1542603925d2701d1920f5517af7c675a72e01205edf33152c31	["*"]	\N	\N	2024-07-01 08:33:52	2024-07-01 08:33:52
+64	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	86a42b2859671ec4d132dd1a9841d47bd272e3eecdce269825a65a7ce11c16bd	["*"]	\N	\N	2024-07-01 09:22:33	2024-07-01 09:22:33
+65	App\\Models\\User	84	84Anna Mariadeva	1a0a6ab92b10148a2b564bc0408a555ffb48fc340e65cd588ae183f22856e64f	["*"]	\N	\N	2024-07-01 10:24:04	2024-07-01 10:24:04
+66	App\\Models\\User	84	84Anna Mariadeva	c769f4649ad84187c5608366fcbda4b3cde57db0c831d7fa9cfe9d7fa272ab40	["*"]	\N	\N	2024-07-01 11:16:43	2024-07-01 11:16:43
+67	App\\Models\\User	88	88Aron Alwinaron@aron.com	d779a469a4fefb6817024e2044862b76d6a8c528f54118c531b757757fffcb1f	["*"]	\N	\N	2024-07-01 11:57:24	2024-07-01 11:57:24
+68	App\\Models\\User	89	89Adhya Surya	c9ac0351916b390c1c96ea88c04ab8fff161bad03faf51e83e96aacd6c847ca7	["*"]	\N	\N	2024-07-01 12:06:26	2024-07-01 12:06:26
+69	App\\Models\\User	84	84Anna Mariadeva	3847384d3fa99ab7620f8d21f7dbefbb7154bb89b19a023c9d003d97ed94e173	["*"]	\N	\N	2024-07-01 12:08:13	2024-07-01 12:08:13
+70	App\\Models\\User	84	84Anna Mariadeva	dbce08d4a4fff08a3accf3f10d8108a5c690cf995c67a1e77d1b9dede61e6cb4	["*"]	\N	\N	2024-07-01 12:17:05	2024-07-01 12:17:05
+71	App\\Models\\User	84	84Anna Mariadeva	a8de312db610a0656f3d61c99a29a14306e798020d372bea53d0096940b69f45	["*"]	\N	\N	2024-07-01 12:20:31	2024-07-01 12:20:31
+72	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	56bbb4eb20d1404e1b5f2ffe625a6aed768cedbf4977edb4430c4d8461b38609	["*"]	\N	\N	2024-07-01 12:29:52	2024-07-01 12:29:52
+73	App\\Models\\User	84	84Anna Mariadeva	263c29e85960403125355498d28038a55be38f7ddea7a9f200fc3ceff13897a9	["*"]	\N	\N	2024-07-01 12:32:31	2024-07-01 12:32:31
+74	App\\Models\\User	84	84Anna Mariadeva	5c43558b9e6e95bd1ffcfff5179195aa8485514fa862a20d8acc03fec3c2097e	["*"]	\N	\N	2024-07-01 14:17:42	2024-07-01 14:17:42
+75	App\\Models\\User	84	84Anna Mariadeva	a36df1c82bda009a3d35fa0d4923865f935c5fe570a28f317e841eabde08163a	["*"]	\N	\N	2024-07-01 14:18:20	2024-07-01 14:18:20
+76	App\\Models\\User	84	84Anna Mariadeva	e9b10def7e5f8ddad5ee6e23aee2625a64d7083006d3c7d7ba975f0458b70cfe	["*"]	\N	\N	2024-07-01 14:18:40	2024-07-01 14:18:40
+77	App\\Models\\User	84	84Anna Mariadeva	64e1709c06130948631f7548b43729b541529ae1d78a46c1a7af5435e8debcbc	["*"]	\N	\N	2024-07-01 14:19:36	2024-07-01 14:19:36
+78	App\\Models\\User	84	84Anna Mariadeva	13ec0f2a7f019f82ccf5b35e649124a699f281362eb5be32942b49dfa409d737	["*"]	\N	\N	2024-07-01 14:24:13	2024-07-01 14:24:13
+79	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	91ca987449a8102baf3d3ce24fad0d32b334d98fe8a46c535ff78f15be4c1ef6	["*"]	\N	\N	2024-07-01 15:00:18	2024-07-01 15:00:18
+80	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	a42d45bfa81135162a272c421ac13bb7289a58eb1771d8e030873ed94a4d659b	["*"]	\N	\N	2024-07-01 18:31:13	2024-07-01 18:31:13
+81	App\\Models\\User	60	60Test Onetest@gmail.com	dc395c7c41e73fdf240a68aafe932a7e5b29ce35035255b4d5de37f9bd6ef390	["*"]	\N	\N	2024-07-01 19:44:08	2024-07-01 19:44:08
+82	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	284105cdf0e2fc14514c2d67a6ad2e2d2f4970b64f848120685bd6e312d2cb92	["*"]	\N	\N	2024-07-01 20:04:23	2024-07-01 20:04:23
+83	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	2cbf464efedd559a12d5848444becddb76b89395dfe0528e35db78ab0035ec36	["*"]	\N	\N	2024-07-01 20:33:33	2024-07-01 20:33:33
+84	App\\Models\\User	90	90HAMID Razae@gmail.com	3f157a393e99adc943b0e70427ca18996a50beecc8e94629b79e1683629eb708	["*"]	\N	\N	2024-07-01 20:41:17	2024-07-01 20:41:17
+85	App\\Models\\User	91	91test testtest27@gmail.com	a32d8f0bcd6406b885781250b1748d75a30321f3b6eaad8a585456ba588e1ee7	["*"]	\N	\N	2024-07-01 20:42:43	2024-07-01 20:42:43
+86	App\\Models\\User	92	92rusvin krusvinmerak3@gmail.com	017c64949057af587e66be378196f0da1f01fa1ba53946b7ed7c91de4502ffd0	["*"]	\N	\N	2024-07-01 20:46:07	2024-07-01 20:46:07
+87	App\\Models\\User	93	93rusvin krusvinmerak2@gmail.com	0d8f4a0eab7efcf2b347809dbee4e9d1e5add5c735888c102ecb0f5586ebcca1	["*"]	\N	\N	2024-07-01 20:46:28	2024-07-01 20:46:28
+88	App\\Models\\User	90	90HAMID Razae@gmail.com	423bf2d9cf6a4c003f1dc1dbf65ee7b0fb50ac497712a6cd8fd75ab16900250c	["*"]	\N	\N	2024-07-01 20:54:12	2024-07-01 20:54:12
+89	App\\Models\\User	90	90HAMID Razae@gmail.com	79578f3f4dad58980cb65e3223e748eaf24cb48c131ee5c9c7b2cce99a622667	["*"]	\N	\N	2024-07-01 20:54:45	2024-07-01 20:54:45
+90	App\\Models\\User	48	48Anil Navisfh@fgg.com	aa51b02fd64c533badc6aa286a070a6223ed1b56df380379c52fecaffb9fb4d2	["*"]	\N	\N	2024-07-02 02:35:38	2024-07-02 02:35:38
+91	App\\Models\\User	22	22anil navis	9afa4656177e3560af566516410d8e26fa85aacd180a5d6eba6ae33ad2a71ffe	["*"]	\N	\N	2024-07-02 04:35:43	2024-07-02 04:35:43
+92	App\\Models\\User	95	95sooraj sabusooraj.a2s4olution2@gmail.com	d055e4b8db67805d0ec890622c74879221009d862371f0dbf1b068458ec9531e	["*"]	\N	\N	2024-07-02 05:43:28	2024-07-02 05:43:28
+93	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	c5fd99f71d561adc164de6abcc2c2e14a533a764f87b2b9ffb6b528193bbd6e9	["*"]	\N	\N	2024-07-02 06:20:27	2024-07-02 06:20:27
+94	App\\Models\\User	96	96Angel Mariaangel@angel.com	fb1851c6adf8f37259b79035d200311844f0a7e132754bf7de8da84954da4473	["*"]	\N	\N	2024-07-02 07:06:36	2024-07-02 07:06:36
+95	App\\Models\\User	96	96Angel Mariaangel@angel.com	d82b7d9c2ec8471715abfd06e31a8db80206240d337b099c5d4c03b77fd34da9	["*"]	\N	\N	2024-07-02 07:19:13	2024-07-02 07:19:13
+96	App\\Models\\User	96	96Angel Mariaangel@angel.com	ba8d46ea0caaa5d55afe7d8fadae00dc7a03a335af1146990965ad9f3814bf49	["*"]	\N	\N	2024-07-02 07:20:43	2024-07-02 07:20:43
+97	App\\Models\\User	60	60Test Onetest@gmail.com	bf0d835a8a3c34355587c3b3e565223f150ea5b918d204f9c42d9b72d6b95486	["*"]	\N	\N	2024-07-02 07:44:30	2024-07-02 07:44:30
+98	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	93f3e350e25831672586cdb592b96fc5391af72d5c20efd82697d8b34b66157e	["*"]	\N	\N	2024-07-02 08:21:38	2024-07-02 08:21:38
+99	App\\Models\\User	96	96Angel Mariaangel@angel.com	f2d13b20307a41f6c308e3b3054263e06e8f23780b03f629142504e4ffdaf86e	["*"]	\N	\N	2024-07-02 09:48:59	2024-07-02 09:48:59
+100	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	ae50f382c9a441c316a40589c1f67d612581a4620ae7390b45dfdc289e516161	["*"]	\N	\N	2024-07-02 09:50:55	2024-07-02 09:50:55
+101	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	8b05b946fa3abac20a9d5da82795c71464c9ca1d23a4c904de11ff03a09e4a96	["*"]	\N	\N	2024-07-02 10:30:24	2024-07-02 10:30:24
+102	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	ba866d0ea7d440aa778f0105dec10f2fde8b76e7245781f63ba83ec4a6b4f8f4	["*"]	\N	\N	2024-07-02 10:56:58	2024-07-02 10:56:58
+103	App\\Models\\User	69	69moin testtest91@gmail.com	e18f6c12e4c30f53ae485d73a7e6dc0c81dcf497352aeb122c1dcdc46d42f8ff	["*"]	\N	\N	2024-07-02 11:45:15	2024-07-02 11:45:15
+104	App\\Models\\User	69	69moin testtest91@gmail.com	3677ffa5dfaf9b5f9fd4568d50b27f7a4db1e19cac82d269ac768687ef6a5323	["*"]	\N	\N	2024-07-02 11:49:52	2024-07-02 11:49:52
+105	App\\Models\\User	84	84Anna Mariadeva	9d61ce32f158c9d7550633d933d389d618111798e4e4495c2380b43b88bd56d8	["*"]	\N	\N	2024-07-02 12:22:01	2024-07-02 12:22:01
+106	App\\Models\\User	84	84Anna Mariadeva	9dc9e93244094cc6c4e28f5e732f206861df9cecf6a4c8cc3826aaaa57d8a157	["*"]	\N	\N	2024-07-02 12:22:13	2024-07-02 12:22:13
+107	App\\Models\\User	96	96Angel Mariaangel@angel.com	07fbd76df596a18b9865069ae1cd4c9c766f3009f1d02585e4f6b454b164f181	["*"]	\N	\N	2024-07-02 12:25:30	2024-07-02 12:25:30
+108	App\\Models\\User	98	98rusvin khamid33@gmail.com	28410c64af4351a784537d4e768e4cc38626c50eb75c2f2de6eb48acc050f313	["*"]	\N	\N	2024-07-02 12:30:00	2024-07-02 12:30:00
+109	App\\Models\\User	69	69moin testtest91@gmail.com	cb4d91186f6b536199e8bc0096e0d102ed426fa62348341a0033579512dad4a7	["*"]	\N	\N	2024-07-02 12:31:49	2024-07-02 12:31:49
+110	App\\Models\\User	84	84Anna Mariadeva	3ea623d8746861a8ae5ce549fce5f107fe5b7f090635cabec0d8d8d12a97db9c	["*"]	\N	\N	2024-07-02 12:41:10	2024-07-02 12:41:10
+111	App\\Models\\User	99	99Helen Alexanderhelen@helen.com	f62c7795837b5b349c1a2c261a71516aaae15a5dc3dba166f87a84add584f64d	["*"]	\N	\N	2024-07-02 12:47:37	2024-07-02 12:47:37
+112	App\\Models\\User	96	96Angel Mariaangel@angel.com	7b4e169cd6e8ccf4fc2a3d53517fa5f0807756d3b15e929fa22004c2d80c0a9c	["*"]	\N	\N	2024-07-02 12:49:19	2024-07-02 12:49:19
+113	App\\Models\\User	100	100rusvin krusvinmerak100@gmail.com	bb64343f0703f1a21c989af23925c93b4397bfeab3cc5cd0bb4223056daa0c16	["*"]	\N	\N	2024-07-02 13:18:34	2024-07-02 13:18:34
+114	App\\Models\\User	101	101rusvin krusvinmerak101@gmail.com	81dabe96af1f1d0e0ff1a2a23e8e7cc710f38ebdf185d13b3907fcb9ac838250	["*"]	\N	\N	2024-07-02 13:21:06	2024-07-02 13:21:06
+115	App\\Models\\User	102	102rusvin krusvinmerak102@gmail.com	bae86e78135eea94b0f07054c56e406ed5ec399aba17b0b47308968cdee6f849	["*"]	\N	\N	2024-07-02 13:24:17	2024-07-02 13:24:17
+116	App\\Models\\User	99	99Helen Alexanderhelen@helen.com	76ecdadd7250ae0fc8b046d13815829af92fa4976186bd49a8c367aaec7d90de	["*"]	\N	\N	2024-07-02 13:37:37	2024-07-02 13:37:37
+117	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	bb3ab72d13dabaecba23ff6553e9aa3036ec237229df08ce35f4dc0caa9fcbd2	["*"]	\N	\N	2024-07-02 14:18:26	2024-07-02 14:18:26
+118	App\\Models\\User	103	103Hamid Razafiverhamidraza@gmail.com	5c10cf2916333793c9100e32cf86c6a0f6cdedb1eaefb61b8981fb66c6411a2f	["*"]	\N	\N	2024-07-02 15:00:14	2024-07-02 15:00:14
+119	App\\Models\\User	60	60Test Onetest@gmail.com	53732b16a12c2767e497d79fd585b82940e88a79b1faf7dafea43001de176f17	["*"]	\N	\N	2024-07-02 19:13:04	2024-07-02 19:13:04
+120	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	fea46975e9cabc036119bb3a2f0b8a7a3b56d3c7c94a9806b7d583f0aa9a5720	["*"]	\N	\N	2024-07-02 19:15:10	2024-07-02 19:15:10
+121	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	67b3788a0d0d37500af1129ce64dbbc41a95c58b63a645b2f677e74f16b2c2d1	["*"]	\N	\N	2024-07-02 19:16:42	2024-07-02 19:16:42
+122	App\\Models\\User	84	84Anna Mariadeva	0d8f0707adb14720e6c6bc19e88f5ce02872b150e6dfb278501df88999e5d351	["*"]	\N	\N	2024-07-02 19:21:26	2024-07-02 19:21:26
+123	App\\Models\\User	69	69moin testtest91@gmail.com	4f2f771b76ec6a9d2bc08bd79b15c2bf7197c0f350a7e5eb539dbb2a479a8e08	["*"]	\N	\N	2024-07-02 19:23:47	2024-07-02 19:23:47
+124	App\\Models\\User	50	50Hunain Devhunain88@gmail.com	a6998eb13dcd116e3d8566dd14c0965a93348f4d06c4a9f0993869d358e17805	["*"]	\N	\N	2024-07-02 21:07:53	2024-07-02 21:07:53
+125	App\\Models\\User	60	60Test Onetest@gmail.com	abe1c2041c5c9e8ee495aa9b6d22367d2ce7bb32a0ec6481cf052670c30fdedc	["*"]	\N	\N	2024-07-02 22:10:42	2024-07-02 22:10:42
+126	App\\Models\\User	27	27Hamid Razarazahamid46@gmail.com	070415443586fea16d8befcfcfa5723ecc1e4e231df6f7a31f3b6d131c6bbda7	["*"]	\N	\N	2024-07-02 22:15:22	2024-07-02 22:15:22
+127	App\\Models\\User	60	60Test Onetest@gmail.com	8677f451ac3fc010b12d5ea613f08c88012fd48bac0900ca48d5067e2ff73ce3	["*"]	\N	\N	2024-07-02 22:17:03	2024-07-02 22:17:03
+128	App\\Models\\User	48	48Anil Navisfh@fgg.com	d9c726d4e3b94e38205542ee6e61eb4a5576e6c210f42f0ddfa8ae22be077d6e	["*"]	\N	\N	2024-07-03 02:34:31	2024-07-03 02:34:31
+129	App\\Models\\User	96	96Angel Mariaangel@angel.com	eace435c94ed7173614acf32ef4b2d2c8b8b5bb69d611f890d62be46d344b423	["*"]	\N	\N	2024-07-03 05:25:04	2024-07-03 05:25:04
+130	App\\Models\\User	96	96Angel Mariaangel@angel.com	4ff247bcaeeefd35c2a34232915ff0a3c755417daf3b577e7c57c977ffb608dd	["*"]	\N	\N	2024-07-03 07:28:35	2024-07-03 07:28:35
+131	App\\Models\\User	96	96Angel Mariaangel@angel.com	64a107ee0493ed5e4ec09dce8fb04bd0523e7c40698b75cc1e73740d338852ac	["*"]	\N	\N	2024-07-03 07:40:01	2024-07-03 07:40:01
+132	App\\Models\\User	96	96Angel Mariaangel@angel.com	35a03cbc683e2f191691f88905f8c9370dce57427ae20cf2ecede9720b0023b2	["*"]	\N	\N	2024-07-03 07:43:15	2024-07-03 07:43:15
+133	App\\Models\\User	96	96Angel Mariaangel@angel.com	0169cab825e98a06ca4db21067870da374543f3043c06ac12057e5c46e861f6f	["*"]	\N	\N	2024-07-03 07:43:47	2024-07-03 07:43:47
+134	App\\Models\\User	106	106test new	9871da8ca216147477ad410808c211b4780371e47e8f28ad2e68c50865832af2	["*"]	\N	\N	2024-07-03 08:39:21	2024-07-03 08:39:21
+135	App\\Models\\User	107	107nas khannas@gmail.com	1460261d015d26bbe424bd8eeccc073765ff109fc291f126153958e5fb3114dc	["*"]	\N	\N	2024-07-03 08:45:40	2024-07-03 08:45:40
+136	App\\Models\\User	96	96Angel Mariaangel@angel.com	e0ea7847d9249b2314fd52844ef06a1202a2b52c5219fa4fc9ab999bafa09f97	["*"]	\N	\N	2024-07-03 08:50:31	2024-07-03 08:50:31
+137	App\\Models\\User	84	84Anna Mariadeva	e8d48b07c4c2c3b7fef6032d201f561385d099662dfe5cc8e96c2eb18fa7a485	["*"]	\N	\N	2024-07-03 08:51:24	2024-07-03 08:51:24
+138	App\\Models\\User	48	48Anil Navisfh@fgg.com	37dc2fac11b66be5999ab23fc9e4b5aff6c170908bc06df07b87555024447d2b	["*"]	\N	\N	2024-07-03 09:01:37	2024-07-03 09:01:37
+139	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	25bbf8b61cf6d63b653ad3ed4d85b12a3dea996610cf431c150653bfcbe1c7d9	["*"]	\N	\N	2024-07-03 09:23:39	2024-07-03 09:23:39
+140	App\\Models\\User	84	84Anna Mariadeva	c880d725d938662c5f020a1357b820b541e56ab7718e5913a7eef32cc9d87aa2	["*"]	\N	\N	2024-07-03 10:46:00	2024-07-03 10:46:00
+141	App\\Models\\User	114	114Sooraj Sabu	4858437f795d87268001b8572f409610020a3d211a32810fad2a290372069cab	["*"]	\N	\N	2024-07-03 11:56:28	2024-07-03 11:56:28
+142	App\\Models\\User	48	48Anil Navisfh@fgg.com	f2309d3ffe934834142d5e184364d47d4fa6c43676d8ba6c96f9cafcd6c71fea	["*"]	\N	\N	2024-07-03 12:11:42	2024-07-03 12:11:42
+143	App\\Models\\User	96	96Angel Mariaangel@angel.com	c82312f4b23bdd245ec2f6ef3129976c3a6965fee17fddb3bc10891d0f6fa5d0	["*"]	\N	\N	2024-07-03 13:41:36	2024-07-03 13:41:36
+144	App\\Models\\User	23	23Hamid Razarazahamid34@gmail.com	5113c64336d325b821c75012d905e46128e04f851e12f18e7e683b5c266bb711	["*"]	\N	\N	2024-07-03 14:09:14	2024-07-03 14:09:14
+145	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	c4c2467de2388fc5027a5e92fc714db6fa9a52b590fb0ab175ba1bf4abadcfa1	["*"]	\N	\N	2024-07-03 14:44:22	2024-07-03 14:44:22
+146	App\\Models\\User	23	23rusvin krazahamid34@gmail.com	fd09297c8adb1369a7e41dafb4e83152dfb4ab4324fbfecadf980eeb1843efd6	["*"]	\N	\N	2024-07-03 14:48:21	2024-07-03 14:48:21
+147	App\\Models\\User	106	106test new	12cd64b2671c4edc1c7af2e1e44dbc6dd5f8e482f67cac1d75b68498b29dc82b	["*"]	\N	\N	2024-07-03 16:52:01	2024-07-03 16:52:01
+148	App\\Models\\User	23	23rusvin krazahamd98@gmail.com	c1862a6b457254f6d1e755a52964ede765aac99c9e94b121afd3402856ce7e50	["*"]	\N	\N	2024-07-03 17:28:32	2024-07-03 17:28:32
+149	App\\Models\\User	48	48Anil Navisfh@fgg.com	0aa4b258cba53afb492c7e431b24d177bed70715656e62a12f80c0fba2d9e791	["*"]	\N	\N	2024-07-03 20:14:29	2024-07-03 20:14:29
+150	App\\Models\\User	48	48Anil Navisfh@fgg.com	130d2270c3fa346ce9950895f201fc53f3edace6025ecbf84070a992fded45ca	["*"]	\N	\N	2024-07-04 01:56:52	2024-07-04 01:56:52
+151	App\\Models\\User	23	23rusvin krazahamd98@gmail.com	fe551f363de1fb88e3fe3402b577a6d904072642b5a3272e0605b71cc94aa048	["*"]	\N	\N	2024-07-04 05:14:10	2024-07-04 05:14:10
+152	App\\Models\\User	118	118Aisha Abdul Rahim Azad Noornissaaisha@aisha.com	31db632b5da57e052a1163db2e334aed9b5857f9c1d5d6a80781ddc33bb07952	["*"]	\N	\N	2024-07-04 06:01:49	2024-07-04 06:01:49
+153	App\\Models\\User	119	119Abdul Rahim Azad Noornissaabdul@abdul.com	7bef61beca6d1e00c680e82bc8874cb10be87396aeb8b52bb410ac4c4da1e9fd	["*"]	\N	\N	2024-07-04 06:01:50	2024-07-04 06:01:50
+154	App\\Models\\User	119	119Abdul Rahim Azad Noornissaabdul@abdul.com	ca4799a875c58699b66acae39c7c0acf78c4c0fbdce8cfaf4608dffe1a845239	["*"]	\N	\N	2024-07-04 09:20:14	2024-07-04 09:20:14
+155	App\\Models\\User	119	119Abdul Rahim Azad Noornissaabdul@abdul.com	7fbfbf6d58d887059ad6696bb172ad70024fd0c966c0449e6e5dd733c9232aa1	["*"]	\N	\N	2024-07-04 09:21:20	2024-07-04 09:21:20
+156	App\\Models\\User	96	96Angel Mariaangel@angel.com	b228da263e4cdd9811556021650ca9c60a666a2a2cf55cc9f6699380c776684a	["*"]	\N	\N	2024-07-04 09:52:47	2024-07-04 09:52:47
+157	App\\Models\\User	84	84Anna Mariadeva	c2c9e51515a6689fdd5b21febc63ff7883e7746eb8f13c2c0fcfa5395b21576c	["*"]	\N	\N	2024-07-04 10:13:59	2024-07-04 10:13:59
+158	App\\Models\\User	69	69moin testtest91@gmail.com	dc26737c88117abfede3ee23067f902fce33aac8402610b5a13d9e784ed5b102	["*"]	\N	\N	2024-07-04 11:42:51	2024-07-04 11:42:51
+159	App\\Models\\User	48	48Anil Navisfh@fgg.com	e8d054d67b099a88539b236c2981ae94d34b87400fc57f57f3ce3a28bb8f79d2	["*"]	\N	\N	2024-07-04 11:58:06	2024-07-04 11:58:06
+160	App\\Models\\User	96	96Angel Mariaangel@angel.com	25d52743e90d73b9daff295443d73f6550f701da6e374ecd9674b186aa9f6f7a	["*"]	\N	\N	2024-07-04 11:59:31	2024-07-04 11:59:31
+161	App\\Models\\User	84	84Anna Mariadeva	90bfad63138230518461d9daac38d259da60be5a0905009f2b521dc8fb235bce	["*"]	\N	\N	2024-07-04 11:59:38	2024-07-04 11:59:38
+162	App\\Models\\User	122	122Henna Dariahenna@henna.com	9593e47740aec08b396436f809b3fbac69c1035f02158d66b7a5ac9462950a3d	["*"]	\N	\N	2024-07-04 12:38:27	2024-07-04 12:38:27
+163	App\\Models\\User	84	84Anna Mariadeva	3002607660966f867997e73a6cc9d0f935fc91b10182a55f9913a200acdb868a	["*"]	\N	\N	2024-07-04 13:08:32	2024-07-04 13:08:32
+164	App\\Models\\User	60	60Test Onetest@gmail.com	8a189768a13557472aba6231ad22e2122f0419c244eecb33ea10104c1b4d2f4e	["*"]	\N	\N	2024-07-04 13:25:47	2024-07-04 13:25:47
+165	App\\Models\\User	60	60Test Onetest@gmail.com	81a4689f08ee40555f258c35ac693bced97bf35a23c23299852c9d700320d0ef	["*"]	\N	\N	2024-07-04 13:29:06	2024-07-04 13:29:06
+166	App\\Models\\User	60	60Test Onetest@gmail.com	1f92a5986a18e282c86909635b51bd08c209caff3cae79d28142ea3b173a632e	["*"]	\N	\N	2024-07-04 15:40:19	2024-07-04 15:40:19
+167	App\\Models\\User	60	60Test Onetest@gmail.com	e0c0645d7c800475a6fa71d4d45e003b0d11452aeb58bc000aac8ba85c5751a0	["*"]	\N	\N	2024-07-04 15:40:42	2024-07-04 15:40:42
+168	App\\Models\\User	60	60Test Onetest@gmail.com	a8f733884362b74bb6a7dcf01d5989cdf30cf256cdffa845ee66ca5f147ca0ab	["*"]	\N	\N	2024-07-04 15:44:49	2024-07-04 15:44:49
+169	App\\Models\\User	60	60Test Onetest@gmail.com	37c6f21c7fb544e41647869b6c6f52bbe1572313b9b85ce74345851a29c950a3	["*"]	\N	\N	2024-07-04 16:17:57	2024-07-04 16:17:57
+170	App\\Models\\User	50	50Hunain Devhunain88@gmail.com	c752d8cba23ef1a2e495883da1947e5abc636ee82be92c168de8e16db7a21424	["*"]	\N	\N	2024-07-04 16:20:05	2024-07-04 16:20:05
+171	App\\Models\\User	60	60Test Onetest@gmail.com	9f9ef2407bad3533d2aa2c4530dfb5f1da81a6ebfc234fd680cf834b5ac6e7b2	["*"]	\N	\N	2024-07-04 16:20:35	2024-07-04 16:20:35
+172	App\\Models\\User	60	60Test Onetest@gmail.com	22329c15b0da2b4352b4c9a55ddbc3153e4bf142da4373a10e5278e755d68e9a	["*"]	\N	\N	2024-07-04 16:22:11	2024-07-04 16:22:11
+173	App\\Models\\User	23	23rusvin krazahamd98@gmail.com	bb60dc37e1d6a717b00e1d04690ed848c641fe4a297d64cae5f8407f8b00adc2	["*"]	\N	\N	2024-07-04 16:50:33	2024-07-04 16:50:33
+174	App\\Models\\User	48	48Anil Navisfh@fgg.com	bc6aa196dc5e5c552b352fd50294d2c4fa50965e7ada37aede7bb69d7b90c439	["*"]	\N	\N	2024-07-05 02:08:07	2024-07-05 02:08:07
+175	App\\Models\\User	114	114Sooraj Sabu	92a9d569ecea35c8beb63502531cc7feef2ef5a617db21afa6d1c3c22dfc95f4	["*"]	\N	\N	2024-07-05 05:52:57	2024-07-05 05:52:57
+176	App\\Models\\User	96	96Angel Mariaangel@angel.com	2919630933924c163b4325be918f6bc12d9fee13da497dc3112d2b7ad49d3e12	["*"]	\N	\N	2024-07-05 06:29:57	2024-07-05 06:29:57
+177	App\\Models\\User	84	84Anna Mariadeva	1b67b02bfa94b93507afb15e2afe658f228d2763f0dc4292f29a0320dd3623eb	["*"]	\N	\N	2024-07-05 06:30:32	2024-07-05 06:30:32
+178	App\\Models\\User	60	60Test Onetest@gmail.com	0390483f648498ccb06ff032e6e56a23c3ba2801d783b0f8491c618068234e6e	["*"]	\N	\N	2024-07-05 07:23:23	2024-07-05 07:23:23
+179	App\\Models\\User	96	96Angel Mariaangel@angel.com	e12a2000b43beee68c1ca6c9e1d2214a1fab4bce76428ae7f5d46e0478a1d70a	["*"]	\N	\N	2024-07-05 08:13:01	2024-07-05 08:13:01
+180	App\\Models\\User	84	84Anna Mariadeva	f9dcb8439e63a0fe2ba9883b75bbdabe59aa8b2527c9ed665b1839a6cb6abcce	["*"]	\N	\N	2024-07-05 08:15:23	2024-07-05 08:15:23
+181	App\\Models\\User	129	129anil navis	27961147ed7c06ba6363b256d34ac505ba80e222a094ba75e389c43c3155d5ac	["*"]	\N	\N	2024-07-05 09:39:50	2024-07-05 09:39:50
+182	App\\Models\\User	48	48Anil Navisfh@fgg.com	93c1183f7e57dfb3ee66214709d90fd7f6e662de8d3e6bee07e48c295886ca80	["*"]	\N	\N	2024-07-05 09:53:55	2024-07-05 09:53:55
+183	App\\Models\\User	84	84Anna Mariadeva	690df17ecdaea3f1211ab24eeaadb9708fb19f9f1299fe6eca01d079f22e2171	["*"]	\N	\N	2024-07-05 10:33:04	2024-07-05 10:33:04
+184	App\\Models\\User	96	96Angel Mariaangel@angel.com	abf643692a8beb51e0902596c0fd376533ff60dd5545cc0d062bb83cd255af58	["*"]	\N	\N	2024-07-05 11:20:00	2024-07-05 11:20:00
+185	App\\Models\\User	130	130Anil navis	ad19fc44184a9a934cece89e9deb6e16ce5321df74f3541f99d847ceab0ceba4	["*"]	\N	\N	2024-07-05 11:23:40	2024-07-05 11:23:40
+186	App\\Models\\User	131	131Devika Surendran Pillai Rajalekshmidevika@dxbapps.com	7b006bfa8b5a679f018856d9bef921cf6870a86eb807739bd55ede69519f4f88	["*"]	\N	\N	2024-07-05 14:18:38	2024-07-05 14:18:38
+187	App\\Models\\User	96	96Angel Mariaangel@angel.com	2082d05c8346c7bcbc9e9b61887ff18e97b6764e749f01236565b95c1b48d157	["*"]	\N	\N	2024-07-05 14:32:28	2024-07-05 14:32:28
+188	App\\Models\\User	84	84Anna Mariadeva	db1364ea2bb7c46b6ed4af45f6c9869f19c30abb79747ecb05264047a9bcb98c	["*"]	\N	\N	2024-07-05 14:32:30	2024-07-05 14:32:30
+189	App\\Models\\User	60	60Test Onetest@gmail.com	b786806c76af67df3d7b0267fa34bbd810614cb23f172737aad5426f9808f45a	["*"]	\N	\N	2024-07-05 15:04:54	2024-07-05 15:04:54
+190	App\\Models\\User	131	131Devika Surendran Pillai Rajalekshmidevika@dxbapps.com	3eb14d784d8bc4e5dd7e1a3c3c1963b3ab72c60edf38a9da55c257c58242a439	["*"]	\N	\N	2024-07-05 15:09:28	2024-07-05 15:09:28
+191	App\\Models\\User	84	84Anna Mariadeva	31d443e6f8f48b5936e737217f6dea2004b84c81f6e5a872aaf58c44d8389c87	["*"]	\N	\N	2024-07-05 15:25:30	2024-07-05 15:25:30
+192	App\\Models\\User	96	96Angel Mariaangel@angel.com	0a1b610df7e36904e4585fd8d32f69e18f5755df6e46a680b1ba5d2dcc71f895	["*"]	\N	\N	2024-07-05 15:37:55	2024-07-05 15:37:55
+193	App\\Models\\User	131	131Devika Surendran Pillai Rajalekshmidevika@dxbapps.com	2f9545074c9eb228e1a9aa8c71e2fa062e6ae4e6241d1967c075dcb1060f636b	["*"]	\N	\N	2024-07-05 15:39:21	2024-07-05 15:39:21
+194	App\\Models\\User	132	132Devika Arun Padipurackaldevikadxbapps@hotmail.com	366ff49d436047e6fb2f0864ffc49d905ef2a62134590299de89b614017b2e1f	["*"]	\N	\N	2024-07-05 15:45:00	2024-07-05 15:45:00
+195	App\\Models\\User	69	69moin testtest91@gmail.com	89ec17f256b9124582ef5a03269050fb6ea77ef2a1a0ce6b89411c0a14a95ea5	["*"]	\N	\N	2024-07-05 19:49:08	2024-07-05 19:49:08
+196	App\\Models\\User	60	60Test Onetest@gmail.com	89c3025a267f99d327a79741dfd0866d99c0bbda7c7ff5c9eb9ef937047ca351	["*"]	\N	\N	2024-07-05 21:35:38	2024-07-05 21:35:38
+197	App\\Models\\User	133	133Nasrullah Testnasrulahpitafi1@gmail.com	07e89dd0d0c34552df3da19887794a6bd5be52e63650a968d09115698e72f774	["*"]	\N	\N	2024-07-05 22:57:49	2024-07-05 22:57:49
+198	App\\Models\\User	134	134Nasrullah Khannasrulahpitafi@gmail.com	4c7c7c7989594e1d0a0bafa7c6bf43d138b6196edff0e0639c66db592f2ed623	["*"]	\N	\N	2024-07-05 23:11:12	2024-07-05 23:11:12
+199	App\\Models\\User	135	135Nasrullah Khanhp7289gzgs@privaterelay.appleid.com	b43d9e6dabdc2e88145b75c8f03c1421bc9d03cfed22ba9bd8aca2d5bf929b72	["*"]	\N	\N	2024-07-05 23:12:22	2024-07-05 23:12:22
+200	App\\Models\\User	60	60Test Onetest@gmail.com	8445fe4fec842278bb3650c84c993a323d34daaa1363b2423ad65c9c55735cdb	["*"]	\N	\N	2024-07-05 23:13:15	2024-07-05 23:13:15
+201	App\\Models\\User	136	136test testtesthjj@gmail.com	37ad151b5f18bd997e57b2fc7af2092d7aa9d5890178c0e1397b670ca01ce329	["*"]	\N	\N	2024-07-05 23:26:59	2024-07-05 23:26:59
+202	App\\Models\\User	106	106nsarullah khannast@gmail.com	0332e0f0dc6625068923d976fd31e303c516f43c0ffd561375d6778f2ea11c6f	["*"]	\N	\N	2024-07-05 23:27:32	2024-07-05 23:27:32
+203	App\\Models\\User	60	60Test Onetest@gmail.com	a24c0637d5def31b21bd6cd9a5e0db7f73c951ad06e04090439e7cbc5f3900d7	["*"]	\N	\N	2024-07-05 23:27:58	2024-07-05 23:27:58
+204	App\\Models\\User	48	48Anil Navisfh@fgg.com	5b391fe41a1514bfe1eeb4f863a69fac02aa47059c1aab8b787fae27fc68a8e7	["*"]	\N	\N	2024-07-06 01:31:36	2024-07-06 01:31:36
+205	App\\Models\\User	130	130Anil navis	d24e9e05cfbecbcdb2eddf335397579419727600b1b629cf9acad16ccc6bb6b9	["*"]	\N	\N	2024-07-06 03:54:40	2024-07-06 03:54:40
+206	App\\Models\\User	130	130Anil navis	317797da81359994b4bd199139b46c7eca95609a317408afc1bb3e7c533b2990	["*"]	\N	\N	2024-07-06 03:58:22	2024-07-06 03:58:22
+207	App\\Models\\User	130	130Anil navis	4ad5ac1a08c637479eda4ada3dddbeeb5c9a389ce6a47d8c3193c41e6c3c1cd0	["*"]	\N	\N	2024-07-06 04:01:17	2024-07-06 04:01:17
+208	App\\Models\\User	130	130Anil navis	ffb78d5b49e796be47812c70aeb709d8305c4ae1c6f11e0256d2d0a456ac59d8	["*"]	\N	\N	2024-07-06 04:03:40	2024-07-06 04:03:40
+209	App\\Models\\User	84	84Anna Mariadeva	ff264982cfe6f8b6436e5aca21ebe54b6c12112c5b18e05b9ae6ed02bcdfc4b5	["*"]	\N	\N	2024-07-06 05:34:39	2024-07-06 05:34:39
+210	App\\Models\\User	84	84Anna Mariadeva	d94ed81f57c1503788a4f2cdfa33278ec8f10bf0eefa613b08c7f83cc7c624c8	["*"]	\N	\N	2024-07-06 05:37:38	2024-07-06 05:37:38
+211	App\\Models\\User	138	138Catherin Fernadezcatherin@catherin.com	9dddc141c5a84bc8d506c50df144333e0830a5cad05dfcd6d447c1d1154886b6	["*"]	\N	\N	2024-07-06 05:56:15	2024-07-06 05:56:15
+212	App\\Models\\User	84	84Anna Mariadeva@deva.com	966012d590d2851efe6b341f13e90a0c8691d90a184489478c078de0c9232047	["*"]	\N	\N	2024-07-06 06:02:15	2024-07-06 06:02:15
+213	App\\Models\\User	84	84Anna Mariadeva@deva.com	6ffd721de0ab7ad909f42a2946b9db6c0b343d72cde889d53d55f25901bcc308	["*"]	\N	\N	2024-07-06 06:05:14	2024-07-06 06:05:14
+214	App\\Models\\User	96	96Angel Mariaangel@angel.com	f7ee198c43402c8e3f8346cc709db60fb6e4dcdcebcf67d5051c86233f1e810c	["*"]	\N	\N	2024-07-06 06:25:52	2024-07-06 06:25:52
+215	App\\Models\\User	96	96Angel Mariaangel@angel.com	a934df6f1ae3cc306e7b8cd4860575ba9a3f4f3279f15fb6c96bb72049d470f8	["*"]	\N	\N	2024-07-06 07:21:48	2024-07-06 07:21:48
+216	App\\Models\\User	69	69moin testtest91@gmail.com	12fdac266ada3cda12c84c8cfd1f7b7f8180bd40236f66113d8492026a0e21fa	["*"]	\N	\N	2024-07-06 07:52:29	2024-07-06 07:52:29
+217	App\\Models\\User	69	69moin testtest91@gmail.com	b9cae6eb9d916526af5977f56b847755d713655cacb434a3fd8a3d2673ffdf2d	["*"]	\N	\N	2024-07-06 07:53:22	2024-07-06 07:53:22
+218	App\\Models\\User	130	130Anil navis	71fbf23d5624f2da7382a0f900eff9b87c2f8c7818d7fa983f34731cbf5c1273	["*"]	\N	\N	2024-07-06 08:06:05	2024-07-06 08:06:05
+219	App\\Models\\User	96	96Angel Mariaangel@angel.com	e1b38fc53b7419c1ff1605eeab04716364b0ee9438bd0ec6a3166baff1ae5b26	["*"]	\N	\N	2024-07-06 08:17:41	2024-07-06 08:17:41
+220	App\\Models\\User	84	84Anna Mariadeva@deva.com	01e956846cf8cd55ee722423b515236cc1de22a6ba939c575f5675bf087985b6	["*"]	\N	\N	2024-07-06 08:17:42	2024-07-06 08:17:42
+221	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	324680b4258e7af08b50fd37a5f8116140cd5350510ba70bba882abbc8a21c54	["*"]	\N	\N	2024-07-06 08:44:54	2024-07-06 08:44:54
+222	App\\Models\\User	84	84Anna Mariadeva@deva.com	aaf3f136ed08d688aa8a396e8aab209d87fc9cfe97f5e1ac7adb17f226b24194	["*"]	\N	\N	2024-07-06 08:58:34	2024-07-06 08:58:34
+223	App\\Models\\User	106	106nsarullah khannast@gmail.com	8c4822cf9114d0a040ad4a9af998df38ffc822149835b04dda03c91a03c1b7b9	["*"]	\N	\N	2024-07-06 09:07:13	2024-07-06 09:07:13
+224	App\\Models\\User	130	130Anil navis	27a373e7f4aab8925e46865449ed951cc2f48c000c4d19dbefee1a44c61457af	["*"]	\N	\N	2024-07-06 09:09:48	2024-07-06 09:09:48
+225	App\\Models\\User	130	130Anil navis	308700a52c1ac772bb11779e0c877c4519b526308e971671a3d46954f76918a9	["*"]	\N	\N	2024-07-06 09:22:45	2024-07-06 09:22:45
+226	App\\Models\\User	69	69moin testtest91@gmail.com	0eed141f9a9dc4d8b34dace5587602d0e84ede864fa8c35c4c015f302b046d5e	["*"]	\N	\N	2024-07-06 09:48:20	2024-07-06 09:48:20
+227	App\\Models\\User	60	60Test Onetest@gmail.com	471677faaeee518dc35a2fadc1487c6cdea6997c29c71f650a49a36bb1b56c70	["*"]	\N	\N	2024-07-06 09:48:46	2024-07-06 09:48:46
+228	App\\Models\\User	96	96Angel Mariaangel@angel.com	934315ef94efdb9b9559bcf08c79f414cec76fba40251e081e8db56431b6d3ce	["*"]	\N	\N	2024-07-06 10:07:44	2024-07-06 10:07:44
+229	App\\Models\\User	96	96Angel Mariaangel@angel.com	0b7a27ba2ad1cd7cdf45012730ab10816bf8ceb707a48cc89116f35f39e11e41	["*"]	\N	\N	2024-07-06 10:08:38	2024-07-06 10:08:38
+230	App\\Models\\User	130	130Anil navis	b2c43653a1b1b196b415e50e9650c00de7f714a22cc3a091422ea4e38ac138b2	["*"]	\N	\N	2024-07-06 10:13:17	2024-07-06 10:13:17
+231	App\\Models\\User	69	69moin testtest91@gmail.com	a9a261197dd91970fc9b59da9cedd5d826ac1c3f4a7b0b79cb33c46bc3cd7459	["*"]	\N	\N	2024-07-06 10:17:17	2024-07-06 10:17:17
+232	App\\Models\\User	130	130Anil navis	885fb8e7d68420f5c03a65cbeac4e5511c45018c9c9570358641872457f0835f	["*"]	\N	\N	2024-07-06 10:23:37	2024-07-06 10:23:37
+233	App\\Models\\User	96	96Angel Mariaangel@angel.com	0af3ff224b9e6206c7d38809267f42a4f5c186bc2fe3dc1cd50ce782c0886da9	["*"]	\N	\N	2024-07-06 10:25:54	2024-07-06 10:25:54
+234	App\\Models\\User	106	106nsarullah khannast@gmail.com	cb0edbeea25adc3589def9ad1967eada1e4dbe3fe957ab815f3010417c556c95	["*"]	\N	\N	2024-07-06 10:26:21	2024-07-06 10:26:21
+235	App\\Models\\User	84	84Anna Mariadeva@deva.com	b0e247878a6054757e8b9b5836c48ab5f91706fbf71f7fdf8af35b00d2336ad1	["*"]	\N	\N	2024-07-06 10:37:56	2024-07-06 10:37:56
+236	App\\Models\\User	139	139naviz hjjnavisanil@gmail.com	113213deba62ba9712b0ada525698b5c2748d033baa69b09641117aabefab3e9	["*"]	\N	\N	2024-07-06 10:54:34	2024-07-06 10:54:34
+237	App\\Models\\User	140	140ANIL NAVIS vvbanil@dxbusinessgroup.com	86023ff5cd47a4e27ae40302631f3b1df46c1e734c64ca47914a0ff9b6dceec0	["*"]	\N	\N	2024-07-06 11:16:07	2024-07-06 11:16:07
+238	App\\Models\\User	141	141Devika DX TECHNOLOGIES LLC DX TECHNOLOGIES LLCdevika@dxbapps.com	934da4823ad0f7ce5245a2866b7727ac5a481ee31fbd87d59e7b9cd0b990959d	["*"]	\N	\N	2024-07-06 11:30:29	2024-07-06 11:30:29
+239	App\\Models\\User	142	142Devan sdevas@devas.com	44a336c53737c785b3f3017b1424d742edf872b0bf80331095e98eb83dc11e2a	["*"]	\N	\N	2024-07-06 11:40:31	2024-07-06 11:40:31
+240	App\\Models\\User	143	143anil navisanilnavis@gmail.com	c2439638c1c501640683f9fabe7a8ba0e6dd3949a629f5afc88061e1435078f1	["*"]	\N	\N	2024-07-06 11:40:54	2024-07-06 11:40:54
+241	App\\Models\\User	142	142Devan sdevas@devas.com	73a03865fa35b60fd3ec59c47eb39f1ecd0052327487d0edfd2f193ca4936d04	["*"]	\N	\N	2024-07-06 11:41:00	2024-07-06 11:41:00
+242	App\\Models\\User	144	144sewa qdevikadxba@hotmail.com	ac0c18cb72a2181bf365bd0aace59d2d59f33599088fa0f18267ab6d12c3ba14	["*"]	\N	\N	2024-07-06 11:42:49	2024-07-06 11:42:49
+243	App\\Models\\User	96	96Angel Mariaangel@angel.com	94f56aa54c9c04aa8e28a8df2ed160bd793211e0a579e3cbde544a675278a54b	["*"]	\N	\N	2024-07-06 12:11:43	2024-07-06 12:11:43
+244	App\\Models\\User	84	84Anna Mariadeva@deva.com	80edacca2b9bf64faa8393bb05461ec410edb6231110858e3731b84e66c65126	["*"]	\N	\N	2024-07-06 12:24:37	2024-07-06 12:24:37
+245	App\\Models\\User	96	96Angel Mariaangel@angel.com	c1e19bc76cc0eda3e4bf2165981800315df7b6eb06232fdadda075e45edec046	["*"]	\N	\N	2024-07-06 12:32:12	2024-07-06 12:32:12
+246	App\\Models\\User	143	143anil navisanilnavis@gmail.com	dd759c28a9936e67d224c5c4e2aa09aa177cc8e760a09fa635671b1e77b15b82	["*"]	\N	\N	2024-07-06 12:36:30	2024-07-06 12:36:30
+247	App\\Models\\User	96	96Angel Mariaangel@angel.com	80d6611fa1e16243b0ff97398be36f873e64c5db2b8070eff94e593dddf6b5b3	["*"]	\N	\N	2024-07-06 13:05:04	2024-07-06 13:05:04
+248	App\\Models\\User	96	96Angel Mariaangel@angel.com	981f9f76abd83974b7c0cfe1bb89fe2c9fa07a9f09f54d56a17bc78810b6e9e1	["*"]	\N	\N	2024-07-06 13:38:38	2024-07-06 13:38:38
+249	App\\Models\\User	96	96Angel Mariaangel@angel.com	be817ef370b0457d91665fe408363bab139db382895911c6c426a58e367c5c17	["*"]	\N	\N	2024-07-06 13:40:36	2024-07-06 13:40:36
+250	App\\Models\\User	96	96Angel Mariaangel@angel.com	5aef9153313b8ed7dfe743aaf6bfb45f8da2e942741694ef44ef4621f01fa0d1	["*"]	\N	\N	2024-07-06 13:40:49	2024-07-06 13:40:49
+251	App\\Models\\User	60	60Test Onetest@gmail.com	46d19e3caced5ba18d0cd18854c0c070140394e6e231385ad50eb57636fd628f	["*"]	\N	\N	2024-07-06 14:55:06	2024-07-06 14:55:06
+252	App\\Models\\User	146	146Devika DX TECHNOLOGIES LLC Andrdevika@dxbapps.com	20195a1175c839d70f48d939069b6540c31820720d36192af09b9d7c532ff8b3	["*"]	\N	\N	2024-07-06 15:23:31	2024-07-06 15:23:31
+253	App\\Models\\User	106	106nsarullah khannast@gmail.com	2ace7f53c39d480f7b8d5786077cd737cb683509e9efc9eec7394adb3f1e54c9	["*"]	\N	\N	2024-07-06 15:52:17	2024-07-06 15:52:17
+254	App\\Models\\User	147	147test new	60a1e33f5a653726de653338e98dcd0ffdf741fc8c4f09791b901fe3b1cbdab3	["*"]	\N	\N	2024-07-06 15:56:59	2024-07-06 15:56:59
+255	App\\Models\\User	148	148test new	a8b8657843d1bfea289c2ce9ad4ff3e30d64f890096b7c71481852b5a4d9dde0	["*"]	\N	\N	2024-07-06 17:01:21	2024-07-06 17:01:21
+256	App\\Models\\User	149	149anil navisnavisanil@gmail.com	77191c75f42c124127a309fb621963da52077f3d23c3c1e815fc0af8e8efb0fb	["*"]	\N	\N	2024-07-06 18:16:28	2024-07-06 18:16:28
+257	App\\Models\\User	130	130Anil navis	371851a90cd77305a0cc4c56cd718fa91752fbece6df7f52eb32162e95bc4082	["*"]	\N	\N	2024-07-06 20:12:57	2024-07-06 20:12:57
+258	App\\Models\\User	130	130Anil navis	aa8a18fd7f1c8a10f7f05d0d827fa2080541979037f88733c24d874a480d6aac	["*"]	\N	\N	2024-07-07 03:12:20	2024-07-07 03:12:20
+259	App\\Models\\User	130	130Anil navis	0b16b0cd8262b2f2367704024a263ce96b902a0e4c89198e9e0dca67fd8e6aa8	["*"]	\N	\N	2024-07-07 04:29:47	2024-07-07 04:29:47
+260	App\\Models\\User	49	49Asad Nazir	d6e70097ecfc53b77d6cb098f854b1072b5a9aa6e4fe0bb6bce00ca5ccab2a22	["*"]	\N	\N	2024-07-08 08:50:43	2024-07-08 08:50:43
+261	App\\Models\\User	130	130Anil navis	f6afe60f6885626ef663cd0a682e2fb629bd2f75bdfdffdedf3c0fd8b69b8a31	["*"]	\N	\N	2024-07-08 09:34:46	2024-07-08 09:34:46
+262	App\\Models\\User	157	157Arun Padippurackalarun.devu.290321@gmail.com	80eb19d5f2bc5fe78c310b67ca7504145264a267262973f21c42450f66f95722	["*"]	\N	\N	2024-07-08 10:02:15	2024-07-08 10:02:15
+263	App\\Models\\User	158	158Devika S Rdevikasr1995@gmail.com	0da14d7ed4dd2e593b940030229dd53048be3969d6e6842a65c6da8c7f705f95	["*"]	\N	\N	2024-07-08 10:02:17	2024-07-08 10:02:17
+264	App\\Models\\User	157	157Arun Padippurackalarun.devu.290321@gmail.com	9a0c7ed77d7007aacf98795e7cc18120b95db0b34c055cf93505eea05f8fca96	["*"]	\N	\N	2024-07-08 11:11:57	2024-07-08 11:11:57
+265	App\\Models\\User	157	157Arun Padippurackalarun.devu.290321@gmail.com	4106e4712886685f998367dcbd17d700ee13b2489e6bd59a77b6ec0fa5d827cb	["*"]	\N	\N	2024-07-08 11:21:14	2024-07-08 11:21:14
+266	App\\Models\\User	158	158Devika S Rdevikasr1995@gmail.com	4a238b730b8734ba30661d7b5556f51cd01f30f00472565970d81669e0528001	["*"]	\N	\N	2024-07-08 11:28:59	2024-07-08 11:28:59
+267	App\\Models\\User	157	157Arun Padippurackalarun.devu.290321@gmail.com	892ecb5053e1a05096da706dc917b73d38b9d9b161f8b44ea367a6d8cbe8ca5e	["*"]	\N	\N	2024-07-08 12:14:17	2024-07-08 12:14:17
+268	App\\Models\\User	157	157Arun Padippurackalarun.devu.290321@gmail.com	d58d47de7a02214a89310031c6c8ea9799a0a4d1200fbdf46e9ad0b044f5b69a	["*"]	\N	\N	2024-07-08 12:16:20	2024-07-08 12:16:20
+269	App\\Models\\User	158	158Devika S Rdevikasr1995@gmail.com	b9ee00e5fdd81a5ea9baab8bf369af016cfc9a719d4c1e20c3c4aa75d3d9edff	["*"]	\N	\N	2024-07-08 12:16:55	2024-07-08 12:16:55
+270	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	5a8000e2b2fe67631f7cd1a5e9e9321d31908e90ea2066f25736d9b9a96dbe74	["*"]	\N	\N	2024-07-08 13:35:15	2024-07-08 13:35:15
+271	App\\Models\\User	25	25Hamid Razarazahamd34@gmail.com	6339a9677633b7c46ef4f47df85176208b937eaba25b8e3763583d63e7607336	["*"]	\N	\N	2024-07-08 15:29:50	2024-07-08 15:29:50
+272	App\\Models\\User	160	160Zain Falak testz.falak777@gmail.com	688ab2b98955186245df8cd0f46255f3fc6c59092920e0b40673ef2b91602d77	["*"]	\N	\N	2024-07-08 20:34:36	2024-07-08 20:34:36
+273	App\\Models\\User	130	130Anil navis	ba3a6443f2d6e8b9e7dc33d7f43e0b6b09c5e4a3d43cb53c650e43eb506f9111	["*"]	\N	\N	2024-07-09 05:44:40	2024-07-09 05:44:40
+274	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	8de100605eef42b86105ca8b40dc4b5527be47e43f8fbff15c794e7156e26518	["*"]	\N	\N	2024-07-09 06:00:08	2024-07-09 06:00:08
+275	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	033719ebd0f8126a3cd15c83ed480cfc9887f5caf3a4823c47c2c4e2c55661ec	["*"]	\N	\N	2024-07-09 06:00:14	2024-07-09 06:00:14
+276	App\\Models\\User	69	69moin testtest91@gmail.com	1fcf453cd76b90d0a516a4910b2c2abe87b8dfaf5b2e815d675029ef79bb03a2	["*"]	\N	\N	2024-07-09 06:44:39	2024-07-09 06:44:39
+277	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	1b0bb6439a6294dd81b033669a4151fd8b20ada2d94cf2bba5e9ae8c0ba23196	["*"]	\N	\N	2024-07-09 07:15:17	2024-07-09 07:15:17
+278	App\\Models\\User	69	69moin testtest91@gmail.com	40df4ccf0e3c1afb3c817b22df00c035eb4c48baa86191ffbab813e36ad9716c	["*"]	\N	\N	2024-07-09 07:45:08	2024-07-09 07:45:08
+279	App\\Models\\User	69	69moin testtest91@gmail.com	7f81675bfa8d9d07e6315e7eefac310f8080f722c9ae636a143f53e502636d94	["*"]	\N	\N	2024-07-09 07:48:10	2024-07-09 07:48:10
+280	App\\Models\\User	69	69moin testtest91@gmail.com	a136c9c46ec71eac40fb2f8c82bd6e67f990d5e370bd5dc6f18c78b120825a99	["*"]	\N	\N	2024-07-09 07:50:05	2024-07-09 07:50:05
+281	App\\Models\\User	69	69moin testtest91@gmail.com	a3c25d65ed65f1e6019210a1e336d5bf7c72481608b35cb99cb69a56585addd1	["*"]	\N	\N	2024-07-09 07:58:08	2024-07-09 07:58:08
+282	App\\Models\\User	85	85rusvin krusvinmerak@gmail.com	8acb1a7c7ad8732fd9df7665172263ffd5ee46e000c6b037fba7231c7aa780ec	["*"]	\N	\N	2024-07-09 09:36:36	2024-07-09 09:36:36
+283	App\\Models\\User	69	69moin testtest91@gmail.com	d727dab0cfa1a7705653ff1436d94091a20c7185cb72f5ffbd137d8ca12fb56b	["*"]	\N	\N	2024-07-09 09:36:59	2024-07-09 09:36:59
+284	App\\Models\\User	130	130Anil navis	4eb84ec127ae48bef1d7f70f798377814c8bfe584b81cdfc191eedbfa1252826	["*"]	\N	\N	2024-07-09 09:53:00	2024-07-09 09:53:00
+285	App\\Models\\User	130	130Anil navis	616fef5a301495153f78533a7ac8b70db1c700f59e464917362ea8c8ce8d667d	["*"]	\N	\N	2024-07-09 09:53:49	2024-07-09 09:53:49
+286	App\\Models\\User	130	130Anil navis	98783d4eacdda994d51f5e2c6423c732ca52bb5dee6f848b279b3d7419e2756b	["*"]	\N	\N	2024-07-09 09:54:11	2024-07-09 09:54:11
+287	App\\Models\\User	130	130Anil navis	8c669ed7424480c4211a0a905959827fe7ffbfd66c4ed72926da01f3b944c8e4	["*"]	\N	\N	2024-07-09 09:55:07	2024-07-09 09:55:07
+288	App\\Models\\User	130	130Anil navis	604587bab550d6eaacaf9e5b0aeb7e169ab4f33df3cf552548f5000d6fef2a97	["*"]	\N	\N	2024-07-09 09:55:25	2024-07-09 09:55:25
+289	App\\Models\\User	130	130Anil navis	574b741b23bb8d4abf4d9c90e973a48a0411d4aad823243e8cbf01a143e5d9ec	["*"]	\N	\N	2024-07-09 09:55:49	2024-07-09 09:55:49
+290	App\\Models\\User	130	130Anil navis	10a370e619cd3ffaf3467777782fd61da62fd0ace8608dc66b4f466f6af991b5	["*"]	\N	\N	2024-07-09 09:56:13	2024-07-09 09:56:13
+291	App\\Models\\User	130	130Anil navis	7205725d269dff1bad02ca7e54220b66b363cfa65dfb4cb82dd9be7d5f965c6e	["*"]	\N	\N	2024-07-09 09:56:27	2024-07-09 09:56:27
+292	App\\Models\\User	69	69moin testtest91@gmail.com	70e0db07655fbb86056cd38e40ac401c17aed2cad58ec2962009e8468e6b7f5e	["*"]	\N	\N	2024-07-09 09:59:14	2024-07-09 09:59:14
+293	App\\Models\\User	69	69moin testtest91@gmail.com	f4417ce4f21bacf0e55063d5d433324b675feaa6fcfd488532b190b0d94221f5	["*"]	\N	\N	2024-07-09 10:08:40	2024-07-09 10:08:40
+294	App\\Models\\User	69	69moin testtest91@gmail.com	0711e2b8d9ac4d5cc4ea3a88c054abdac0584523fd413d7fea22f50831008907	["*"]	\N	\N	2024-07-09 10:08:56	2024-07-09 10:08:56
+295	App\\Models\\User	130	130Anil navis	c65df050e484ce515a8f9baa5e0308c2de9021f49b45a3714d669d3d334b0672	["*"]	\N	\N	2024-07-09 10:09:07	2024-07-09 10:09:07
+296	App\\Models\\User	69	69moin testtest91@gmail.com	8db451f0277d7d5303665a0178da43dc24d98db32e7d3605961da3a1c6c00eac	["*"]	\N	\N	2024-07-09 10:09:11	2024-07-09 10:09:11
+297	App\\Models\\User	69	69moin testtest91@gmail.com	6df2c0dc2b9b98b60268ccfda53de4d105e53cfdc08125b00357bb25bd12756e	["*"]	\N	\N	2024-07-09 10:13:52	2024-07-09 10:13:52
+298	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	fb41767547fbde93915445e0b0d833b4716b216ef57fe800b975e5e093ab6869	["*"]	\N	\N	2024-07-09 10:17:11	2024-07-09 10:17:11
+299	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	4922baca966b23f4b82c08e783ddc979bdf692b2a9e551a021d0bf304241e82d	["*"]	\N	\N	2024-07-09 10:25:37	2024-07-09 10:25:37
+300	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	0787b9633b06061946c6671d9b006be388fba91d98c7652222ae7e7031bbaab8	["*"]	\N	\N	2024-07-09 10:25:48	2024-07-09 10:25:48
+301	App\\Models\\User	69	69moin testtest91@gmail.com	760b823b6a84a67cfdf8a59bc665448a6308069550db6fea7e5f8d361a586b19	["*"]	\N	\N	2024-07-09 10:25:55	2024-07-09 10:25:55
+302	App\\Models\\User	69	69moin testtest91@gmail.com	a097e2fb638c54fcfc9443508b374a0d02f73a89cc3263ed361bda1363fa0de3	["*"]	\N	\N	2024-07-09 10:27:39	2024-07-09 10:27:39
+303	App\\Models\\User	170	170vv ggajeshcd1@gmail.com	fc966596249882d93fed0d4eedb8eeaa92395d060402fca4fe34e794b7d577ce	["*"]	\N	\N	2024-07-09 10:41:40	2024-07-09 10:41:40
+304	App\\Models\\User	130	130Anil navis	d29b8061e4cc4b97bee5c68b0f9c2ee709887c2d26e8b45054c9120ef319514f	["*"]	\N	\N	2024-07-09 11:01:35	2024-07-09 11:01:35
+305	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	ffe53ff96a14dd70aef0c25a1f5f846161b203c91f3092657f0f06791e8550c2	["*"]	\N	\N	2024-07-09 11:06:29	2024-07-09 11:06:29
+306	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	dce1594bda3540aff472a550c58fa72aa77082cac8465779ada0dc791bcf434e	["*"]	\N	\N	2024-07-09 11:07:14	2024-07-09 11:07:14
+307	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	1e713de36d77ee97be3602ca5467ee12e4adcd902c1b24eb96d0afbaf6b3ea8a	["*"]	\N	\N	2024-07-09 11:07:36	2024-07-09 11:07:36
+308	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	a23ff14831383238aeb06e5120acfc0a3958657df15a1dd8935dcf5f133c2118	["*"]	\N	\N	2024-07-09 11:08:01	2024-07-09 11:08:01
+309	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	9ae34426ba0214fcc63a807a6875d78d9e7699dc889b9e02de56fbe9688882fb	["*"]	\N	\N	2024-07-09 11:08:33	2024-07-09 11:08:33
+310	App\\Models\\User	130	130Anil navis	708854ac54c0756e8d46ea03370d7edde98aafa19ebaabc8d649b7cf3082b101	["*"]	\N	\N	2024-07-09 11:14:03	2024-07-09 11:14:03
+311	App\\Models\\User	171	171Devika Sdevikadxba@hotmail.com	e4bc4711fc3a5abb7be021ff18641f254383e8863b3bb3c4f7ec3560cf554958	["*"]	\N	\N	2024-07-09 11:23:30	2024-07-09 11:23:30
+312	App\\Models\\User	173	173dev sdevikadxba@hotmail.com	4a03383aacd8825ebed315a4784364420ed9b4ee156e3689a1ca998252bd284d	["*"]	\N	\N	2024-07-09 11:25:43	2024-07-09 11:25:43
+313	App\\Models\\User	173	173dev sdevikadxba@hotmail.com	1b6c42e035421621129e02003aae09bd2e8e64f4d184b9747eb3499e382c101b	["*"]	\N	\N	2024-07-09 11:26:34	2024-07-09 11:26:34
+314	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	dce5cb595a1498fedac8e4cae9e4757cce5e09e18eca523a44326a8e57c47a29	["*"]	\N	\N	2024-07-09 11:30:02	2024-07-09 11:30:02
+315	App\\Models\\User	84	84Anna Mariadeva@deva.com	c8e095a0800845eab08f6528daf6195284523e52a3e800937bddef26a7f1d045	["*"]	\N	\N	2024-07-09 12:12:20	2024-07-09 12:12:20
+316	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	12c5fa0b8fa502aaf7f09e0f92c36b97f414480b0ac13d92361ca0fb4c13c9c7	["*"]	\N	\N	2024-07-09 12:16:42	2024-07-09 12:16:42
+317	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	a1fe18cdb191e4069b0bfcad1cccaba0147227e10d0de620ee1aa985bdae6f49	["*"]	\N	\N	2024-07-09 12:17:39	2024-07-09 12:17:39
+318	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	06173968332e40b4aa902b97c909d1ebbf827d82939d53636631f8ad59469194	["*"]	\N	\N	2024-07-09 12:18:22	2024-07-09 12:18:22
+319	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	c6862ef15b25435411b8edb904fb00a734bddf3098a793ed3416efddc18735ff	["*"]	\N	\N	2024-07-09 12:19:16	2024-07-09 12:19:16
+320	App\\Models\\User	169	169Ajesh kumarajeshcd@gmail.com	d4e51896a6dfbde5d1f97d26b3cc9c481c96a37409a0bd6a567e09907287361c	["*"]	\N	\N	2024-07-09 12:20:00	2024-07-09 12:20:00
+321	App\\Models\\User	69	69moin testtest91@gmail.com	bd86a58f040ce06e633131f612b0340cb43eb20f2d1a0637aa2f5bb1835650e6	["*"]	\N	\N	2024-07-09 12:38:04	2024-07-09 12:38:04
+322	App\\Models\\User	69	69moin testtest91@gmail.com	ac182f46881027b8dbdfcd6d170073c5fbf6650b82e18c5a83c8f28157cecc3a	["*"]	\N	\N	2024-07-09 12:39:01	2024-07-09 12:39:01
+323	App\\Models\\User	69	69moin testtest91@gmail.com	6571aeab2c154ddbb3d9c64d7d482fccd457c8ee6fbc9feeb2edd35cd644e345	["*"]	\N	\N	2024-07-09 12:43:36	2024-07-09 12:43:36
+324	App\\Models\\User	69	69moin testtest91@gmail.com	b94cd6f2bd185942fa389091ca9c3d596a008b9039331f03faff96baa016586c	["*"]	\N	\N	2024-07-09 12:45:00	2024-07-09 12:45:00
+325	App\\Models\\User	96	96Angel Mariaangel@angel.com	3c07d8b2f46dfd2b7495010e0631d7a9ed6794e3162c59c11c5c6ce40fd6c400	["*"]	\N	\N	2024-07-09 13:57:38	2024-07-09 13:57:38
+326	App\\Models\\User	69	69moin testtest91@gmail.com	a798f28514193672de946e8e2073406fde2b8302159242ad42f93eacaaa918eb	["*"]	\N	\N	2024-07-09 15:20:00	2024-07-09 15:20:00
+327	App\\Models\\User	181	181Qbc Gqhtest191@gmail.com	7d80a33007a54e7c607472647315209c0b9e76958b8b3d73aa8b8dbcbefc61aa	["*"]	\N	\N	2024-07-09 18:21:40	2024-07-09 18:21:40
+328	App\\Models\\User	181	181Qbc Gqhtest191@gmail.com	4dca158098f71e3010150fa489b63fdeaa91fe0b7fab8683495aa1d761994bf8	["*"]	\N	\N	2024-07-09 18:22:23	2024-07-09 18:22:23
+329	App\\Models\\User	181	181Qbc Gqhtest191@gmail.com	fa3fc7f618f2ccb7d6002f63308cab4cfb9aaf05e6cc828c2dc8181d8d776d61	["*"]	\N	\N	2024-07-09 18:24:00	2024-07-09 18:24:00
+330	App\\Models\\User	69	69moin testtest91@gmail.com	1527e6dbdec780c6d324205d060bb837708eef0d03dbe9c2483282f02239ddd5	["*"]	\N	\N	2024-07-09 19:15:14	2024-07-09 19:15:14
+331	App\\Models\\User	69	69moin testtest91@gmail.com	0836e9c3b84fb35a3d75805fae43f74309867bcf8942d4dfb82aee43f0d40923	["*"]	\N	\N	2024-07-09 19:17:38	2024-07-09 19:17:38
+332	App\\Models\\User	69	69moin testtest91@gmail.com	66b6b3d61e4ef72936dc4b6d93cdd9a62b00acef7c874c8173b0f4c597aa141c	["*"]	\N	\N	2024-07-09 19:30:10	2024-07-09 19:30:10
+333	App\\Models\\User	69	69moin testtest91@gmail.com	69b5c4e51cd43da6292c04358ee92c989e7c2e4a27c39f4bdba6c6bdd160f6c4	["*"]	\N	\N	2024-07-09 19:34:00	2024-07-09 19:34:00
+334	App\\Models\\User	69	69moin testtest91@gmail.com	98d116b32e30e1c7f8779a30021d37ece77c79c84425c6a4018185bd1319880c	["*"]	\N	\N	2024-07-09 19:37:05	2024-07-09 19:37:05
+335	App\\Models\\User	69	69moin testtest91@gmail.com	e101d836c047b928ac51a2e43d2c364727ddbfd3c37be51b4d7cd03b6f7744a4	["*"]	\N	\N	2024-07-09 19:41:38	2024-07-09 19:41:38
+336	App\\Models\\User	69	69moin testtest91@gmail.com	6e9e2fb4f6166dca9cdb3b9906801bfc5c3115d56c681f331eb7271f38c3ace0	["*"]	\N	\N	2024-07-09 19:42:42	2024-07-09 19:42:42
+337	App\\Models\\User	69	69moin testtest91@gmail.com	5ee27926d90a47b99ae119cfecdfbc764c6df33b4d4954225572a393d9ca40fc	["*"]	\N	\N	2024-07-09 19:46:20	2024-07-09 19:46:20
+338	App\\Models\\User	69	69moin testtest91@gmail.com	dcf9486ecb99f86a2cb47cfa393d8435f63f91e4eb7b8778c38591170a2214f2	["*"]	\N	\N	2024-07-09 19:52:31	2024-07-09 19:52:31
+339	App\\Models\\User	69	69moin testtest91@gmail.com	15ba53a24ab62132fdf036e494b37dbde322ee4ec384e63377d166d415d6046e	["*"]	\N	\N	2024-07-09 19:57:42	2024-07-09 19:57:42
+340	App\\Models\\User	130	130Anil navis	12bc2d781fcbef38d3b1d82a08f9cd7ad5c574f47f7eaf865ade01a708094004	["*"]	\N	\N	2024-07-10 02:01:50	2024-07-10 02:01:50
+341	App\\Models\\User	130	130Anil navis	36ed15da9dad89f8453f0a438c81fee2e4352b80dfb2b6d3ec10d6f746170f63	["*"]	\N	\N	2024-07-10 02:09:32	2024-07-10 02:09:32
+\.
+
+
+--
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (id, product_code, product_name, product_type, price, description, file_name, drow_date, drow_time, product_status, created_by, updated_by, deleted_at, created_at, updated_at) FROM stdin;
+1	BL-66016927eebd3	Daily Luto	daily	100	desc	171136848766016927ef32e.jpg	1	23:37:00	1	1	1	\N	2024-03-25 12:08:07	2024-03-25 12:08:07
+2	BL-66016951d091d	MOnthly Lut	monthly	500	desc	171136852966016951d122d.png	8	06:00:00	1	1	1	\N	2024-03-25 12:08:49	2024-03-25 12:08:49
+\.
+
+
+--
+-- Data for Name: profile_bios; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.profile_bios (id, value, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: qualifications; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.qualifications (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+2	MBBS2	MBBS2	1	1	1	2024-04-09 10:27:05	2024-04-09 10:28:42	2024-04-09 10:28:42
+4	MBBS	Phd	1	1	1	2024-04-11 10:37:37	2024-06-06 06:43:31	\N
+3	MD	Pediatrics	1	1	1	2024-04-11 06:30:15	2024-06-06 06:43:48	\N
+1	BDS	Ortho	1	1	1	2024-04-09 10:23:56	2024-06-06 06:44:04	\N
+5	MDS	MDS	1	1	1	2024-06-06 06:44:22	2024-06-06 06:44:22	\N
+6	MB BCh	MB BCh	1	1	1	2024-07-06 03:22:21	2024-07-06 03:22:21	\N
+7	FRCS	FRCS	1	1	1	2024-07-06 03:23:07	2024-07-06 03:23:07	\N
+8	FRCP CH	FRCP CH	1	1	1	2024-07-06 03:23:31	2024-07-06 03:23:31	\N
+9	American Board Cardiology	American Board Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+10	American Board Gastroenterology	American Board Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+11	American Board General Surgery	American Board General Surgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+12	American Board Hematology	American Board Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+13	American Board Neurology	American Board Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+14	American Board Oncology	American Board Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+15	American Board Pediatric	American Board Pediatric	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+16	American Board Pediatric Cardiology	American Board Pediatric Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+17	American Board Pediatric Gastroenterology	American Board Pediatric Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+18	American Board Pediatric Hematology	American Board Pediatric Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+19	American Board Pediatric Hemato-Oncology	American Board Pediatric Hemato-Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+20	American Board Pediatric Neurology	American Board Pediatric Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+21	American Board Pediatric Pulmonology	American Board Pediatric Pulmonology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+22	American Board Pulmonology 	American Board Pulmonology 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+23	CCT (UK) Cardiology	CCT (UK) Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+24	CCT (UK) Gastroenterology	CCT (UK) Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+25	CCT (UK) General Surgery	CCT (UK) General Surgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+26	CCT (UK) Hematology	CCT (UK) Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+27	CCT (UK) Neurology	CCT (UK) Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+28	CCT (UK) Oncology	CCT (UK) Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+29	CCT (UK) Pediatric	CCT (UK) Pediatric	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+30	CCT (UK) Pediatric Cardiology	CCT (UK) Pediatric Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+31	CCT (UK) Pediatric Gastroenterology	CCT (UK) Pediatric Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+32	CCT (UK) Pediatric Hematology	CCT (UK) Pediatric Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+33	CCT (UK) Pediatric Neurology	CCT (UK) Pediatric Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+34	CCT (UK) Pediatric Oncology	CCT (UK) Pediatric Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+35	CCT (UK) Pediatric Pulmonology	CCT (UK) Pediatric Pulmonology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+36	CCT (UK) Pulmonology 	CCT (UK) Pulmonology 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+37	DCH Pediatric	DCH Pediatric	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+38	DM Cardiology	DM Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+39	DM Gastroenterology	DM Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+40	DM Hematology	DM Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+41	DM Neurology	DM Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+42	DM Oncology	DM Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+43	DM Pulmonology	DM Pulmonology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+44	FRCOG	FRCOG	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+45	FRCP 	FRCP 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+46	FRCP (Canada) Cardiology	FRCP (Canada) Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+47	FRCP (Canada) Gastroenterology	FRCP (Canada) Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+48	FRCP (Canada) General Surgery	FRCP (Canada) General Surgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+49	FRCP (Canada) Hematology	FRCP (Canada) Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+50	FRCP (Canada) Neurology	FRCP (Canada) Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+51	FRCP (Canada) Oncology	FRCP (Canada) Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+52	FRCP (Canada) Pediatric	FRCP (Canada) Pediatric	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+53	FRCP (Canada) Pediatric Cardiology	FRCP (Canada) Pediatric Cardiology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+54	FRCP (Canada) Pediatric Gastroenterology	FRCP (Canada) Pediatric Gastroenterology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+55	FRCP (Canada) Pediatric Hematology	FRCP (Canada) Pediatric Hematology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+56	FRCP (Canada) Pediatric Hemato-Oncology	FRCP (Canada) Pediatric Hemato-Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+57	FRCP (Canada) Pediatric Neurology	FRCP (Canada) Pediatric Neurology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+58	FRCP (Canada) Pediatric Pulmonology	FRCP (Canada) Pediatric Pulmonology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+59	FRCP (Canada) Pulmonology 	FRCP (Canada) Pulmonology 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+60	FRCP (PATH)	FRCP (PATH)	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+61	FRCP CH	FRCP CH	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+62	FRCR	FRCR	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+63	FRCS	FRCS	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+64	MB BCh	MB BCh	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+65	MBBS	MBBS	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+66	MCH Cardiac Surgery	MCH Cardiac Surgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+67	MCH Gastrointestinal Surgery	MCH Gastrointestinal Surgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+68	MCH Neurosurgery	MCH Neurosurgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+69	MCH Thoracic Surgery	MCH Thoracic Surgery	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+70	MCH Urology	MCH Urology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+71	MD Chest	MD Chest	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+72	MD General medicine	MD General medicine	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+73	MD Gynecology	MD Gynecology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+74	MD Internal medicine	MD Internal medicine	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+75	MD Obstetrics and Gynecology	MD Obstetrics and Gynecology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+76	MD Pediatrics	MD Pediatrics	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+77	MRCOG	MRCOG	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+78	MRCP	MRCP	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+79	MRCPCH	MRCPCH	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+80	MRCS	MRCS	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+81	MS ENT	MS ENT	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+83	MS Obstetrics and Gynecology	MS Obstetrics and Gynecology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+84	MS Ortho	MS Ortho	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+85	MSc Child Health	MSc Child Health	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+86	MSc Child Health	MSc Child Health	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+87	MSc Oncology	MSc Oncology	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+88	MSc Pediatric	MSc Pediatric	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+90	Specialist Dermatologist	Specialist Dermatologist	1	1	1	2024-07-07 07:31:00	2024-07-07 07:31:00	\N
+82	MS General surgery	MS General surgery	1	1	1	2024-06-07 07:16:00	2024-07-07 08:25:32	\N
+91	ORTHOPIDIC SURGERY	ORTHOPIDIC SURGERY	1	1	1	2024-07-07 11:30:19	2024-07-07 11:30:19	\N
+92	BHM	BHM	1	1	1	2024-07-07 11:31:55	2024-07-07 11:31:55	\N
+94	A Masters	A Masters	1	1	1	2024-07-09 09:47:25	2024-07-09 09:55:25	2024-07-09 09:55:25
+95	aaa	\N	1	1	1	2024-07-09 10:28:56	2024-07-09 10:29:17	2024-07-09 10:29:17
+96	aaa	\N	1	1	1	2024-07-09 10:30:09	2024-07-09 10:31:27	2024-07-09 10:31:27
+97	aaaa	\N	1	1	1	2024-07-09 10:31:40	2024-07-09 10:31:55	2024-07-09 10:31:55
+93	z	Msc Dietetics & Nutrition	1	1	1	2024-07-07 11:32:16	2024-07-09 10:50:08	\N
+98	2	\N	1	1	1	2024-07-09 10:55:27	2024-07-09 10:55:27	\N
+99	.	.	1	1	1	2024-07-09 11:00:28	2024-07-09 11:00:28	\N
+\.
+
+
+--
+-- Data for Name: role_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.role_permissions (id, user_role_id_fk, module_key, permissions, created_at, updated_at) FROM stdin;
+13	3	settings	["c","r","u","d"]	\N	\N
+48	4	dashboard	["r"]	\N	\N
+49	4	customers	["r","u","d"]	\N	\N
+56	5	dashboard	["r"]	\N	\N
+57	5	customers	["r"]	\N	\N
+58	5	cms	["r"]	\N	\N
+59	5	contact_detail_settings	["d"]	\N	\N
+60	5	settings	["c","r","u","d"]	\N	\N
+61	2	dashboard	["r"]	\N	\N
+62	2	qualifications	["c","r","u","d"]	\N	\N
+63	2	licencetype	["c","r","u","d"]	\N	\N
+64	2	special_intrests	["r"]	\N	\N
+65	2	cms	["c","r","u","d"]	\N	\N
+66	2	faq	["c","r","u","d"]	\N	\N
+67	2	contact_detail_settings	["c","r","u","d"]	\N	\N
+68	2	settings	["c","r","u","d"]	\N	\N
+\.
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.roles (id, role, status, is_admin_role, created_at, updated_at, deleted_at) FROM stdin;
+1	Super Admin	1	1	2024-03-25 04:53:06	2024-03-25 04:53:06	\N
+2	Sub Admins	1	1	2024-03-25 05:31:32	2024-03-25 05:31:49	\N
+3	test	1	1	2024-03-25 05:31:59	2024-03-25 05:33:00	2024-03-25 05:33:00
+4	tester	1	1	2024-04-09 06:46:52	2024-04-09 07:00:54	2024-04-09 07:00:54
+5	asdadas	0	1	2024-04-09 07:01:20	2024-04-09 07:01:46	\N
+\.
+
+
+--
+-- Data for Name: services; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.services (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+1	Ambulance Service	\N	1	1	1	2024-04-12 12:21:06	2024-04-12 12:21:06	\N
+2	Clinical Laboratory Servicess	Clinical Laboratory Services	0	1	1	2024-06-28 09:45:53	2024-06-28 10:33:31	\N
+\.
+
+
+--
+-- Data for Name: settings; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.settings (id, created_at, updated_at, doctor_search_radius, instant_appoitment_number) FROM stdin;
+1	\N	\N	300	971 50 50 00 000
+\.
+
+
+--
+-- Data for Name: special_intrests; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.special_intrests (id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+1	Ortho	ort	0	1	1	2024-04-11 05:14:56	2024-04-11 05:15:51	2024-04-11 05:15:51
+7	Anemia	Anemia	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+8	Anxiey	Anxiey	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+9	Arthritis	Arthritis	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+10	Arythmia	Arythmia	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+11	Asthma	Asthma	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+2	Allergy	ChildAllergy	1	1	1	2024-04-11 05:15:43	2024-07-01 08:50:16	\N
+3	Anemia	Anemia	1	1	1	2024-07-01 08:50:40	2024-07-01 08:50:40	\N
+4	Headache	\N	1	1	1	2024-07-01 08:50:58	2024-07-01 08:50:58	\N
+5	High blood pressure	High blood pressure	1	1	1	2024-07-01 08:51:36	2024-07-01 08:51:36	\N
+12	Autism	Autism	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+13	Bone marrow transplantation	Bone marrow transplantation	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+14	Brain tumor	Brain tumor	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+15	Breasst cancer	Breasst cancer	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+16	Celiac disease	Celiac disease	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+17	Cerebral palsy	Cerebral palsy	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+18	Childhood cancer	Childhood cancer	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+19	Chron's disease	Chron's disease	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+20	Collitis	Collitis	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+21	Colon cancer	Colon cancer	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+22	Congenital heart disease	Congenital heart disease	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+23	Constipation	Constipation	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+24	Delayed development	Delayed development	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+25	Depression	Depression	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+26	Eczema 	Eczema 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+27	Epilepsy	Epilepsy	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+28	G6PD deficiency	G6PD deficiency	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+29	Head and neck cancer	Head and neck cancer	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+30	Headache	Headache	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+31	heart attack	heart attack	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+32	Heart failure 	Heart failure 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+33	Hemophilia	Hemophilia	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+34	High blood pressure	High blood pressure	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+35	Hypothyroidism	Hypothyroidism	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+36	Iron deficiency anemia	Iron deficiency anemia	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+37	Learning disability	Learning disability	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+38	Leukemia.	Leukemia.	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+39	Lung cancer 	Lung cancer 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+40	Menstruation disorder	Menstruation disorder	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+41	Pregnancy	Pregnancy	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+42	Primary immunodeficiency disease	Primary immunodeficiency disease	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+43	Rheumatic disease	Rheumatic disease	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+44	Sickle cell disease	Sickle cell disease	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+45	Stroke	Stroke	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+46	Thalassemia	Thalassemia	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+47	Thalassemia carrier	Thalassemia carrier	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+48	Thalassemia major	Thalassemia major	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+50	Urine infection	Urine infection	1	1	1	2024-07-06 09:08:49	2024-07-06 09:08:49	\N
+6	Allergy	Allergy	0	1	1	2024-06-07 07:16:00	2024-07-06 12:03:20	\N
+51	Botox	Botox	1	1	1	2024-07-07 06:43:50	2024-07-07 06:43:50	\N
+52	Fillers	Fillers	1	1	1	2024-07-07 06:44:03	2024-07-07 06:44:03	\N
+53	Mesotheraphy	Mesotheraphy	1	1	1	2024-07-07 06:44:17	2024-07-07 06:44:17	\N
+54	Skin Care	Skin Care	1	1	1	2024-07-07 06:44:32	2024-07-07 06:44:32	\N
+55	Aesthetic procedures	Aesthetic procedures	1	1	1	2024-07-07 08:05:35	2024-07-07 08:05:35	\N
+56	Hair transplantation	Hair transplantation	1	1	1	2024-07-07 08:05:56	2024-07-07 08:05:56	\N
+57	Breast surgeries	Breast surgeries	1	1	1	2024-07-07 08:06:32	2024-07-07 08:06:32	\N
+58	Eczema	Eczema	1	1	1	2024-07-07 11:37:04	2024-07-07 11:37:04	\N
+59	Psoriasis	Psoriasis	1	1	1	2024-07-07 11:37:21	2024-07-07 11:37:21	\N
+60	Obesity	Obesity	1	1	1	2024-07-07 11:37:33	2024-07-07 11:37:33	\N
+61	Thyroiditis	Thyroiditis	1	1	1	2024-07-07 11:37:45	2024-07-07 11:37:45	\N
+\.
+
+
+--
+-- Data for Name: specialties; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.specialties (id, name_en, name_ar, active, deleted_at, created_at, updated_at) FROM stdin;
+1	Oncology	Oncology	1	\N	2024-06-06 06:44:52	2024-06-06 06:44:52
+2	Dental	Dental	1	\N	2024-06-06 06:45:07	2024-06-06 06:45:07
+3	Pediatric Cardiology	Pediatric Cardiology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+4	Pediatric Dermatology	Pediatric Dermatology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+5	Pediatric Endocrinology	Pediatric Endocrinology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+6	Pediatric Gastroenterology	Pediatric Gastroenterology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+7	Pediatric General Surgeon	Pediatric General Surgeon	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+8	Pediatric Geriatrics	Pediatric Geriatrics	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+9	Pediatric Hematology	Pediatric Hematology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+10	Pediatric Immunology	Pediatric Immunology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+11	Pediatric Infectious disease	Pediatric Infectious disease	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+12	Pediatric Medical genetics	Pediatric Medical genetics	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+13	Pediatric Nephrology	Pediatric Nephrology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+14	Pediatric Neuro Surgeon	Pediatric Neuro Surgeon	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+15	Pediatric Neurology	Pediatric Neurology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+16	Pediatric Oncology	Pediatric Oncology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+17	Pediatric Psychiatry	Pediatric Psychiatry	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+18	Pediatric Respiratory medicine	Pediatric Respiratory medicine	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+19	Pediatric Rheumatology	Pediatric Rheumatology	1	\N	2024-06-07 07:16:00	2024-06-07 07:16:00
+20	Dental Care	Dental Care	1	\N	2024-07-06 08:58:48	2024-07-06 08:58:48
+21	Dermatology	Dermatology	1	\N	2024-07-07 06:40:19	2024-07-07 06:40:19
+22	Hair Trasnsplantation	Hair Trasnsplantation	1	\N	2024-07-07 08:03:40	2024-07-07 08:03:40
+23	Homeopathy Medicine	Homeopathy Medicine	1	\N	2024-07-07 11:33:49	2024-07-07 11:33:49
+\.
+
+
+--
+-- Data for Name: sub_insurence_policies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.sub_insurence_policies (id, insurence_id, title, title_ar, status, created_by, last_updated_by, created_at, updated_at, deleted_at) FROM stdin;
+2	3	Cardiac Care	Cariac Care	1	1	1	2024-04-11 08:56:45	2024-04-11 08:56:45	\N
+3	1	AAFIYA APN	AAFIYA APN	1	1	1	2024-04-11 08:57:00	2024-06-17 17:17:33	\N
+1	1	AAFIYA PREMIER	AAFIYA PREMIER	1	1	1	2024-04-11 08:55:00	2024-06-17 17:17:56	\N
+4	1	AAFIYA GOLD DIAMOND ELITE NETWORK	AAFIYA GOLD DIAMOND ELITE NETWORK	1	1	1	2024-06-17 17:18:20	2024-06-17 17:18:20	\N
+5	4	HIGH-GN	HIGH-GN	1	1	1	2024-06-17 17:19:10	2024-06-17 17:19:10	\N
+6	4	HIGH-RNA	HIGH-RNA	1	1	1	2024-06-17 17:19:36	2024-06-17 17:19:36	\N
+7	4	HIGH-SILVER-INS017	HIGH-SILVER-INS017	1	1	1	2024-06-17 17:19:58	2024-06-17 17:19:58	\N
+8	1	APN Edge	APN Edge	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+9	1	APN Essential 1	APN Essential 1	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+10	1	APN Essential 2	APN Essential 2	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+11	1	APN Essential - NMC	APN Essential - NMC	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+12	1	APN Network	APN Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+13	1	APN Plus Network	APN Plus Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+14	1	APN Premier	APN Premier	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+15	1	APN With Thumbay	APN With Thumbay	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+16	1	Diamond	Diamond	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+17	1	Essential	Essential	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+18	1	Gold	Gold	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+19	4	SEHA Standard	SEHA Standard	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+20	4	Standard 2	Standard 2	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+21	4	Standard 3	Standard 3	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+22	4	Standard Network 1 & 2	Standard Network 1 & 2	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+23	4	TC 1 Comprehensive 2	TC 1 Comprehensive 2	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+24	4	TC 1 Comprehensive 2 Prime	TC 1 Comprehensive 2 Prime	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+25	4	TC 1 Comprehensive 3	TC 1 Comprehensive 3	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+26	4	TC 1 Comprehensive 3 Prime	TC 1 Comprehensive 3 Prime	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+27	4	TC 1 Exclusive 1	TC 1 Exclusive 1	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+28	4	TC Plus 2	TC Plus 2	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+29	4	TC Plus 3	TC Plus 3	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+30	4	TC Plus 4	TC Plus 4	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+31	4	Thiqa	Thiqa	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+32	4	THIQA 1	THIQA 1	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+33	4	Thiqa C1	Thiqa C1	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+34	4	UAE L & A D E	UAE L & A D E	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+35	4	UAE Litmited 1 - 5	UAE Litmited 1 - 5	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+36	4	UAE NETWORK 1 - 5	UAE NETWORK 1 - 5	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+37	4	Value 2	Value 2	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+38	4	Value 3 Hospitals Only	Value 3 Hospitals Only	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+39	5	General	General	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+40	5	General Restricted	General Restricted	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+41	5	General Plus	General Plus	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+42	5	BRONZE " DG & Oasis " only	BRONZE " DG & Oasis " only	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+43	5	AETNA SUMMIT DUBAI 4000	AETNA SUMMIT DUBAI 4000	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+44	5	Silver, Gold, Platinum, Bronze	Silver, Gold, Platinum, Bronze	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+45	5	Silver, Gold, Platinum	Silver, Gold, Platinum	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+46	5	Platinum, Gold, Silver, Bronze, Blue	Platinum, Gold, Silver, Bronze, Blue	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+47	5	Platinum, Gold, SIlver,\n Silver Excluding \nAl Noor Hospitals, Bronze, Blue	Platinum, Gold, SIlver,\n Silver Excluding \nAl Noor Hospitals, Bronze, Blue	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+48	5	Gold, Platinum	Gold, Platinum	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+49	5	Silver, Gold, Platinum, \nBronze, Hala (IP Only)	Silver, Gold, Platinum, \nBronze, Hala (IP Only)	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+50	6	Comprehensive	Comprehensive	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+51	6	GN- General Network	GN- General Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+52	6	RS- Restricted Network	RS- Restricted Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+53	6	Super Restricted Network	Super Restricted Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+54	6	Work Network	Work Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+55	6	ADNIC - NAS - network	ADNIC - NAS - network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+56	6	Comprehensive	Comprehensive	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+57	6	GN- General Network	GN- General Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+58	6	RS- Restricted Network	RS- Restricted Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+59	6	Super Restricted Network	Super Restricted Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+60	6	Work Network	Work Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+61	6	ADNIC - NAS - network	ADNIC - NAS - network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+62	7	GOLD	GOLD	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+63	7	SILVER	SILVER	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+64	7	all cards	all cards	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+65	7	all cards	all cards	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+66	7	MHD	MHD	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+67	7	FMU	FMU	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+68	7	Area 1, 2, 3 & 4 (IP/OP), \nTier 1 & 2 (IP/OP), Tier 3 -	Area 1, 2, 3 & 4 (IP/OP), \nTier 1 & 2 (IP/OP), Tier 3 -	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+69	7	Area 1, 2, 3 & 4 (IP/OP),\n\\ Tier 1 & 2 (IP/OP)	Area 1, 2, 3 & 4 (IP/OP),\n\\ Tier 1 & 2 (IP/OP)	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+70	7	MHD Plans only	MHD Plans only	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+71	7	Tier 3 	Tier 3 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+72	7	Pioneer, Summit, Elect, \nJelf Essential,\nInternational Healthcare Plan (MOFA KSA)	Pioneer, Summit, Elect, \nJelf Essential,\nInternational Healthcare Plan (MOFA KSA)	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+73	7	Tier 1 & 2 (IP/OP)	Tier 1 & 2 (IP/OP)	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+74	7	Tier 3 (IP)	Tier 3 (IP)	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+76	8	Genral	Genral	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+77	8	Premium	Premium	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+78	8	Preium Plus	Preium Plus	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+79	8	Basic	Basic	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+80	8	Basic Plus	Basic Plus	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+81	8	Restricted	Restricted	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+82	8	Executive Plus	Executive Plus	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+83	9	ASNIC	ASNIC	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+84	9	Preimier	Preimier	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+85	9	Premier Plus	Premier Plus	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+86	9	Elite 	Elite 	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+87	9	Classic	Classic	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+88	9	Classic Plus	Classic Plus	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+89	10	Comprehensive	Comprehensive	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+90	10	Comprehensive +	Comprehensive +	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+91	10	Standard	Standard	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+92	10	Limited	Limited	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+93	11	General	General	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+94	11	General +	General +	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+95	11	Rn  Network	Rn  Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+96	11	Rn 2 Network	Rn 2 Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+97	11	Rn 3 Network	Rn 3 Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+98	11	All Network	All Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+99	12	All Orient Allianz	All Orient Allianz	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+100	12	All Orient Intl	All Orient Intl	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+101	12	Comphrensive	Comphrensive	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+102	12	Gold	Gold	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+103	13	Genral	Genral	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+104	13	General +	General +	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+105	13	Rn  Network	Rn  Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+106	13	Rn 2 Network	Rn 2 Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+107	13	Rn 3 Network	Rn 3 Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+108	13	Genral	Genral	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+109	13	General +	General +	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+110	13	Rn  Network	Rn  Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+111	13	Rn 2 Network	Rn 2 Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+112	13	Rn 3 Network	Rn 3 Network	1	1	1	2024-06-07 07:16:00	2024-06-07 07:16:00	\N
+\.
+
+
+--
+-- Data for Name: temp_users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.temp_users (id, user_image, first_name, last_name, gender, dob, email, dial_code, phone, whatsap_dial_code, whatsap_phone, insurence_id, sub_insurence_id, phone_otp, email_otp, created_at, updated_at) FROM stdin;
+2	17180897916667f83fecf19.jpg	sooraj	sabu	1	2020-12-15		971	9847823756	971	9847823793	1	3	1111	1111	2024-06-11 07:09:51	2024-06-11 07:09:51
+71	\N	test	new	1	2024-07-03		971	36178361783	971	36178361783	1	3	1111	1111	2024-07-03 08:38:40	2024-07-03 08:38:40
+5	17181355526668ab00a5449.jpg	well	test	1	2024-06-12	test28@gmail.com	971	946464664646	971	946464664646	1	3	1111	1111	2024-06-11 19:52:32	2024-06-11 19:52:32
+6	17181360426668aceab37c3.jpg	abc	test	1	2024-06-12	test29@gmail.com	971	105454313484	971	105454313484	1	3	1111	1111	2024-06-11 20:00:42	2024-06-11 20:00:42
+14	1718346452666be2d4ce22c.jpg	Hamid	Raza	1	1996-01-12	razahamd324@gmail.com	971	9847823796	971	9847823799	1	3	1111	1111	2024-06-14 06:27:32	2024-06-14 06:27:32
+27	1719378718667ba31ed6371.jpg	sunil	kumar	1	2024-06-26		971	52324316354	971	523243163	1	3	1111	1111	2024-06-26 05:11:58	2024-06-26 05:11:58
+31	1719389844667bce94b43d7.jpg	Hamid	Raza	1	1970-01-01	p1@gmail.com	92	3111111111	92	3111111111	1	3	1111	1111	2024-06-26 08:17:24	2024-06-26 08:17:24
+33	1719394463667be09f9904d.jpeg	sooraj	sabu	1	2020-12-15		971	98473823700	971	98437823790	0	0	1111	1111	2024-06-26 09:34:23	2024-06-26 09:34:23
+36	\N	sooraj	sabu	1	\N	sooraj.a2solution2@gmail.com	971	98478243799	971	9847823799	1	3	1111	1111	2024-06-27 03:49:13	2024-06-27 03:49:13
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, name, email, dial_code, phone, phone_verified, password, email_verified_at, role, verified, user_type_id, first_name, last_name, user_image, user_phone_otp, remember_token, created_at, updated_at, deleted, role_id, active, user_code, created_by, last_updated_by, access_token, user_device_token, firebase_user_key, device_type, gender, dob, whatsap_dial_code, whatsap_phone, insurence_id, sub_insurence_id, user_email_otp, is_social, face_login_id) FROM stdin;
+3	developer	developer@a2.com	\N	\N	0	$2y$12$.rs4b5JhZNF372Xi5OJkDe2VgmGjh2lwaOzHxQIg0KS2tmiS/fqce	\N	\N	0	\N	\N	\N	\N	\N	\N	2024-03-25 05:37:18	2024-03-25 05:37:18	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+4	subadmin	subadmin@gmail.com	\N	123455	0	$2y$12$5QhURKYgL9vqsNaSe4hRqOcdduFQ.95WqmjN/Y8b7HS75XSlWq53W	\N	1	1	\N	add	asda	\N	\N	\N	2024-03-25 05:45:09	2024-03-25 05:49:16	1	1	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+8	Sooraj Sabu	sooraj.a2solution@gmail.com	93	9847823799	0	$2y$12$w//jrBIM8SAliILyGTylgOAdIzL5h6GBnbAiamBIopgEkwfYDKvpa	\N	3	0	\N	Sooraj	Sabu	\N	\N	\N	2024-03-26 05:37:41	2024-03-26 05:37:41	0	0	1	BLC-66025f253f697	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+12	Sooraj Sabu	sooraj.a2solutions@gmail.com	358	9847823799	0	$2y$12$rHuzbjvzLMfN4p1KNUD83..sD23kBtIm3aeUq4FXwigu3tGKegBNu	\N	3	0	\N	Sooraj	Sabu	\N	\N	\N	2024-03-26 05:46:03	2024-03-26 05:46:03	0	0	1	BLC-6602611b19026	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+6	dev dev	developer@gmail.com	\N	\N	0	$2y$12$UR5BkkQQrGtgykjXde3bVe.3YZaMVR7UYwZFo2uvwyj.NQCPS4Rh6	\N	1	1	\N	dev	dev	\N	\N	\N	2024-03-25 05:53:05	2024-04-09 07:04:17	1	2	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+7	admin sub	adminsub@gmail.com	\N	\N	0	$2y$12$d3fiOttEff7UgNMU0Z9cFOsb7sFTBLRDzJBfdX2DRsAWXCdzjNNUu	\N	1	1	\N	admin	sub	\N	\N	\N	2024-04-11 06:41:52	2024-04-11 10:32:03	0	2	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+13	Abdul Wahab	abdulwahab22@gmail.com	92	6541235	0	$2y$12$FxAiWMhPI2oNUH47TCPsruUb9yNF5z.iIMv33BsVNG/IxDQEHbVHW	\N	2	0	3	\N	\N	1716533483665038eb1a300.png	\N	\N	2024-05-24 06:51:23	2024-05-24 06:51:23	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+20	abv baab		971	101101881818	1	$2y$12$hu0JxuX9rw7aQjzRj3AvauMPcUdF0bSqaTdytuC6emsoMUOriTIJS	\N	7	0	\N	abv	baab	17181400896668bcb97d036.jpg	\N	\N	2024-06-11 21:08:17	2024-06-11 22:00:44	0	0	1	\N	0	0	4|OesecWCoHqQatiQmRoy4fSyd7tbIZ3j01SLvppH96d4ff786		\N	iOS	1	2024-06-12	971	101101881818	1	3	\N	0	\N
+21	na abvh		971	48484848444	1	$2y$12$cWrxDV.zaWOCc86gkJ2m6OJRKcxOdj4pPbhLSJNr4Z4StRShwvnHa	\N	7	0	\N	na	abvh	17181404316668be0f30aa5.jpg	\N	\N	2024-06-11 21:13:56	2024-06-11 22:00:44	0	0	1	\N	0	0	5|wIB54eGWAlYrACdxFxhcfiEAZXK1yNVBXVApgPFo5b71a774		\N	iOS	1	2024-06-12	971	48484848444	1	3	\N	0	\N
+33	Mydoc Call center	callcenter@admin.com	971	3456789	0	$2y$12$OXyWWRTJIc71Kmk3tqGf0ugTsKOF40GglTg0fteowQv3XOcOiOi.i	\N	4	0	4	\N	\N	17189525226675224a0893c.png	\N	\N	2024-06-21 06:48:43	2024-07-04 12:00:15	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+31	Anil navis	anil@anil.com	971	235235252	0	$2y$12$m2yBVXE1dl533q2U7MThh.krCguhQETM87wZY3TsvBvsZXj9f/fQ.	\N	6	0	\N	Anil	navis	17199145446683d030baa4f.jpeg	\N	\N	2024-06-20 05:22:07	2024-07-04 10:27:54	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+23	rusvin k	razahamd98@gmail.com	92	3441562554	1	$2y$12$Goa7opPm1SEu/q8nZJwphOv2MVbkrvnsb1YtPwc6/dqy9L4RTAAWO	\N	7	0	\N	rusvin	k	1718258791666a8c67cb5fa.jpg	1111	\N	2024-06-13 06:07:22	2024-07-04 16:52:39	0	0	1	\N	0	0	173|bz8iF0T36ZakThHQHLTEekjdAkEAYvs2IMMK42tg96297134		-O0m5VnIFkXHzZnVvLS0	ANDROID	0	1996-01-12			0	0	1111	0	\N
+35	Unni Moopan	anil@kgk.com	971	5795595778	0	$2y$12$.cqqt95C/.9rMy0OUAZ3geaqGHYhAgS6hZuEovsKJX8sz4Ocedmoq	\N	6	0	\N	Unni	Moopan	17201667346687a94e3c4d6.jpg	\N	\N	2024-06-22 06:36:52	2024-07-05 08:05:34	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+25	Hamid Raza	razahamd34@gmail.com	971	9847823797	1	$2y$12$CQsoslarb/0eRy0sMzbRYu.hCk/ntynXptp2jMQ4goIzaMF9gp9r2	\N	7	0	\N	Hamid	Raza	1718336631666bbc779ea04.jpg	\N	\N	2024-06-14 03:45:22	2024-07-08 15:31:48	0	0	1	\N	0	0	271|RiHI8LiThy5q8bMax2yWFpiTkajO3Z8IsOuEZCSddda170a5		-O1Hxn9gt070oIYLSH8C	ANDROID	1	1996-01-12	971	9847823799	1	3	1111	0	\N
+14	sooraj sabu		971	9847823790	1	$2y$12$dtMeWQMGrxbK2QLejCWMb.eosTjUP9bCg0Oz8oizg6aFrfLKgpBXW	\N	7	0	\N	sooraj	sabu	171764940466613ffc85016.jpg	1111	\N	2024-06-06 04:50:17	2024-06-11 21:17:47	0	0	1	\N	0	0	2|BnfBNUNbFmomP2NqsdzuLSufTeNyuF6tG2Hb0by63010879d		\N	ios	1	2020-12-15	971	9847823793	1	3	\N	0	\N
+19	aja nana	test30@gmail.com	971	943431818118	1	$2y$12$5cSJer9Nb335Rm7dbXPn6uFRQS2fVgqG0ys.41ivMVh0NBVXYsn2y	\N	7	0	\N	aja	nana	17181370006668b0a8d6280.jpg	1111	\N	2024-06-11 20:18:56	2024-06-26 21:22:20	0	0	1	\N	0	0	7|9nziakixsogullvNaXoRxY4A8o5ylBJMI3URvMLd1c79182a		\N	iOS	1	2024-06-12	971	943431818118	1	3	\N	0	\N
+18	Cmh	testing@gmail.com	93	12345678	0	$2y$12$DKwZhuCBYIKzztTJWCORJetfvcfZFtSjLA9H3pqyRUVuuqyzAkKh.	\N	5	0	\N	\N	\N	\N	\N	\N	2024-06-07 03:54:30	2024-07-06 08:35:14	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+29	test	agent@yopmail.com	971	855424545	0	$2y$12$1cZm3SIPzpXak/p1uxYDHeJlcQcEQ9MqQYdAZBuJAEfcHTVCOpm6y	\N	2	0	3	\N	\N	1718771962667260fa32284.png	\N	\N	2024-06-19 04:39:25	2024-06-19 04:39:25	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+26	\N	jason@gmail.com	971	436363666	0	$2y$12$9MhitJzirz3oIcxSc7jUVuEIcBdlX2iGUwxInLop4uX1SJg04qF/S	\N	7	0	\N	Jason	Jacob	1718439437666d4e0d59211.jpg	\N	\N	2024-06-15 08:17:19	2024-06-15 08:17:19	0	0	1	\N	0	0	\N	\N	\N	\N	1	1971-06-09	971	34634636	1	3	\N	0	\N
+28	Hamid Raza	razahamid349@gmail.com	92	3441562555	1	$2y$12$mXjViBFHgS4eKG0v4m8MsO1l.26YHrbDYHZ9UVXstYrZ5d5E3ME.W	\N	7	0	\N	Hamid	Raza	1718612200666ff0e81001b.jpg	\N	\N	2024-06-17 08:16:49	2024-06-26 18:09:13	0	0	1	\N	0	0	15|wNDxSbWDC6cgNSJUvcONKLCU1yJ5Au4JZff6wx6n7a200f47		\N	ANDROID	1	2023-12-19	92	3441562555	4	6	\N	0	\N
+22	anil navis		971	523243163	1	$2y$12$Kb08ALyacRGdiQdz/Lg5GOXEyiXfoWacyqBBRAfU37PuMcLe6pAjC	\N	7	0	\N	anil	navis	1718159831666909d75f438.jpg	1111	\N	2024-06-12 02:37:22	2024-07-02 07:19:13	0	0	1	\N	0	0	91|o7EBIK77DZFgr6m9WT63yWVV1VfPd0RLJiICss5l106a7252		\N	ANDROID	1	1997-06-12	971	523243163	1	3	\N	0	\N
+1	Admin	admin@admin.com	971	112233445566778899	0	$2y$12$e/UcM7IBEObEfuZVMB4HV.Gm3LdhvTbwkYzRXjz5/j6LoQ475rBgq	\N	1	1	1	\N	\N	\N	\N	\N	\N	2024-03-22 12:32:29	0	1	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+17	Ahmad	ahmaddxba@gmail.com	971	131231444	0	$2y$12$9Hco6u6GcstjpXP3iyCv2.FmYUr3OmCgSGcDFMIdA25MH7SICnRBq	\N	6	0	\N	Ahmad	dxba	\N	\N	\N	2024-06-06 11:45:14	2024-07-02 09:37:30	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+32	Anil Agent	agent@admin.com	971	3535352523	0	$2y$12$ld1PeHjOS2qbDQz7vR0EYubkc.y88dVknMGkQaPlB26W6kJAmTfZ2	\N	3	0	3	\N	\N	171888151966740cefd6864.png	\N	\N	2024-06-20 11:05:20	2024-07-04 11:56:04	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+16	Ammar	ammar@amar.com	971	6363463466	0	$2y$12$8QE74b/lHuQg.wxEa.GhR.I1c3TMPWlvzesd2MirUxpUt.YJ8CUWS	\N	6	0	\N	Ammar	Zain	\N	\N	\N	2024-06-06 06:48:23	2024-07-02 09:37:47	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+24	Al Jalila Children's Hospital	ranadxba@hotmail.com	971	12312312312	0	$2y$12$r9IC5/TdLiqF2rc6quwFBeuw5mO9LiQVJ4Bm374qNJfY.L5Ju2h.i	\N	5	0	\N	\N	\N	\N	\N	\N	2024-06-13 10:08:27	2024-07-06 09:22:44	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+15	Aster Medcity	aster@aster.com	971	352352523	0	$2y$12$mTH3vjHR7bhE06Qa6ytJou2JvAk2.m7Zfup5ISqzC81ZK5wFPHeL2	\N	5	0	\N	\N	\N	\N	\N	\N	2024-06-06 06:33:30	2024-07-06 09:23:11	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+56	Anna Benny Alexander Carlitos	bennnnnnn@gm	971	505500550	0	$2y$12$GcsJ1dJ0HnoPOeRmH7Xx8.wodHTFpRAoMaXuhWItL/9HyAJjYpUGe	\N	6	0	\N	Anna	Benny Alexander Carlitos	1719494510667d676e82ba1.jpeg	\N	\N	2024-06-27 13:21:51	2024-07-04 10:30:45	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+38	dev dev	dev@dev.com	\N	\N	0	$2y$12$e/UcM7IBEObEfuZVMB4HV.Gm3LdhvTbwkYzRXjz5/j6LoQ475rBgq	\N	1	1	\N	dev	dev	\N	\N	\N	2024-06-25 03:58:50	2024-06-25 03:58:49	0	2	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+37	fghdfhdfhdhdhhfhdhdh	rg2@dg.com	971	6777788	0	$2y$12$tCCNnUwaa9I5tIFOGEDgBOrZQwGeo5H0xUwXUtJYVAySLQURGNdbq	\N	6	0	\N	fghdfhdfhdhdh	hfhdhdh	17192115456679161940989.png	\N	\N	2024-06-24 06:45:45	2024-07-02 09:37:15	1	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+30	Aster	info@aster.com	971	23423423424	0	$2y$12$NBPO5UxVcSE4P/OM.g5okO4wSmboM7xH4paQk9sKXgHfBp4phsorO	\N	5	0	\N	\N	\N	1719401855667bfd7f78fa1.jpg	\N	\N	2024-06-19 11:21:02	2024-06-26 11:37:35	0	0	1	\N	1	30	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+39	sooraj sabu	sooraj@yopmail.com	971	9847823700	1	$2y$12$TG2Zhc9VuYCOyZAbJzn2SOlPz3.nP.fkC8roHNhK03BR4ESO6wBla	\N	7	0	\N	sooraj	sabu	1719313692667aa51c2d3bc.jpeg	\N	\N	2024-06-25 11:08:27	2024-06-25 11:08:27	0	0	1	MYD-P-39	0	0	19|otLRh87DzhUhQ08mggDch0TGDxrjrHx1TJJfZlgDd3ca57ee	fcm_token	\N	android	1	2020-12-15	971	9847823790	1	4	\N	0	\N
+45	Hamid Raza	razahamid001@gmail.com	92	3441562558	1	$2y$12$TUL7dvd/N3vBBeJz6dHG1.JQqvY51aUxUu5c/AoMHkf27kacQ0W2y	\N	7	0	\N	Hamid	Raza	1719425232667c58d0c74e7.jpg	\N	\N	2024-06-26 18:07:23	2024-06-26 18:09:13	0	0	1	MYD-P-45	0	0	26|xXxryupxlJtH7dZ7CEDQQGYGD4vnc2SEK5VfhCkocb0ee9bd		\N	ANDROID	1	1996-06-26	92	3441562558	1	3	\N	0	\N
+41	Hamid Raza	razahamid334@gmail.com	92	3441562556	1	$2y$12$emgsEMAGTM3FOfd0TfgWQeG8lyq4n7Oyd4kiqAOIIvpZxN/aU61NK	\N	7	0	\N	Hamid	Raza	1719331062667ae8f636bdd.jpg	\N	\N	2024-06-25 15:57:49	2024-06-26 18:09:13	0	0	1	MYD-P-41	0	0	21|fFGbAP5dUu6J14OCTuMYW1bEPEhwCH7o3BOoD0b136a05ca5		\N	ANDROID	1	1970-01-01	92	3441562556	4	5	\N	0	\N
+43	Hamid Raza	p1@gmail.com	92	3111111111	1	$2y$12$472p5ahSwuznV1z1z7bu3eMW4/6.EJurvTR0jewav8znG.7PAiQHa	\N	7	0	\N	Hamid	Raza	1719389845667bce951ea7c.jpg	\N	\N	2024-06-26 08:17:36	2024-06-26 18:09:13	0	0	1	MYD-P-43	0	0	23|xCeOpr0H3tjoktUVbbB5bYwWho8AalfrQDttdy6L914aa8d4		\N	ANDROID	1	1970-01-01	92	3111111111	1	3	\N	0	\N
+55	Ananya Athul Muraleedharan	ananyananyaannn2@gmail	971	5655665565	0	$2y$12$PWTgAKMq5b2DIwWht31.f.MEblwonuJAKIaepc20ySxPfoUIQMjE2	\N	6	0	\N	Ananya	Athul Muraleedharan	1719494060667d65ac4b152.jpeg	\N	\N	2024-06-27 13:14:21	2024-07-04 10:29:55	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+51	\N	hiiiiii@gmail.com	971	mmmmkmmm	0	$2y$12$DqjalM6LHrMTxWo/3a1Rj.I0WHOMoFH7MjTp9PRD1fHfUo2GLvo2G	\N	7	0	\N	Aftab	Ali	1719482207667d375fa42cb.jpeg	\N	\N	2024-06-27 09:56:48	2024-06-27 12:01:04	1	0	1	\N	0	0	\N	\N	\N	\N	1	2024-02-20	971	dhuhduidiuiydiu	1	3	\N	0	\N
+53	\N	patient@gmail.com	971	1121212121	0	$2y$12$5Ko555lxsQhw2Cl1XUyZI./BefcQWDz.9Ap7AYHKfk69R57aBEMj6	\N	7	0	\N	Rusvin	K	\N	\N	\N	2024-06-27 12:06:21	2024-06-27 12:06:21	0	0	1	\N	0	0	\N	\N	\N	\N	1	2024-06-24	971	12121212121	1	3	\N	0	\N
+46	anil navis		971	225522552	1	$2y$12$otC26iggZJjj4bnpSdE8jOOehXwzooa.U4l147ZFyFjeBLSve1.yS	\N	7	0	\N	anil	navis	\N	\N	\N	2024-06-27 03:50:36	2024-06-27 05:31:25	0	0	1	MYD-P-46	0	0	30|E1l8jvq6jrUC7usOR4xARhkNDFS7BQUclv0bfbFBe01a77be		\N	iOS	1	\N	971	22552255	1	4	\N	0	\N
+40	Hospital	rusvinhospital@gmail.com	\N	56896	0	$2y$12$BIv72gGsK4HLrRU0hL9OT.A27LwdjAzC7460nFC6GKgvBRRtkD7fK	\N	5	0	\N	\N	\N	\N	\N	\N	2024-06-25 13:45:16	2024-07-06 08:34:37	1	0	1	\N	0	0	\N	\N	-O0qZqAx7QB5_gHvl5NE	\N	\N	\N	\N	\N	0	0	\N	0	\N
+34	anil navis		971	546484649	1	$2y$12$k2./b7yblSmI/WCYwPz.YeOkvgnyyH4eDqq4IcUbXc/4/NeHPgLYS	\N	7	0	\N	anil	navis	171902499666763d64d0636.jpg	\N	\N	2024-06-22 02:56:42	2024-06-26 21:22:20	0	0	1	\N	0	0	18|aNNhyOq6fmUm5l7kLRxksBFuEeyiuicqsi1h2q5m15abe053		\N	iOS	1	2024-06-22	971	546484649	1	4	\N	0	\N
+44	anil navis		971	4864684646	1	$2y$12$Vn5rbWTVswtUA5.KTde0nOkuSO41UGacSUyauMGd0mDFGqLPF.boC	\N	7	0	\N	anil	navis	\N	\N	\N	2024-06-26 10:07:29	2024-06-26 21:22:20	0	0	1	MYD-P-44	0	0	24|JFXBMTdvUPmwYgsZuLnqN9jJ0RaDWVnA2P1kf7E5e32bfb9a		\N	iOS	1	2024-06-26	971	4864684646	1	4	\N	0	\N
+47	Sooraj Sabu	ssss@yopmail.com	971	505086060	1	$2y$12$SN5Fmyc2iD3vbBPadxqt8OXMgviaw96scxHhU/UKMzJoyGzzaOfti	\N	7	0	\N	Sooraj	Sabu	\N	\N	\N	2024-06-27 03:54:13	2024-06-27 09:20:23	0	0	1	MYD-P-47	0	0	31|VfC0te4kQ5TumPUhAiXeR0UKiDwfBgpYCpykYRNnd33002bb		\N	ANDROID	3	1970-01-01	971	505086060	0	0	\N	0	\N
+36	Mohsin ans	dssdf@dsff.com	971	254565656	0	$2y$12$45fFeunxJmf1TByjt.TfA.zKW9V6LWuHhgfMIlgNAOqdrfSZygAnS	\N	6	0	\N	Mohsin	ans	1720433992668bbd48cdbb8.jpeg	\N	\N	2024-06-24 06:14:24	2024-07-08 10:19:54	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+58	Jupiter Clinic	jupjupjup@h	971	98989898	0	$2y$12$LaXDZOUJHqWxcmaKXqzraeo.zEaKkq1GFYUQU4OY2qUWApBwwDIZy	\N	8	0	\N	\N	\N	\N	\N	\N	2024-06-27 14:09:24	2024-06-28 05:17:10	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+54	AniX Hospital	anix@gmail.com	971	889900887	0	$2y$12$qjKOcV7R1s1YoN4yOnoPk.mw2RJW5wIlUJAw.E2n3lKTwgPqM/EPS	\N	5	0	\N	\N	\N	17198411466682b17a6294c.png	\N	\N	2024-06-27 12:27:12	2024-07-05 10:02:28	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+59	Albin Alwin Alex Carletos	albin@g	971	3464363463	0	$2y$12$gmIwyQPZFZv8/Sb0CgjpW.GSJ1dlI4V1jtp5ZyHObvj0FA5gnQsGa	\N	6	0	\N	Albin	Alwin Alex Carletos	17201667766687a9788fcf8.jpg	\N	\N	2024-06-27 14:18:27	2024-07-05 08:06:17	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+52	Joseph Clinic	info@joseph.com	971	456464677	0	$2y$12$BenyFyHQN/fhiIg0NA/jyeBf9A6GVvI9nKBPTQnVaFpAnCahJCuPO	\N	8	0	\N	\N	\N	1719487849667d4d69c2f2e.jpg	\N	\N	2024-06-27 11:23:04	2024-06-27 14:12:00	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+50	Hunain Dev	hunain88@gmail.com	92	3095565455	1	$2y$12$WNCla.FcTAHowHi6of6KAe8fScKzKujOESUu2LglhC6o0VnjNnp1q	\N	7	0	\N	Hunain	Dev	1719478538667d290aa341a.jpg	1111	\N	2024-06-27 08:55:45	2024-07-04 16:20:22	0	0	1	MYD-P-50	0	0	170|BCeLfCPgPi6qvMVIDzbmZRtDeIISXepHI3Jvwdbme236019c		-O0pGcXpC8NWXdlYmWlR	ANDROID	1	1970-01-01	92	3095565455	4	5	\N	0	\N
+49	Asad Nazir		92	3441560319	1	$2y$12$.sd4fL7w3U6F5N4RwbQ2IOu1qhpfjIHRj0.cqFWzUyva.iq7kXZO6	\N	7	0	\N	Asad	Nazir	\N	1111	\N	2024-06-27 08:52:18	2024-07-08 08:50:43	0	0	1	MYD-P-49	0	0	260|9tdya736favMv6PNSxS2xxIOw8EnlSn3HwWi5PoT9d4b11d2	asd	-O1GXRMWDCoME2GyS0BY	ANDROID	1	1970-01-01	92	3441560319	1	3	\N	0	\N
+42	test anc	test71@gmail.com	971	123456789	1	$2y$12$C7x431LAfVerZ09YR7cF3O2rVtPcZf1m88natx4.DaZRI1UZ0fGDK	\N	7	0	\N	test	anc	1719386824667bc2c82ff2a.jpg	1111	\N	2024-06-26 07:27:18	2024-06-29 01:39:36	0	0	1	MYD-P-42	0	0	51|74gWAf10sXxPT6TSAlrRHxWqRwQ7mpuTwikLnjFy20b68c81		\N	iOS	1	2024-06-26	971	123456789	1	3	\N	0	\N
+57	Rohan Johan	jojojojjojo@m	971	5555555534	0	$2y$12$7HHKbjA7zphTAVDAEOZU1Ow8N3fA9EEOIOSP38MmX7ApPjTZoq9Py	\N	6	0	\N	Rohan	Johan	17201671506687aaeee82b6.jpg	\N	\N	2024-06-27 13:24:11	2024-07-05 08:12:32	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+62	Hello Call Center	helocal@g	971	3555555555555	0	$2y$12$GBrQxTSvCqiASwUz1GKf4eAKlGr0oWAyYJUzIsRdVX2dbCVQ7FQk2	\N	4	0	4	\N	\N	1719559386667e64da0d8c6.jpeg	\N	\N	2024-06-28 07:23:07	2024-06-28 07:23:07	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+63	Alex	al@g	971	bjknjfnvkfdhfkhkhfvjfdkhvdf	0	$2y$12$4QFipxf7KK65jk6U6gZAbuLZ0u5IdeBKekFCVWu43wmOEPv14Ddu.	\N	2	0	3	\N	\N	1719561130667e6baa267ad.jpeg	\N	\N	2024-06-28 07:52:11	2024-06-28 07:52:11	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+65	\N	dhyansns@gmail.com	971	1233333333	0	$2y$12$yH4kZK82y..iB7kPmJb0SOl2AJKZyb9auKSM2cAzrbMjwqJA3BT16	\N	7	0	\N	Dhyan	S	1719571373667e93ad67ab0.png	\N	\N	2024-06-28 10:42:54	2024-06-28 10:42:54	0	0	0	\N	0	0	\N	\N	\N	\N	1	2002-06-05	971	122333333	1	1	\N	0	\N
+71	Test Three	test3@gmail.com	92	3176640406	1	$2y$12$Fgfc7LCsHAPTE8IidmYU1OS79ImLrGvczQiePT6NLkf181BDKlHhG	\N	7	0	\N	Test	Three	\N	\N	\N	2024-06-28 20:50:49	2024-06-28 20:58:36	0	0	1	MYD-P-71	0	0	52|HGY6kvFNh5PrImk3iFcNwBGdoratp2seHTSNBWrb2f1a7159		\N	ANDROID	1	1970-01-01	92	3176640406	5	0	\N	0	\N
+83	Albi Mariam	dev	971	505566556	1	$2y$12$DgYnyyelcHAb4QCFzdq7KOiuu9Kd/50RcNB3ifgr9VSmKwxfE43u.	\N	7	0	\N	Albi	Mariam	1719816705668252014d9a9.jpg	\N	\N	2024-07-01 06:51:52	2024-07-01 07:08:33	0	0	1	MYD-P-83	0	0	60|quagAJCUzanqsdSkXGBW6PaOXzKRySu3VgbQzZafad49c818		\N	ANDROID	2	1994-12-03	971	505566556	0	0	\N	0	\N
+67	Diana Helex	dvika@ddd	971	500505656	0	$2y$12$y.y/QpiNWYGPx7wSOvg3wul4DixDmuAa08JGx1d8TzlUP6BHbuslu	\N	6	0	\N	Diana	Helex	1719584295667ec62737499.jpeg	\N	\N	2024-06-28 14:18:16	2024-07-03 10:12:35	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+78	\N	raza@gmail.com	971	5656565656	0	$2y$12$scLoMIuxWRBFJ57gyz/dIu8C2QJFjT7eHaFoTcR8RGYhjKfei7rQW	\N	7	0	\N	Anwar	Raza	1719654637667fd8ede25e8.png	\N	\N	2024-06-29 09:50:38	2024-06-29 09:50:38	0	0	0	\N	0	0	\N	\N	\N	\N	1	2012-06-07	971	5656565656	1	1	\N	0	\N
+85	rusvin k	rusvinmerak@gmail.com	971	7034526952	1	$2y$12$Y5yKtqOL7dn.0Rv.5bUpxunizkGzzOmt0HKlvKjejLvwOdcWRI1Xq	\N	7	0	\N	rusvin	k	1719825837668275ade59fd.jpg	1111	\N	2024-07-01 09:22:33	2024-07-09 09:36:36	0	0	1	MYD-P-85	0	0	282|wss5uEu4FAeLyWBamNDMdfQbHqaWFjG7cxR0ljSHd3a0fba0	fcm	-O0mqfqmRsjq3ZjWxRog	ios	1	2020-12-15	971	9847823799	1	1	1111	0	\N
+73	sooraj sabu	sooraj.a2solution2@gmail.com	971	80854556	1	$2y$12$zAKPwkdIhgw9Rigj7l0jBOpRJgfdCP.WJbk3VG0JpYudoTgjxfuT.	\N	7	0	\N	sooraj	sabu	\N	\N	\N	2024-06-29 04:57:39	2024-06-29 04:57:39	0	0	1	MYD-P-73	0	0	56|1uBVrYhobrDNiSVrTk8LXF60Og9idU3HPSPIsEHc04844b2e	fcm_token	\N	android	1	2020-12-15	971	9847823799	1	3	\N	0	\N
+64	Anil Bb		971	523243166	1	$2y$12$py.m8vJ7kh4S0KfQXSgNoOtmNnYWDiU1.DWJ/To8/nbV2CVozoHje	\N	7	0	\N	Anil	Bb	\N	\N	\N	2024-06-28 09:31:56	2024-06-28 20:41:55	0	0	1	MYD-P-64	0	0	42|F52hHjZ2vnTZTilpINYZv7O71c1PNLP39zdP5WAG2463c781		\N	ANDROID	1	1970-01-01	971	523243166	1	4	\N	0	\N
+70	Test Two	test2@gmail.com	92	3176640405	1	$2y$12$CEVahVmJAx3m5JP/y3N93.3rXVPz8wY9payNDPMUxK1Gf6KHRuxLa	\N	7	0	\N	Test	Two	\N	\N	\N	2024-06-28 20:38:53	2024-06-28 20:41:55	0	0	1	MYD-P-70	0	0	47|HorWcxTI8ulLj0WcwgcO1kxS7z3lD8iEnwMFGOYK768adf76		\N	ANDROID	2	1970-01-01	92	3176640405	1	3	\N	0	\N
+69	moin test	test91@gmail.com	971	1234567890	1	$2y$12$cyk3ycUe.TRxrq46maVSkuebm.YVAvwU60K3Sqtf9bBZRS.4JWhpq	\N	7	0	\N	moin	test	\N	1111	\N	2024-06-28 20:06:54	2024-07-09 19:57:42	0	0	1	MYD-P-69	0	0	339|f85br5q43Etbns3AjwRRRXCZj684Ww9NSBdUQLPO098ce07d	c5y2J8Nqb0vwpLvpmZBBkA:APA91bHWmVHTqUJlHAH3y-nQ8bAr989y0_NaMWgUIBYhYRp5lxPs6LTeaMAT5o6Nvw1wL8FgT68HtY8AQJrqOr-hwwHxz3DppvyqDTBPq9fU4JjDebZhidoI2nJFnOSahECt4cw_5iP8	-O0nFqWATfWQGVklY4Cy	iOS	1	2024-06-29	971	1234567890	5	0	\N	0	\N
+86	Vikram Sarjah	vikram@vikram.com	971	507788778	0	$2y$12$C31Si86TQdP3Sh/BwDbnv.hSq2bRuKZWd0A1upM8N.lXODIGrul4y	\N	6	0	\N	Vikram	Sarjah	17201670946687aab6215b0.jpg	\N	\N	2024-07-01 11:11:17	2024-07-05 10:14:09	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+60	Test One	test@gmail.com	92	3176640404	1	$2y$12$r04.zJYB2tBsICq8MpfVVeNbB3JxVL4vmj.RxlUECZscBl8nGTJOC	\N	7	0	\N	Test	One	172016428066879fb81b6b5.jpg	1111	\N	2024-06-27 20:45:09	2024-07-06 16:03:50	0	0	1	MYD-P-60	0	0	251|qQPY2g22tNyCIik7sO4mku9b4OeO4zBD1aQDOfLb8df23b92		-O0mOk2WED6BBqjGaGIo	ANDROID	1	2024-07-05	92	3176640404	1	1	1111	0	\N
+76	Aby Humanity	abi@gm	971	500000000000	0	$2y$12$ERkLeCHv0doNCKc7w7krB.aPkEkJQL45k8ilftoLYhlx2o1LDk2EO	\N	3	0	3	\N	\N	1719645448667fb508d7c57.jpeg	\N	\N	2024-06-29 07:17:31	2024-06-29 07:27:50	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+66	Lourde Hospital	l@c	971	878685959595	0	$2y$12$4fY0co0f57KpFZXHTEv0AOp.USGT0JMJZYmY3xybbN7Flk9A.nRl6	\N	5	0	\N	\N	\N	\N	\N	\N	2024-06-28 13:55:28	2024-07-02 05:08:15	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+75	Humanity	hum@hmm	971	50011555556	0	$2y$12$2P15dN0B9MUb5WZA9UUzruD0HHfAWsvUj3q0C5R3xYwi4D5z3Z6Sm	\N	4	0	4	\N	\N	1719645255667fb44735351.jpg	\N	\N	2024-06-29 07:14:16	2024-06-29 12:32:51	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+80	Huaei	h@gmail.com	971	505555555	0	$2y$12$z3kAZis8tz8WdlZTK616FuGNSGx/TfneGStAMHfg92ZOXsJonwbUi	\N	4	0	4	\N	\N	\N	\N	\N	2024-06-29 12:36:32	2024-06-29 12:36:32	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+81	Geelio	geel@gmail.com	971	5055555550	0	$2y$12$7D6fWDTtIYrx.Sf9M25sI.ve1FEhY6ymk3Ia4fpEGWGFzQL7ggjFK	\N	4	0	4	\N	\N	\N	\N	\N	2024-06-29 12:39:41	2024-06-29 12:39:41	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+87	Lourde Matha Hospital	lourde@lourde.com	971	888888888888	0	$2y$12$fz6WLp0nR9HbxXkmZTqpAuGYY2rRnhRu7z5kHIKL9iTKvJuNBFqX2	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-01 11:44:29	2024-07-03 11:36:00	0	0	1	\N	0	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+82	Amstor Hospital	h@g	971		0	$2y$12$7kuNPR8aboYRr6oTMbCLbeffUoU6MydBiJRyHOHNuPzoNoj3sWzuq	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-01 05:44:06	2024-07-06 08:35:44	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+79	K N S Hospital	kn@gmail.co	971	322343254254	0	$2y$12$7IMlWX1wpxnHNwhz7ksBxerCmEDn4QYDeCGCSp/aMhcUwvsYEDER6	\N	5	0	\N	\N	\N	\N	\N	\N	2024-06-29 12:10:49	2024-07-06 08:37:33	1	0	1	\N	0	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+72	Davis john		971	855656565	1	$2y$12$G1wtwRqGxbVdweyTZdL/sOJ01hnLa9yfB8a9FNi1VzcvY/7li888C	\N	7	0	\N	Davis	john	1719625863667f68871e915.jpg	\N	\N	2024-06-29 01:51:21	2024-07-01 19:44:08	0	0	1	MYD-P-72	0	0	55|CjHHkMskz52QJCmSujsmN9OsbgOXIM78kV4MfQh5ea88f39c		\N	iOS	0	\N	971	564005096	5	0	\N	0	\N
+61	Dr.Fousiya Bheegam	foufou@gmail.com	971	50555555555	0	$2y$12$1c1w19ctb/VCvWXGY3cpqeIp/6jKgXPs54FuRMOFXhjTOEAMbzBFm	\N	6	0	\N	Dr.Fousiya	Bheegam	17201654766687a464515cb.jpg	\N	\N	2024-06-28 06:09:11	2024-07-05 07:44:37	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+77	Albi	albi@gmc	971	505050505	0	$2y$12$Wc0Z.sj9A864sk91dqh02eWCukVm91ybsMbUDNr8pRbag6FlDrRyS	\N	3	0	3	\N	\N	1719648260667fc0044bfbd.jpg	\N	\N	2024-06-29 08:04:21	2024-07-02 06:05:07	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+68	Alex K	dvgika@ddd	971	50555555555	0	$2y$12$YFUJAPQUyTcjH69Ew8Qcme1vPlyWjCP6lHQQ2oOY7FNs08Kn6o40W	\N	6	0	\N	Alex	K	1719584398667ec68e7e19a.png	\N	\N	2024-06-28 14:20:00	2024-07-03 10:12:00	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+88	Aron Alwin	aron@aron.com	971	552233445	1	$2y$12$LneN6wztGfxHeQ8JbdvVA.c9gpzFHGK1mdsOuq11txV3umxH46rpi	\N	7	0	\N	Aron	Alwin	1719835027668299934ae0f.jpg	\N	\N	2024-07-01 11:57:24	2024-07-01 12:08:13	0	0	1	MYD-P-88	0	0	67|4kkf2Vor2VasGqWyns9A41aLsTYEf5WnT79mquF661409e00		\N	ANDROID	1	2007-12-11	971	552233445	0	0	\N	0	\N
+89	Adhya Surya		971	557788787	1	$2y$12$Jpeo7woKchUIENvr2SykceIB/2aKxtV6F0axGAm2REdlBV7fzcOEq	\N	7	0	\N	Adhya	Surya	171983557966829bbb9c9a4.jpg	\N	\N	2024-07-01 12:06:26	2024-07-01 12:08:13	0	0	1	MYD-P-89	0	0	68|UrNLiGuXW1qfCKh0y4AvdpH0nXP27rjxe3tXt3cu926fef9f		\N	ANDROID	2	2008-12-01	971	557788777	0	0	\N	0	\N
+74	abc tehs	test101@gmail.com	971	1234567891	1	$2y$12$.HutycC0fZ.OGrVljXy3wuFd01B05IG4NqkZBMgSasnJSZX9D/gFy	\N	7	0	\N	abc	tehs	\N	\N	\N	2024-06-29 06:11:01	2024-07-01 19:44:08	0	0	1	MYD-P-74	0	0	57|RgJTeetj8y4hWPRqORRoikJohBJNLKXxCfY5mXCY5db0f8d6		\N	iOS	1	2024-06-29	971	1234567891	1	0	\N	0	\N
+91	test test	test27@gmail.com	971	494949494949	1	$2y$12$PC.lr.G5xELxqS4mfw4SIekLI41vpUgwdC9llK0nx.TDb02SdK3Dm	\N	7	0	\N	test	test	17181351156668a94b80ce0.jpg	\N	\N	2024-07-01 20:42:43	2024-07-01 20:42:43	0	0	1	MYD-P-91	0	0	85|wnaeNLJIFelY08MbXdvEhVMyKU2nA5AY6NAZq9BK8311048b	fcm_token	\N	android	1	2024-06-12	971	494949494949	1	3	\N	0	\N
+92	rusvin k	rusvinmerak3@gmail.com	971	7034526954	1	$2y$12$25nLWz4IRpxTNb2ZWDjl6OpvnLsmjh48qIn3iAOjmuYgw9yAkx.wm	\N	7	0	\N	rusvin	k	\N	\N	\N	2024-07-01 20:46:06	2024-07-01 20:46:07	0	0	1	MYD-P-92	0	0	86|UrKHQBnLx4ndxiqxfeLQbhodbZ6yEPS8KsWieCho8d3d54db	fcm_token	\N	android	1	2020-12-15	971	9847823799	1	3	\N	0	\N
+93	rusvin k	rusvinmerak2@gmail.com	971	7034526953	1	$2y$12$kabM.qEnFRt8QYq8vPk7w.LJTaMa2uCosgoucT1RDyP8FLFtA1nHq	\N	7	0	\N	rusvin	k	\N	\N	\N	2024-07-01 20:46:28	2024-07-01 20:46:28	0	0	1	MYD-P-93	0	0	87|2DS0Qs3G6uU7SoXipqu5zGldTBFIdpngsYv8JJz511ac725c	fcm_token	\N	android	1	2020-12-15	971	9847823799	1	3	\N	0	\N
+27	Hamid Raza	razahamid46@gmail.com	92	3441562554	1	$2y$12$EpgqNma9.8n5vtxVZx/GO.J.FDXkwzYpQgD6.MJWH3bwqeZDk4PL.	\N	7	0	\N	Hamid	Raza	1718491357666e18dd9cdf7.jpg	1111	\N	2024-06-15 22:42:51	2024-07-02 22:17:03	0	0	1	\N	0	0	126|VlusYzWs2o3cIAGhKDZCdqasjXUuUkibgFGwIvH91935e478		-O0mXEtY65THsYf5xdsj	iOS	1	1970-01-01	92	3441562554	1	1	\N	0	\N
+101	rusvin k	rusvinmerak101@gmail.com	971	7034526956	1	$2y$12$PMufGaukfCaCCX5Xr49/iuPOHmAlq2klHKoAWoopufRDLsN55GCSu	\N	7	0	\N	rusvin	k	\N	\N	\N	2024-07-02 13:21:06	2024-07-02 13:23:34	0	0	1	MYD-P-101	0	0	114|NuI8C5oPbaZzh5L3Rm1VYbqXPhzTfbh5S4RkYKhg286c6bea	21sdrerer	-O0namjJHnID_dxYxCbp	android	1	2020-12-15	971	9847823715	3	1	\N	1	\N
+103	Hamid Raza	fiverhamidraza@gmail.com	92	3441562552	1	$2y$12$bdHRn6vfSlv434yP2T4xA.eeHKs2inqC5cOuBcwrFI.kDCe.XnUWa	\N	7	0	\N	Hamid	Raza	17200272286685885c9a2d2.jpg	1111	\N	2024-07-02 15:00:14	2024-07-09 17:50:09	0	0	1	MYD-P-103	0	0	118|fznb04TjQ32cvpyU17t82cD6a30aypdSHLCNhLmibc0b664c	ch6gAPQrQ1qPwVrUO4mrLL:APA91bFaFDeVcgttaKF1OPGkXl_8SkyTA1kH3FuhtoTtzWTh1HxiYICjbsUnwmSm_P34eAuR9Hg_wmk1qs-bSOZdwPijHMU3wyWVi3mboKhXnof686rS0DCFh1xiy3abjnje8IMj_8M0	-O0nxTgePT2-76mi4Vx8	ANDROID	1	2024-07-08	92	3441562553	4	5	\N	1	\N
+95	sooraj sabu	sooraj.a2s4olution2@gmail.com	971	808545564	1	$2y$12$K6XbJCMVzZOdOvbtzsOADuu/Qipd/kxPNxnQ4qM.lK4XhYMZo8NJW	\N	7	0	\N	sooraj	sabu	\N	\N	\N	2024-07-02 05:43:28	2024-07-02 05:43:28	0	0	1	MYD-P-95	0	0	92|vstJ41voKtARDGM55Ej64N76QFpypx3KRyjaqYjj401f1054	fcm_token	\N	android	1	2020-12-15	971	98478237994	1	3	\N	0	\N
+107	nas khan	nas@gmail.com	971	12345678	1	$2y$12$QYagI4rveIRn94DiaHnWBueUdmez7royrJ/JHYJn.VXJJERA72Cn6	\N	7	0	\N	nas	khan	\N	\N	\N	2024-07-03 08:45:40	2024-07-05 21:11:45	0	0	1	MYD-P-107	0	0	135|T8OWvjnICejPqtizMwbxNtmEcyNuCE8PW5hjBVA46b948088		-O0rlKc_vQUPKlfvAZVX	iOS	1	2013-07-01	971	12345678	1	4	1111	0	\N
+94	Telecom	telecom@telecom.com	971	555555356	0	$2y$12$Tb0dLjrQ4OhURXYGDlgSWeGn5k/WEzAv8jM9/N6znaDhKWu4CP5wS	\N	4	0	4	\N	\N	1719900579668399a3945c9.png	\N	\N	2024-07-02 05:05:34	2024-07-02 06:09:39	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+98	rusvin k	hamid33@gmail.com	971	70345269734	1	$2y$12$NsHRuMl4/x.N1HcE/FAj1eBmmquomh4EmIP4staZO3hJybS6wOZy2	\N	7	0	\N	rusvin	k	\N	\N	\N	2024-07-02 12:30:00	2024-07-02 12:30:23	0	0	1	MYD-P-98	0	0	108|iiZ2Wet02x9St2rV1WWNB2gBljWVF28swnCq83fC620c706d	{{fcm_token}}	-O0nQ5EQ2z76X4s5AXuN	android	1	2020-12-15	971	9847823714	3	1	\N	1	\N
+100	rusvin k	rusvinmerak100@gmail.com	971	7034526955	1	$2y$12$CgppRhah2MleqUm1xvyWEOK7JXRGi.bDfb3inid8Bl4WchP0Rppy.	\N	7	0	\N	rusvin	k	\N	\N	\N	2024-07-02 13:18:34	2024-07-02 13:18:36	0	0	1	MYD-P-100	0	0	113|KhkSqI2DuZ0AFAhYepbF7snjhcZP5sRX0bZ1fipMe2e0c43a	fcm_token	-O0naCtJDsZa8KB2rfM7	android	1	2020-12-15	971	9847823715	3	1	\N	1	\N
+97	Sathya Alex Kavumpadickal	sathya@sathya.com	971	505500559	0	$2y$12$EIwFHrSX39iYWx5xfO/xAeC30vF0u2HibbAH7FsjbLMtdiUgxKmJG	\N	6	0	\N	Sathya Alex	Kavumpadickal	17199112726683c3684d629.jpeg	\N	\N	2024-07-02 09:07:53	2024-07-04 10:26:43	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+106	nsarullah khan	nast@gmail.com	971	3357705054	1	$2y$12$qtnhtzjT5bUPRpbEKsKtUO.kKmGQF5xQWAaQ4VYCUbkYhiko.wEjO	\N	7	0	\N	nsarullah	khan	1720029921668592e1567df.jpg	1111	\N	2024-07-03 08:39:21	2024-07-06 15:53:39	0	0	1	MYD-P-106	0	0	253|P1A7PwuSdRiID71QAggf9Ow0nH5hShrKVvYNHiY9893bd612		-O0rjtYzZDi4Ld7LmHTm	iOS	1	2024-07-03	971	3357705054	4	6	\N	0	\N
+105	Andriya Alexander	andriya@andriya.com	971	578685858585	0	$2y$12$nsj.9T8HcFfe3KFzxvKM6eE1lZDeWJLK9WESOxn0xKjb0kD6YLkYq	\N	6	0	\N	Andriya	Alexander	17201654296687a4352e1d2.jpg	\N	\N	2024-07-03 08:00:10	2024-07-05 07:43:50	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+99	Helen Alexander	helen@helen.com	971	558855885	1	$2y$12$nKwosM.QpzFECL79VcVQlO7hVfOMfwB4N0mH4HEAIZfCRRPyakvyG	\N	7	0	\N	Helen	Alexander	17199244506683f6e206449.jpg	\N	\N	2024-07-02 12:47:37	2024-07-02 19:15:10	0	0	1	MYD-P-99	0	0	116|jJsbVTdUkHVxo1vjU1w64210vWhQrcCayZUeuaz02b12aadf		-O0nU7c3W6ss1BRWbdCW	ANDROID	2	2024-07-02	971	558855885	0	0	1111	0	\N
+90	HAMID Raza	e@gmail.com	92	3441562551	1	$2y$12$bBwfm9.uGp6m5n5b1cdv8uKsfGjMG7.1zCGNvMH/3yR3FFkleOIAy	\N	7	0	\N	HAMID	Raza	1719866471668314679e63f.jpg	1111	\N	2024-07-01 20:41:17	2024-07-09 17:29:46	0	0	1	MYD-P-90	0	0	89|wclkx0mTjFho6KLAm4g5RuVgvFxs2fhlXnTR9Atvcda80d54		\N	ANDROID	1	1970-01-01	92	3441562551	5	0	1111	0	\N
+104	Alexander Helix	alex@alex.com	971	353453539	0	$2y$12$veguB4Ge7DqUYWHlpEZpXe9MgBH.QGJNTetiK6I32EpWHiftID4uu	\N	6	0	\N	Alexander	Helix	17201669516687aa2767436.jpg	\N	\N	2024-07-03 07:57:47	2024-07-05 08:09:13	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+102	rusvin k	rusvinmerak102@gmail.com	971	7034526957	1	$2y$12$L2OTejo557NcsWBE7AwomuxAQJOhrWVzT/CL2rOl2nldgbL71DRem	\N	7	0	\N	rusvin	k	17199266406683ff70cd402.jpg	\N	\N	2024-07-02 13:24:17	2024-07-03 10:06:58	0	0	1	MYD-P-102	0	0	115|mRCwTE2YbzUMeLy3cuTuoklYUKIjTjVhbDMCh8jjbf2022d3		-O0nbWLBIFFlGrI8-jUP	android	1	2020-12-15	971	9847823715	3	1	\N	1	\N
+121	Zulekha Hospital Dubai	zulekha@zulekha.com	971	505566778	0	$2y$12$Qh0VvRA3SnWdMJpf.SRKMuu4c9yAdmaxsfbwhTEOBUDakIyrp18hm	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-04 09:42:42	2024-07-04 09:42:42	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+122	Henna Daria	henna@henna.com	971	508888858	1	$2y$12$mTR5z2BnPJhmno787L7jqOZ/5oOTpMLkV1wIFV1pGbsDzog50VCTu	\N	7	0	\N	Henna	Daria	1720096691668697b368c4d.jpg	\N	\N	2024-07-04 12:38:27	2024-07-04 13:08:10	0	0	1	MYD-P-122	0	0	162|EEXWVnAFu54ilTj3m24ewuRvGqIrj3sR4TV3AgoCc24de790		-O0xkCn8H8X8n7p6Z9hb	iOS	2	2024-07-04	971	508888858	1	3	\N	0	\N
+127	wahab clinic	wahab@gamil.com	971	123456789	0	$2y$12$DJsIPJ7qfWL85PquwcKCOO.JkGS991nxv.coEjXfxKF1cxy2c3lee	\N	8	0	\N	\N	\N	\N	\N	\N	2024-07-04 15:33:54	2024-07-04 15:33:54	0	0	1	\N	33	33	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+111	Abdullah Hussain	hussain@hussain.com	971	507788778	0	$2y$12$GWTistDWwZzV2mj1PeAPzOyGPsyLVMkEDvrwvHUGanQpoZU6gfbzi	\N	6	0	\N	Abdullah	Hussain	17201672536687ab554aff6.jpg	\N	\N	2024-07-03 10:31:04	2024-07-05 10:13:27	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+124	Inam Ulhaq	doctor@admin.com	971	123456789	0	$2y$12$a2rXwVAgSpfAFX8cM/VqAebStzpZSJNJl.qEwzWuZrP5kFw.zvgg.	\N	6	0	\N	Inam	Ulhaq	17201650106687a2920e600.jpg	\N	\N	2024-07-04 12:48:01	2024-07-05 09:01:58	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+119	Abdul Rahim Azad Noornissa	abdul@abdul.com	971	588888889	1	$2y$12$6QwhpYF8ba6DM7SxXXmn4uTYKuVdmoYiINtuyew8Q.EgPxKKKLOgC	\N	7	0	\N	Abdul	Rahim Azad Noornissa	172007307066863b6e761d3.jpg	1111	\N	2024-07-04 06:01:50	2024-07-04 09:23:45	0	0	1	MYD-P-119	0	0	155|3rX8Q71IzQX7lk99I9ttNIohhScXJu01HuE34Udwc7be96a3		-O0wKQfvFMu174a0EFy0	ANDROID	1	2024-07-04	971	588888889	1	4	1111	0	\N
+118	Aisha Abdul Rahim Azad Noornissa	aisha@aisha.com	971	599999999	1	$2y$12$1YPlz3DbU1mGmXeu0WZfgeeHcTFmwIPqMpC81KnipOz4I.p7wWaqG	\N	7	0	\N	Aisha	Abdul Rahim Azad Noornissa	172007307166863b6f61aa9.jpg	1111	\N	2024-07-04 06:01:49	2024-07-04 09:23:54	0	0	1	MYD-P-118	0	0	152|DJtImTVMBcXI8RGBHbr4qZF4ZVT4BlfPbii4m61x3e015719		-O0wKQH3q5uxNHtYab7b	iOS	2	1995-07-04	971	599999999	4	5	\N	0	\N
+126	Alkram Khan	alkram@gmail.com	971	123456789	0	$2y$12$.fuIofgJu2vny8ao9BhGTOFlSH6siKX0FNoEFAWCIzpS.RTiF6gPS	\N	6	0	\N	Alkram	Khan	17201649896687a27d1fd71.jpg	\N	\N	2024-07-04 15:24:11	2024-07-05 09:01:30	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+112	Mary Callahan	nete@mailinator.com	971	31821545482	0	$2y$12$xi.Cmp5z3g.EX7eF2JLLteBY24orYiAX4RNpmp.4YPkiRAZDAGBQ.	\N	6	0	\N	Mary	Callahan	17201673476687abb30ed9f.jpg	\N	\N	2024-07-03 10:31:27	2024-07-05 08:15:47	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+120	NMC Healthcare Hospital	nmc@nmc.com	971	509988765	0	$2y$12$331pUBjLR5yuH/9fYjjmCefY11FxHa4gIHRTGpbIcUQg6g47/DzTe	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-04 09:40:49	2024-07-04 09:40:49	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+110	Arif Ali Khan	arif@arif.com	971	65462121212	0	$2y$12$.H0CQ041HUJbbefOfncWXuXKONcKUq/5JLCzR1y.tUygr1vzH1xzG	\N	6	0	\N	Arif	Ali Khan	17200021276685264fece02.jpeg	\N	\N	2024-07-03 10:22:09	2024-07-04 10:37:11	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+96	Angel Maria	angel@angel.com	971	554466779	1	$2y$12$rpF3YWmFxa74bFJ/bI2X9e7fXBrBVHaJyKKPOfj6./oATkC4iV0Lu	\N	7	0	\N	Angel	Maria	17199039906683a6f6b59a3.jpg	\N	\N	2024-07-02 07:06:36	2024-07-09 13:57:38	0	0	1	MYD-P-96	0	0	325|RQdjc3SFdYz4C3NXQTHLiR7Uu8jC89Hg2mEzZzfQb63f4898	cErfO3eQn0fdpI0FHuqm4s:APA91bEm6AQzfO-q7G3qkkfKg16VDU13IHUii4zVQyGkfymb2OqYh3xdQwTC9g2MJWj2M-cv2fWgg15LlO7yJIbFQTco4OHcnNl6b2biO4kkBSLQzNvgxqku9zbkG8zDdEAk427Rt46H	-O0mG3mkWakmbcJtVS0N	iOS	2	2024-07-06	971	554466779	0	0	1111	0	\N
+48	Anil Navis	fh@fgg.com	971	523243164	1	$2y$12$TwIxV3fWqjiOBegdJkmyCOAspKzO2CjZK.H2sUKys1yiVJLuJ9PB.	\N	7	0	\N	Anil	Navis	17200586556686031fbe894.jpg	1111	\N	2024-06-27 03:55:53	2024-07-06 03:47:24	0	0	1	MYD-P-48	0	0	204|oXHdAZmqDVWMm5dvYTvQqrpyNXdOXjrtY5RyXqTB2b4c7397		-O0qROFomonhCB6vvhmO	iOS	1	2009-09-18	971	523243164	1	4	\N	0	\N
+117	Inam Ulhaq	callcentasdasder@admin.com	971	1234567890	0	$2y$12$54dUDUrDzFuKy/diroccp.7k1yP04bYAjTrYjd16H42x.bNsnbNYW	\N	6	0	\N	Inam	Ulhaq	17201650646687a2c80f092.jpg	\N	\N	2024-07-03 12:56:11	2024-07-05 09:02:26	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+84	Anna Maria	deva@deva.com	971	505555585	1	$2y$12$P262h7gd/PZpL8cfioGl9ezMZ4GKzMTfphhDV2W0XsslCNXyfzGhC	\N	7	0	\N	Anna	Maria	17202443576688d885e69ab.jpg	1111	\N	2024-07-01 07:00:08	2024-07-09 13:52:37	0	0	1	MYD-P-84	0	0	315|0CFLYd9sZi8TXVgvZGMN41TjE4hTMEd509x9woXz06c175f4		-O0nOGF9dVeNTcRoT1cz	iOS	2	2008-12-01	971	505555585	0	0	\N	0	\N
+125	Noori hospital	noori@gmail.com	971	123456789	0	$2y$12$xKOFEva37BlDZwsFE8RU8uI5CduWxrj3RmWZj8ZiFu7dpgY/OEpXS	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-04 15:19:39	2024-07-04 15:19:39	0	0	1	\N	33	33	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+128	mirza clinic	mirzaclinic@gmail.com	971	123456789	0	$2y$12$2SRFJkJbF1LfHrqs5OMi4OueDkQUVUxFzLz4LwmfkhbHD.oSMMRrW	\N	8	0	\N	\N	\N	\N	\N	\N	2024-07-05 04:31:23	2024-07-05 04:31:23	0	0	1	\N	32	32	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+109	Britanni Booth	qajulo@mailinator.com	971	36323132155	0	$2y$12$2gjvu3wL30StHwrKeNKiyOGNPOBtQs8EfaGcowsIfqkbWpQT3y8fW	\N	6	0	\N	Britanni	Booth	1720428324668ba7248537e.png	\N	\N	2024-07-03 09:48:00	2024-07-08 08:45:25	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+123	345	alshifa@gmail.com	971	3455454545	0	$2y$12$WsYe8XTS.Gmj0J67GCv5w.gDEtSsvV5OgEXJdQR.TqeGsvDbjSvZa	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-04 12:45:42	2024-07-08 08:21:39	1	0	1	\N	32	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+113	Kyle Goff	hehozu@mailinator.com	971	2355121255	0	$2y$12$PO0SEUEMi12aRAAFOFa13.m.Vfugzj7cj52fPfzA/i8X7XHEP2twm	\N	6	0	\N	Kyle	Goff	17201651066687a2f2c59bb.jpg	\N	\N	2024-07-03 10:33:56	2024-07-05 07:38:28	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+129	anil navis		971	564004096	1	$2y$12$T5Hk.k5hwNpbtyX/txpxe.dOECBJkZml/Q2/.7rRYwriLqKFK0r0m	\N	7	0	\N	anil	navis	\N	\N	\N	2024-07-05 09:39:50	2024-07-05 09:39:51	0	0	1	MYD-P-129	0	0	181|oLTeodamO5FpFJQNr1PZoNhH5qXmL8g8IpsSmJlW07362f45	dewBu1bGsEkxnzQnJ_FU1I:APA91bFjKr1hltRwbfi77RKMDOx8JQ-EmKI7pweXyMQ0kSltLgm6Wyg9tmEwIGf7hmubs5zA81gtPAEq5U_HwXhP-zS5m5vpbk-NBKlPPRUJ3eqI5Duz7QBSfCDggNKQvVqWfLkC5Qlf	-O11FuqWuT816-q0Yx1_	iOS	0	\N	971	564004096	0	0	\N	0	\N
+114	Sooraj Sabu		91	9745969706	1	$2y$12$kNI67.YKM/8r2NACLdFmSOXsTLwClyBIbLd7vk0VtIWa2UnsfsFE.	\N	7	0	\N	Sooraj	Sabu	\N	1111	\N	2024-07-03 11:56:28	2024-07-07 08:00:15	0	0	1	MYD-P-114	0	0	175|XpWnxVKcFsE2KB0yMbhJoRLONE632I1fqKrYnBsWbe67ee75		-O0sS-d7azE38lkuB8s-	ANDROID	1	2024-07-03	91	9745969706	0	0	\N	0	\N
+108	Carlitos Abraham Angela Maria	carlitos@carlitos.com	971	69868689698	0	$2y$12$h9WQ9z9jUf0yIQcEpFTRP.uW/WSghXdxyeAOagxVaL.BEs2wJMcr.	\N	6	0	\N	Carlitos	Abraham Angela Maria	17201674546687ac1e1d962.jpg	\N	\N	2024-07-03 09:39:55	2024-07-08 12:17:32	0	0	1	\N	1	1	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+136	test test	testhjj@gmail.com	971	545454884	1	$2y$12$A6h3qcFZXr04Wn07CaFBxO7sYTTUjxoOB/CyupvCkDLaasN/D4sxi	\N	7	0	\N	test	test	\N	\N	\N	2024-07-05 23:26:59	2024-07-05 23:27:16	0	0	1	MYD-P-136	0	0	201|UUSJJzHIQadgtPQbRQTCPBw7ENwpsoMuexoaoYvp82888f22		-O14DEFI3bs4TUUhrZ5R	iOS	1	2024-07-06	971	664644884	1	4	\N	0	\N
+134	Nasrullah Khan	nasrulahpitafi@gmail.com	971	94949488	1	$2y$12$KAffEReFjWkFNK7gXk9ZIepk7WejCSzWw8bhffDnnaAHmwGa5LoQe	\N	7	0	\N	Nasrullah	Khan	\N	\N	\N	2024-07-05 23:11:12	2024-07-05 23:11:37	0	0	1	MYD-P-134	0	0	198|BQITnszH2zrqxyRbiErOWgUdvWIKhpdD0ahrJvjI8c97d76c		-O149bowcLD9tZRjBXIw	iOS	1	2017-07-06	971	84994949	4	1	\N	1	\N
+139	naviz hjj	navisanil@gmail.com	971	552255553	1	$2y$12$LEW14lajGQzYV5Bq5UEBl.T9oHMhHXlxkt31slTzwLgdc8PHfujl2	\N	7	0	\N	naviz	hjj	17202639966689253cdece9.jpg	\N	\N	2024-07-06 10:54:34	2024-07-06 11:20:15	1	0	1	MYD-P-139	0	0	236|JBbOeuHzM3ZCoedzXegGlrjW1q3BrQeCZLYq2xPH95d98ef1		-O16fbSrt88dpAcGZv4v	iOS	0	\N	971	552255553	0	1	\N	1	\N
+140	ANIL NAVIS vvb	anil@dxbusinessgroup.com	971	543484664	1	$2y$12$aogPnEnHpKlRvuK3qg9Jx.6iiCbh0kPhqggSaoyYQmuaSgB2Kyz7O	\N	7	0	\N	ANIL NAVIS	vvb	1720264562668927722bc3e.jpg	\N	\N	2024-07-06 11:16:07	2024-07-06 11:21:26	0	0	1	MYD-P-140	0	0	237|KxAQ31JB6bnk87G9tUGqtzHTl2EHmham9jKCIiBv6974e98d		-O16kXrnbFEbe3EZklDp	iOS	1	\N	971	543484664	7	1	\N	1	\N
+143	anil navis	anilnavis@gmail.com	971	555885585585	1	$2y$12$zaEagH7lyElqjo2HNWqGKOBhZraxbTwbUR1EExWvI7blH69PCiwXa	\N	7	0	\N	anil	navis	\N	\N	\N	2024-07-06 11:40:54	2024-07-06 12:36:30	0	0	1	MYD-P-143	0	0	246|WFwZk9sQ539IE0cqeXMObNdzcZzr3tF1LNHT5eyg15696c81	d7x9_cmfUk7inYu6MwEwbp:APA91bF0I8d-pHC1WPE5UTLpmGIYykFcW813TcBu9dXENxSQ392MaVBnhAfrwfx2QFyo37g-aEvpL2CRxL6Zr9gfT-envO6_Nu6nzvSLpP6ptOBfTkoqon__RCBhGCr-wdBCBuz36ONz	-O16qCtuTDW7dkIZGz62	iOS	0	\N	971	555885585585	4	19	1111	0	\N
+131	Devika Surendran Pillai Rajalekshmi	devika@dxbapps.com	91	9961549033	1	$2y$12$RO2jvL.zJpY512xc/jx7ZOYqgG3BnPKg9unReef8JuTUTO4.FEEiS	\N	7	0	\N	Devika Surendran Pillai	Rajalekshmi	172019224466880cf4a31b4.jpg	1111	\N	2024-07-05 14:18:38	2024-07-06 11:23:50	1	0	1	MYD-P-131	0	0	193|Ed7goukTAQZJWNHSI2HW8HFW0fOP61raCEUexKnT48bfe525	e5icHxdzS4atUaYZ4HsoIg:APA91bHTJdYnIUFTAR7Fmm99gA9wTOUvEBdfP0AcPTUR_xOYfWyBzYzOk2WCn0rh4uOy0lFJQHf6PaA87_OmOINy6hU_U9UKLYOczNJwmbR9KpP-CTU9_bDng0opSVlq8x60wHfZCzE-	-O12FimuJOJgRnFM7GjC	ANDROID	2	2024-07-05	91	9961549033	0	0	\N	0	\N
+133	Nasrullah Test	nasrulahpitafi1@gmail.com	971	8499494787	1	$2y$12$8Ro8dKNFpo.x1ByQnkLxxu26pPYzCPE04/O2dom/AY82ZnFDSoZAi	\N	7	0	\N	Nasrullah	Test	172022025866887a62639d2.jpg	\N	\N	2024-07-05 22:57:49	2024-07-06 10:07:57	0	0	1	MYD-P-133	0	0	197|HqzBfF3lFzYjdskFt79HWoxJkSTUt81aL6YhApfw78fb1949		-O146Z6tY3zZuGcJ9P-U	iOS	1	2008-07-06	971	949499494949	1	1	\N	1	\N
+138	Catherin Fernadez	catherin@catherin.com	971	500000555	1	$2y$12$60SwnNX.khu2sChuRhF.KuCmPFlBOD20GvkzsKY5blkOB6E.ygg4e	\N	7	0	\N	Catherin	Fernadez	17202455256688dd152aa00.jpg	\N	\N	2024-07-06 05:56:15	2024-07-06 06:01:59	0	0	1	MYD-P-138	0	0	211|folXNu3ILtl6wBg8CWq0irvhiyRG9X50MAptxID2b3d43d3a		-O15bKCVuNLEMbmR24ba	iOS	2	2024-07-06	971	500000555	0	0	\N	0	\N
+135	Nasrullah Khan	hp7289gzgs@privaterelay.appleid.com	971	84848848	1	$2y$12$2fjUV4Sq7ubfKoYWIw5eVOfljWj3SeKZdSxRRupIRUGZiM76M8mdm	\N	7	0	\N	Nasrullah	Khan	\N	\N	\N	2024-07-05 23:12:22	2024-07-05 23:12:59	0	0	1	MYD-P-135	0	0	199|aL5ulViA91BS0veQidarnHiCtzkIFb47H5EXKMoVe755ba22		-O149tBPdPy_Yp-HgBjW	iOS	1	2024-07-06	971	84884488	4	1	\N	1	\N
+142	Devan s	devas@devas.com	971	522255225	1	$2y$12$uaZho9lYs1IbPHmz29oQs./1r/4dwPZP4GYYBjxQOB8NInko2tqke	\N	7	0	\N	Devan	s	\N	\N	\N	2024-07-06 11:40:31	2024-07-06 11:41:41	0	0	1	MYD-P-142	0	0	241|Qn9lGIztUqyEzcW7ZP4HwHldLv17KOi59d5fk6ZY384fde53		-O16q7JTF88C_sDASv8f	iOS	1	\N	971		0	0	1111	0	\N
+141	Devika DX TECHNOLOGIES LLC DX TECHNOLOGIES LLC	devika@dxbapps.com__deleted_account141	971	528855225__deleted_account141	1	$2y$12$3VRMRguM8gBzV/bS6kVivukx2chYHzpQta/S9hZf6ct3RPnsdymX.	\N	7	0	\N	Devika DX TECHNOLOGIES LLC	DX TECHNOLOGIES LLC	172026553266892b3cb0fb8.jpg	\N	\N	2024-07-06 11:30:29	2024-07-06 11:39:03	1	0	1	MYD-P-141	0	0			-O16npLCmAcVqFX5VCor	iOS	0	\N	971		0	1	\N	1	\N
+132	Devika Arun Padipurackal	devikadxbapps@hotmail.com	971	502693489	1	$2y$12$kD965EXXzDtRpBBGt2cdj.4RRyX8SdqL7L7iUUdoZfyjfy7RbNioa	\N	7	0	\N	Devika	Arun Padipurackal	17201943386688152298e12.jpg	1111	\N	2024-07-05 15:45:00	2024-07-06 11:23:58	1	0	1	MYD-P-132	0	0	194|8fyz5Edl0uyuljWZQi9MewPS3D92XFpOKENgiV9tbd8c02dc	ehYpkpg2n0CrvJ20l_op4Y:APA91bH4PdtIGc0a09lxn_e2IrfBdLMhIq1IjcoZbL4f2gn19DzKPcWKBfaa6OliAFVndDt55XbUdZ33OzoHtNcyEPlPrZBaT8aTC5VTBvoa61GTtb8vVkkGLJJxUAaQvdYiKFlHuwG2	-O12ZV2MF6Qe6t8_7BaX	iOS	2	2024-07-05	971		0	0	\N	0	\N
+137	sooraj	sooraj@gmail.com	971	123445344354	0	$2y$12$uBt3Ycn2DlLeJR4Q.9YYhufWtKN3x234U7DZcOAZ52oDSE47OpKSG	\N	3	0	3	\N	\N	\N	\N	\N	2024-07-06 05:11:32	2024-07-06 05:11:32	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+145	subhanshah	callcenterasdasdasd@admin.com	971	123456789	0	$2y$12$4zfalDAEJVx9C6u41zzjhuJZV/Um6oTYzYsdka64XE/8erdyK2twO	\N	6	0	\N	subhan	shah	\N	\N	\N	2024-07-06 14:22:28	2024-07-08 08:47:01	1	0	1	\N	33	33	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+144	Devika Dxb Ios	devikadxba@hotmail.com__deleted_account144	971	447744774__deleted_account144	1	$2y$12$l3At1AP7bkSmFCiXQ4XUue05pdvtRXAypTceKV3.3uX1VEJeC5Maa	\N	7	0	\N	Devika Dxb	Ios	172026453366892755cef91.jpg	1111	\N	2024-07-06 11:42:49	2024-07-09 11:21:59	1	0	1	MYD-P-144	0	0			-O16qe7-NMjRzWsLMJhU	iOS	2	2024-07-06	971	502693489	0	1	\N	1	\N
+146	Devika DX TECHNOLOGIES LLC Andr	devika@dxbapps.com	971	545866088	1	$2y$12$uMskV77Cqgybpa8p3mYwTO3hoFqxRvPhOoUIV4ZRoNghWi9AURrtm	\N	7	0	\N	Devika	DX TECHNOLOGIES LLC Andr	172027944966896199ca5dc.jpg	\N	\N	2024-07-06 15:23:31	2024-07-06 15:24:10	0	0	1	MYD-P-146	0	0	252|pql7WrYbJZejXzzAmiBw9xlPzctJgcxYWuLFtYjX63eb60f5	eRluWYxdQNedfDwcjqeUEB:APA91bGf7bsPWdf6ofYzSPyVAcvzjVN2bh74IwU-4ZIpxi4oEPpi_wOv56y4KPrM58qMjrosaFxCc85eMfYuMbmRrRgOgAFGtgOLQqmkioZcWqwmR5_T8UjmckR3K5DCgRpYlmt5NEXX	-O17dA5Drt_5ZYPMNNzj	ANDROID	2	2024-07-06	971	545866088	0	1	\N	1	\N
+147	test new		971	623674627462	1	$2y$12$cueOJcK3HryK7/zUo0MpR.lVn0b0t5Tma2pJd4ek6.0G1hzF4ZE9O	\N	7	0	\N	test	new	172028173266896a84f2b91.jpg	\N	\N	2024-07-06 15:56:59	2024-07-06 16:05:07	0	0	1	MYD-P-147	0	0	254|31K3bzzgRykWaIlD9g3tC6umlAUFaQLxJcjcEfBedf00e0dd		-O17kpCMYOqz111ZVNL4	iOS	0	\N	971	623674627462	0	0	\N	0	\N
+148	test new	__deleted_account148	1264	414141424__deleted_account148	1	$2y$12$4E7thjo4qREoXiss2h/iBeAy3TU9GkihEQeY7.wSFfwFnsnJZf1e6	\N	7	0	\N	test	new	\N	1111	\N	2024-07-06 17:01:21	2024-07-06 17:18:47	1	0	1	MYD-P-148	0	0			-O17zYxLWhNA_-7sn3t3	iOS	0	\N	93	414141424	0	0	\N	0	\N
+167	Karthika	karthika@k	971	509988455	0	$2y$12$YngvpUKeKxGGCZcWfQLtgOuADIiNA8KZY6HU1C5fYF/Ws3AiU16Im	\N	3	0	3	\N	\N	1720515065668cf9f9f1352.jpeg	\N	\N	2024-07-09 08:51:06	2024-07-09 08:51:06	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+155	Helia Clinic	test@helia.com	971	346346346	0	$2y$12$9TNqGSvgjKJHOA24t6xDou9vqNvl2ZJGrMp/D4VgAVN9PQMfA48Ze	\N	8	0	\N	\N	\N	1720353431668a82978d6bb.JPG	\N	\N	2024-07-07 07:51:36	2024-07-07 11:57:11	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+156	YassY	yas@helia.com	971	366464747	0	$2y$12$wlJ6RSd4PQNe7G8mYCFM5Ol6ZpCQ6JnnqWOlC1K6d4rEqsmIQVkh2	\N	6	0	\N	Yass	Y	1720340680668a50c875bd1.jpg	\N	\N	2024-07-07 08:14:06	2024-07-07 12:03:24	0	0	1	\N	155	155	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+149	anil navis	navisanil@gmail.com	971	5464684646	1	$2y$12$YNCy2a6vQuhWUtizOyvcUObXVdVDPpRw5Q/LTGDSHhS5mXNyL5bSW	\N	7	0	\N	anil	navis	1720289783668989f718fbe.jpg	1111	\N	2024-07-06 18:16:28	2024-07-07 03:00:45	0	0	1	MYD-P-149	0	0	256|9sWi56SoT4aIOETjxmTT6Lopc2ApuMxb1QznJcRUb94d1576		-O18FkNT3vcLuBx20sIN	iOS	1	2024-07-06	971	5464684646	20	1	\N	1	\N
+160	Zain Falak test	z.falak777@gmail.com	971	1234567893	1	$2y$12$azweRfPtuAWBIDJD9/VFhu6oiQB74wndGV/ser51bjZ5nQvHaeO.m	\N	7	0	\N	Zain Falak	test	17180908066667fc36d9a11.jpg	\N	\N	2024-07-08 20:34:36	2024-07-09 20:22:44	0	0	1	MYD-P-160	0	0	272|sVdD499v493pSKI5saXZNJoiKu2EmxhBvXGRxOjT17b07b2b		-O1J2YOUE_06XaPoRW9H	iOS	1	2024-07-09	971	1234567893	22	1	\N	1	\N
+150	Trucare Clinics LLC	info@true.ae	971	6436467747	0	$2y$12$wif/YzKICSKCCoIIIs7iHuiINvayEuaVorcM6pbhf5uteITlafTA6	\N	5	0	\N	\N	\N	1720333772668a35cc1f2b3.png	\N	\N	2024-07-07 05:44:49	2024-07-07 06:29:32	0	0	1	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+157	Arun Padippurackal	arun.devu.290321@gmail.com	91	500088445	1	$2y$12$Bd4VJ3APaEcdI6e2KorSKeRWIPWttwvqN9dkwHBzf5zNVto3fG19y	\N	7	0	\N	Arun	Padippurackal	1720432922668bb91ae786d.jpg	1111	\N	2024-07-08 10:02:15	2024-07-08 12:16:20	0	0	1	MYD-P-157	0	0	268|8hYZxtVt5dmZ2QR9vEkD64HF6OgVJaTINUv3irxq9e04bf4f	eejODlpPf07kotuXbZ0fAp:APA91bE04miu1IMPuhxgoIgvIwSFwyKxgO29D6yyWLkp6D-R8uymTOqKS97J0q-JZ-vJ-PnRaX9hp2KKUelHZzye69VX5PeQ7tKRSz3IgPxBXp7omOUmclZ_NDuemiYM2X40dR6-_WKm	-O1GmojAAVtAAb-P2-X9	iOS	0	1993-07-08	91	919961549033	4	23	1111	0	\N
+154	Ourida Tagnit Hamou	ourida@true.ae	971	333556789	0	$2y$12$EH7ZiQBI806.cJOngAxrn.TOorlRX6rSb087xXsL6JwujuTJ0wb8m	\N	6	0	\N	Ourida	Tagnit Hamou	1720336345668a3fd9c87a1.jpg	\N	\N	2024-07-07 07:12:27	2024-07-07 07:32:53	0	0	1	\N	1	1	\N	\N	\N	\N	2	\N	\N	\N	0	0	\N	0	\N
+166	3	x@gmail.com	971	54654645648	0	$2y$12$eGWwsQYO6QYi1/yhLHqVc.26XPupFAclQqIKr4nzr0I1w5kgYzMCu	\N	4	0	4	\N	\N	1720526080668d25000bee9.png	\N	\N	2024-07-09 08:35:02	2024-07-09 13:33:31	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+158	Devika S R	devikasr1995@gmail.com	971	502690000	1	$2y$12$seNuzSc03T1p6lphKV/oTuQRp9xzSC02DOrrRJ8mmxc4OHF0wYoQe	\N	7	0	\N	Devika	S R	1720432925668bb91d78ef7.jpg	1111	\N	2024-07-08 10:02:17	2024-07-08 12:16:55	0	0	1	MYD-P-158	0	0	269|Eq48MixYxe0UMDGObGbAL1ZPOlebQSW5U4O3EF29c8e4a394	cleoCYNwQ66T9Q-lhwOEfo:APA91bFNV11KqlD02zU4UytTtCxtG-qwOqx6Ob4cg-G2h2PoeDJ31cXYYQHBM5ByO_2f22--P6LOmIsw8u7mdzLSAFZ7A6a_bu-BZQ_Hc98VtNFmpj-0RXD_ra0_-22hhTwVnpcOU6Ap	-O1Gmp1zWtZwwdIePTV8	ANDROID	0	2024-07-08	971	502690000	4	21	1111	0	\N
+159	Huawei	h@t	971	123456787	0	$2y$12$VqhTi9DPJwSH/zHJiyJiSOAjZ/CcuAPitOJL/NrqsA4J8kB0e.SQS	\N	4	0	4	\N	\N	\N	\N	\N	2024-07-08 14:19:56	2024-07-08 14:19:56	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+162	Al Naseem Medical Center	naseem@gmail.com	971	45645645433	0	$2y$12$uLR4KPSkM2mOgot9kxR1LuL6PStGQzfPCXATnPsuxJwKUkfo.bDqu	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-09 05:14:26	2024-07-09 05:14:26	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+163	S.K SHETTY M S.M S.	shetty@gmail.com	971	34534534545	0	$2y$12$HYhGVyL2h8ZTb2LHuKbWxuf3loBgP6vrTK3ondIsZlnY9ElVls1Xu	\N	6	0	\N	S.K SHETTY M S.	M S.	1720505374668cd41e7ef2a.jpg	\N	\N	2024-07-09 06:09:36	2024-07-09 06:09:36	0	0	1	\N	162	162	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+169	Ajesh kumar	ajeshcd@gmail.com	971	505041860	1	$2y$12$b0EydxzRNXGd0/33Q7NcR.ezDw4jiRmJsZLGd.2fWDtz22ut.St06	\N	7	0	\N	Ajesh	kumar	\N	1111	\N	2024-07-09 10:17:11	2024-07-09 12:20:00	0	0	1	MYD-P-169	0	0	320|rx6Otgxy8MEfRW1fpExU9uhMWCP5GxxtD16QsAIy0673f0bf	cwtPWcNE6UWzgxIQZJ8VEu:APA91bHYNReQiX7HjuV2TFaDTl-EMD30Ct9qUGKP2t0staYZ2tSt5noaVJOSwlSPn_VcL0rPy3Pe9Jx4H0k9gCFiet5hasmsSZG_V1picfdzIGxY52wjXgOJw8IWOgWczt0pE1L7tvCR	-O1LzowqZiUYnQnlhlDy	iOS	1	1990-01-02	971	505041860	6	61	1111	0	\N
+164	Phone Bridge	phonebridge@phonebridge	971	502255445	0	$2y$12$a3m7qglPRNrfp5olk5v4e.Vh4JP4glB6Un0WsnoIc7MLY9asv/Pqa	\N	4	0	4	\N	\N	1720508095668cdebf6e1cd.png	\N	\N	2024-07-09 06:54:57	2024-07-09 06:58:20	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+168	2	2@g	971	45353533454	0	$2y$12$5cr9b/fI23DJJuAMxZl9eOjRDu1G52Oo5gn5H/XwExAdwQmREy7qS	\N	3	0	3	\N	\N	1720517043668d01b32a80d.jpg	\N	\N	2024-07-09 09:24:06	2024-07-09 10:18:43	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+161	Al Naseem Medical Center	nseem@gmail.com	971	34554454545	0	$2y$12$ToNW602.lqVKf6FLKPNFPuE2rmLW02pZZ1yumNnrTI1t/SJIYi5k2	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-09 05:06:55	2024-07-09 13:21:05	1	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+170	vv gg	ajeshcd1@gmail.com	971	56889988	1	$2y$12$eyzez59X7lqqhI06Hh7xS.RUfm3eSnU3cQZAGSKPGFjiNj/f7DM/W	\N	7	0	\N	vv	gg	\N	\N	\N	2024-07-09 10:41:40	2024-07-09 10:41:41	0	0	1	MYD-P-170	0	0	303|37UjdjKPg2jmTRbx3P1TWRuueHjgAzCkcUFUZUl08439aaee	fMGckzyjW00cmarFGeEFwE:APA91bF-VGRi1YYbYabMA2vEWRxaSlwLN7forlR3jqs5raiv7wuQUH26xLcwqnQHshZGXP1z831OOV1DnKf5fZCa1OQBS2u2OhHC38Q1Xclh15yf9DSMq3zVosSRWQRHSCPZZGX56WUx	-O1M4QP_BpkR_mVAtJpR	iOS	1	2011-05-09	971	56889988	0	0	\N	0	\N
+171	Devika S	devikadxba@hotmail.com__deleted_account171	971	50269348__deleted_account171	1	$2y$12$suMJ7hkQy96siV.ajMNzk.bJJiTB7Kejqgfup.oS2B/riNUQ8d/0C	\N	7	0	\N	Devika	S	\N	\N	\N	2024-07-09 11:23:30	2024-07-09 11:24:26	1	0	1	MYD-P-171	0	0			-O1ME-Wud1nepj6fa7KX	iOS	0	\N	971	502693489	0	1	\N	1	\N
+172	\N	as@gmail.com	971	55544333444	0	$2y$12$GMVhjQXOTziSLI3NwDTEU.ghacufkbmBQXjK5OU1CbJEy4ujrN93G	\N	7	0	\N	4	6	\N	\N	\N	2024-07-09 11:25:25	2024-07-09 11:31:15	0	0	0	\N	0	0	\N	\N	\N	\N	1	2024-04-20	971	657676767775	7	63	\N	0	\N
+165	Phone Bridge	phonebridge@phonebridg.com	971	565656559	0	$2y$12$HLmKw2FXO6fJPYRzxmPr2uvZdFFR4JvxRm5WHYYsgoGzAPrW3zCYe	\N	4	0	4	\N	\N	1720508459668ce02b4e062.png	\N	\N	2024-07-09 07:00:59	2024-07-09 15:56:55	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+130	Anil navis		971	564005096	1	$2y$12$1jrMjZJI4wYy6gyNbOUnkOplwfoQ57yshlMXykiqTgyUmjRBGMl3G	\N	7	0	\N	Anil	navis	1720526580668d26f4e7684.jpg	1111	\N	2024-07-05 11:23:40	2024-07-10 02:09:32	0	0	1	MYD-P-130	0	0	341|xUGGrXyLOpm0Ts6SFfIfSU7B9z9vXgv4SUfkmtE23d249938	fQDILfUTDEGHpYiJRiBXZs:APA91bFpNGKqNVLq0hZNPYC3Ih7Vo66Ew-1EEuHuhJYk8DqQfVeVCeU7Njj4ehL4aFPZxJDZZT_BC8QcHhZFE1EycpjuWvb7JtNOmo1X5Qs7Anr6FER94-UaRPMNsf5zgz0GioFNgu9r	-O11cflsbTmkR0h-mqBt	iOS	1	1986-07-05	971	564005096	4	7	\N	0	\N
+181	Qbc Gqh	test191@gmail.com	971	557077482	1	$2y$12$dkMrDTYqiFpmNktIfppjFedODAsWm9ol.0Wgk9xJDnw59kYJjoA0i	\N	7	0	\N	Qbc	Gqh	\N	1111	\N	2024-07-09 18:21:40	2024-07-09 18:24:45	0	0	1	MYD-P-181	0	0	329|JxYjHj5j3FfwYg8i4AB9yIsL2xcortWN5xgG4ngvf14bb050		-O1Nihm9Hll2PlWMzOUg	ANDROID	1	2024-07-07	971	557077482	4	7	\N	0	\N
+173	dev s	devikadxba@hotmail.com__deleted_account173	971	502693__deleted_account173	1	$2y$12$xENRr3I7K1klihmwKAk44OwAyVx3yrVmJjn/NN2RWXbvIbTqPo956	\N	7	0	\N	dev	s	\N	\N	\N	2024-07-09 11:25:43	2024-07-09 11:27:33	1	0	1	MYD-P-173	0	0			-O1MEVhKVI_5euWq6-xU	iOS	0	\N	971	502693	0	1	\N	1	\N
+174	Harshan Clinic	hhh@t	971	12354548787	0	$2y$12$B88eK4E941I20xC3SiOrwuinDCZjhwAmd.j41SLVVmIZXVUvDdB/i	\N	8	0	\N	\N	\N	1720534155668d448b2c4ed.jfif	\N	\N	2024-07-09 14:06:09	2024-07-09 14:32:24	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+175	Seha Hospital	seha@seha.com	971	502233223	0	$2y$12$9gwmbHzyoz/n3cGg4D/N8u6q2edoI7rFqRew1QcPJSRdyfFFW.Vai	\N	5	0	\N	\N	\N	\N	\N	\N	2024-07-09 14:24:07	2024-07-09 15:28:12	0	0	1	\N	164	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+176	Haridwar Clinic	haridwar@t.com	971	502233223	0	$2y$12$RTy93ylVZFeRitbnA9oCIexgHeNQLxpya/dTtyDAa1AS95wwcCOnG	\N	8	0	\N	\N	\N	1720539103668d57df1b43b.jpeg	\N	\N	2024-07-09 15:31:43	2024-07-09 15:31:43	0	0	1	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+178	SamGabriyel	gab@gab.com	971	565656565	0	$2y$12$wq8Moyxm.OfsxBTDyzqlY.f0KXXcMH40EBKpDjR1BjbU2TdW5a80y	\N	6	0	\N	Sam	Gabriyel	1720540283668d5c7b51b81.png	\N	\N	2024-07-09 15:51:23	2024-07-09 15:51:23	0	0	1	\N	175	175	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+177	GabriyelSam Kuthirapparambil	sam@sam.com	971	565656565	0	$2y$12$n3zM9ELnVlYYDhKSkVB3Q.UEMlLl7PpMa9JL1qHwGCblbHPmKDdNm	\N	6	0	\N	Gabriyel	Sam Kuthirapparambil	1720539737668d5a5970040.jpeg	\N	\N	2024-07-09 15:42:19	2024-07-09 15:53:35	0	0	1	\N	175	175	\N	\N	\N	\N	1	\N	\N	\N	0	0	\N	0	\N
+179	Google Call	g@mail.com	971	545454545	0	$2y$12$MKd5FSvaijYtzZJj0rUOq.1Efcp9BGkvUSxtoDIn.KgqatGkWZ/K.	\N	4	0	4	\N	\N	1720540776668d5e68a75c6.png	\N	\N	2024-07-09 15:59:38	2024-07-09 15:59:38	0	0	0	\N	0	0	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+180	Salha Hospital	salha@salha.com	971	564545454	0	$2y$12$PqiNy/f8jqDLKUGbrTlCCe9wL4s06Elx7a5NEmWm/nBAROuKrvV7q	\N	5	0	\N	\N	\N	1720541029668d5f6563bc8.jpeg	\N	\N	2024-07-09 16:03:49	2024-07-09 16:03:49	0	0	0	\N	1	1	\N	\N	\N	\N	\N	\N	\N	\N	0	0	\N	0	\N
+\.
+
+
+--
+-- Name: agent_user_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.agent_user_details_id_seq', 9, true);
+
+
+--
+-- Name: appointments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.appointments_id_seq', 1, false);
+
+
+--
+-- Name: areas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.areas_id_seq', 80, true);
+
+
+--
+-- Name: articles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.articles_id_seq', 14, true);
+
+
+--
+-- Name: callcenter_user_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.callcenter_user_details_id_seq', 11, true);
+
+
+--
+-- Name: contact_us_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.contact_us_id_seq', 8, true);
+
+
+--
+-- Name: contact_us_settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.contact_us_settings_id_seq', 1, true);
+
+
+--
+-- Name: country_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.country_id_seq', 242, true);
+
+
+--
+-- Name: country_of_origins_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.country_of_origins_id_seq', 495, true);
+
+
+--
+-- Name: department_hospital_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.department_hospital_id_seq', 33, true);
+
+
+--
+-- Name: departments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.departments_id_seq', 19, true);
+
+
+--
+-- Name: doctor_availabilities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_availabilities_id_seq', 28, true);
+
+
+--
+-- Name: doctor_holidays_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_holidays_id_seq', 37, true);
+
+
+--
+-- Name: doctor_instant_appointments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_instant_appointments_id_seq', 39, true);
+
+
+--
+-- Name: doctor_intrests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_intrests_id_seq', 304, true);
+
+
+--
+-- Name: doctor_language_spokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_language_spokens_id_seq', 288, true);
+
+
+--
+-- Name: doctor_patient_appointments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_patient_appointments_id_seq', 289, true);
+
+
+--
+-- Name: doctor_qualifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_qualifications_id_seq', 322, true);
+
+
+--
+-- Name: doctor_reschedule_appointments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_reschedule_appointments_id_seq', 72, true);
+
+
+--
+-- Name: doctor_specialities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_specialities_id_seq', 198, true);
+
+
+--
+-- Name: doctor_temporary_unavailables_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctor_temporary_unavailables_id_seq', 7, true);
+
+
+--
+-- Name: doctors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.doctors_id_seq', 37, true);
+
+
+--
+-- Name: emirates_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.emirates_id_seq', 8, true);
+
+
+--
+-- Name: failed_jobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.failed_jobs_id_seq', 1, false);
+
+
+--
+-- Name: faq_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.faq_id_seq', 4, true);
+
+
+--
+-- Name: help_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.help_id_seq', 1, false);
+
+
+--
+-- Name: hospital_doctor_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_doctor_feedback_id_seq', 20, true);
+
+
+--
+-- Name: hospital_images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_images_id_seq', 31, true);
+
+
+--
+-- Name: hospital_insurance_policies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_insurance_policies_id_seq', 33, true);
+
+
+--
+-- Name: hospital_insurances_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_insurances_id_seq', 4, true);
+
+
+--
+-- Name: hospital_locations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_locations_id_seq', 77, true);
+
+
+--
+-- Name: hospital_services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_services_id_seq', 1, false);
+
+
+--
+-- Name: hospital_specialities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospital_specialities_id_seq', 1, false);
+
+
+--
+-- Name: hospitals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hospitals_id_seq', 26, true);
+
+
+--
+-- Name: insurence_policies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.insurence_policies_id_seq', 23, true);
+
+
+--
+-- Name: jobs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jobs_id_seq', 1, false);
+
+
+--
+-- Name: languages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.languages_id_seq', 12, true);
+
+
+--
+-- Name: licence_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.licence_types_id_seq', 6, true);
+
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.locations_id_seq', 1, false);
+
+
+--
+-- Name: medical_conditions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.medical_conditions_id_seq', 2, true);
+
+
+--
+-- Name: members_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.members_id_seq', 88, true);
+
+
+--
+-- Name: migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.migrations_id_seq', 116, true);
+
+
+--
+-- Name: mydrworld_service_feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.mydrworld_service_feedback_id_seq', 11, true);
+
+
+--
+-- Name: orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.orders_id_seq', 2, true);
+
+
+--
+-- Name: personal_access_tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.personal_access_tokens_id_seq', 341, true);
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 2, true);
+
+
+--
+-- Name: profile_bios_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.profile_bios_id_seq', 1, false);
+
+
+--
+-- Name: qualifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.qualifications_id_seq', 99, true);
+
+
+--
+-- Name: role_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.role_permissions_id_seq', 68, true);
+
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.roles_id_seq', 5, true);
+
+
+--
+-- Name: services_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.services_id_seq', 2, true);
+
+
+--
+-- Name: settings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.settings_id_seq', 1, true);
+
+
+--
+-- Name: special_intrests_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.special_intrests_id_seq', 61, true);
+
+
+--
+-- Name: specialties_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.specialties_id_seq', 23, true);
+
+
+--
+-- Name: sub_insurence_policies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.sub_insurence_policies_id_seq', 11, true);
+
+
+--
+-- Name: temp_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.temp_users_id_seq', 124, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 181, true);
+
+
+--
+-- Name: agent_user_details agent_user_details_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agent_user_details
+    ADD CONSTRAINT agent_user_details_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: appointments appointments_appointment_id_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_appointment_id_unique UNIQUE (appointment_id);
+
+
+--
+-- Name: appointments appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: areas areas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.areas
+    ADD CONSTRAINT areas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: articles articles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.articles
+    ADD CONSTRAINT articles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cache_locks cache_locks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cache_locks
+    ADD CONSTRAINT cache_locks_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: cache cache_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cache
+    ADD CONSTRAINT cache_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: callcenter_user_details callcenter_user_details_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.callcenter_user_details
+    ADD CONSTRAINT callcenter_user_details_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contact_us contact_us_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contact_us
+    ADD CONSTRAINT contact_us_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contact_us_settings contact_us_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contact_us_settings
+    ADD CONSTRAINT contact_us_settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: country_of_origins country_of_origins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country_of_origins
+    ADD CONSTRAINT country_of_origins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: country country_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.country
+    ADD CONSTRAINT country_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: department_doctors department_doctors_doctor_id_department_id_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_doctors
+    ADD CONSTRAINT department_doctors_doctor_id_department_id_unique UNIQUE (doctor_id, department_id);
+
+
+--
+-- Name: department_hospital department_hospital_hospital_id_department_id_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_hospital
+    ADD CONSTRAINT department_hospital_hospital_id_department_id_unique UNIQUE (hospital_id, department_id);
+
+
+--
+-- Name: department_hospital department_hospital_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_hospital
+    ADD CONSTRAINT department_hospital_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: departments departments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.departments
+    ADD CONSTRAINT departments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_availabilities doctor_availabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_availabilities
+    ADD CONSTRAINT doctor_availabilities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_holidays doctor_holidays_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_holidays
+    ADD CONSTRAINT doctor_holidays_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_instant_appointments doctor_instant_appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_instant_appointments
+    ADD CONSTRAINT doctor_instant_appointments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_intrests doctor_intrests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_intrests
+    ADD CONSTRAINT doctor_intrests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_language_spokens doctor_language_spokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_language_spokens
+    ADD CONSTRAINT doctor_language_spokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_patient_appointments doctor_patient_appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_patient_appointments
+    ADD CONSTRAINT doctor_patient_appointments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_qualifications doctor_qualifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_qualifications
+    ADD CONSTRAINT doctor_qualifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_reschedule_appointments doctor_reschedule_appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_reschedule_appointments
+    ADD CONSTRAINT doctor_reschedule_appointments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_specialities doctor_specialities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_specialities
+    ADD CONSTRAINT doctor_specialities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctor_temporary_unavailables doctor_temporary_unavailables_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_temporary_unavailables
+    ADD CONSTRAINT doctor_temporary_unavailables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: doctors doctors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctors
+    ADD CONSTRAINT doctors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: emirates emirates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.emirates
+    ADD CONSTRAINT emirates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: failed_jobs failed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.failed_jobs
+    ADD CONSTRAINT failed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: failed_jobs failed_jobs_uuid_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.failed_jobs
+    ADD CONSTRAINT failed_jobs_uuid_unique UNIQUE (uuid);
+
+
+--
+-- Name: faq faq_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.faq
+    ADD CONSTRAINT faq_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: help help_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.help
+    ADD CONSTRAINT help_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_doctor_feedback hospital_doctor_feedback_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_doctor_feedback
+    ADD CONSTRAINT hospital_doctor_feedback_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_images hospital_images_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_images
+    ADD CONSTRAINT hospital_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_insurance_policies hospital_insurance_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurance_policies
+    ADD CONSTRAINT hospital_insurance_policies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_insurances hospital_insurances_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurances
+    ADD CONSTRAINT hospital_insurances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_locations hospital_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_locations
+    ADD CONSTRAINT hospital_locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_services hospital_services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_services
+    ADD CONSTRAINT hospital_services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospital_specialities hospital_specialities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_specialities
+    ADD CONSTRAINT hospital_specialities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: hospitals hospitals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospitals
+    ADD CONSTRAINT hospitals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: insurence_policies insurence_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.insurence_policies
+    ADD CONSTRAINT insurence_policies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_batches job_batches_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.job_batches
+    ADD CONSTRAINT job_batches_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: jobs jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jobs
+    ADD CONSTRAINT jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: languages languages_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.languages
+    ADD CONSTRAINT languages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: licence_types licence_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.licence_types
+    ADD CONSTRAINT licence_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locations
+    ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: medical_conditions medical_conditions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.medical_conditions
+    ADD CONSTRAINT medical_conditions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: members members_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.members
+    ADD CONSTRAINT members_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: migrations migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.migrations
+    ADD CONSTRAINT migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: mydrworld_service_feedback mydrworld_service_feedback_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.mydrworld_service_feedback
+    ADD CONSTRAINT mydrworld_service_feedback_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: personal_access_tokens personal_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personal_access_tokens
+    ADD CONSTRAINT personal_access_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: personal_access_tokens personal_access_tokens_token_unique; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.personal_access_tokens
+    ADD CONSTRAINT personal_access_tokens_token_unique UNIQUE (token);
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: profile_bios profile_bios_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profile_bios
+    ADD CONSTRAINT profile_bios_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qualifications qualifications_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.qualifications
+    ADD CONSTRAINT qualifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: role_permissions role_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permissions
+    ADD CONSTRAINT role_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.services
+    ADD CONSTRAINT services_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: settings settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.settings
+    ADD CONSTRAINT settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: special_intrests special_intrests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.special_intrests
+    ADD CONSTRAINT special_intrests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: specialties specialties_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.specialties
+    ADD CONSTRAINT specialties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sub_insurence_policies sub_insurence_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.sub_insurence_policies
+    ADD CONSTRAINT sub_insurence_policies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: temp_users temp_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.temp_users
+    ADD CONSTRAINT temp_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: agent_user_details_user_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX agent_user_details_user_id_index ON public.agent_user_details USING btree (user_id);
+
+
+--
+-- Name: dc_to_vail; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX dc_to_vail ON public.doctor_availabilities USING btree (doctor_id);
+
+
+--
+-- Name: doc_appoiutment_dailcode; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_appoiutment_dailcode ON public.doctors USING hash (appointment_dial_code);
+
+
+--
+-- Name: doc_appoiutment_phoe; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_appoiutment_phoe ON public.doctors USING hash (appointment_phone);
+
+
+--
+-- Name: doc_gender; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_gender ON public.doctors USING btree (gender);
+
+
+--
+-- Name: doc_intre; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_intre ON public.doctor_intrests USING btree (doctor_id, special_intrest_id);
+
+
+--
+-- Name: doc_to_country_of_orgin; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_to_country_of_orgin ON public.doctors USING btree (country_id);
+
+
+--
+-- Name: doc_to_hospital; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_to_hospital ON public.doctors USING btree (hospital_id);
+
+
+--
+-- Name: doc_to_user; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX doc_to_user ON public.doctors USING btree (user_id);
+
+
+--
+-- Name: hopsital_name; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hopsital_name ON public.hospitals USING hash (name_en);
+
+
+--
+-- Name: hopsital_ti_user; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hopsital_ti_user ON public.hospitals USING btree (user_id);
+
+
+--
+-- Name: hopsital_to_area; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hopsital_to_area ON public.hospitals USING btree (area_id);
+
+
+--
+-- Name: hos_sub; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hos_sub ON public.hospital_insurance_policies USING btree (sub_insurance_id, hospital_id, insurance_id);
+
+
+--
+-- Name: hospital_inus; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hospital_inus ON public.hospital_insurances USING btree (hospital_id, insurance_id);
+
+
+--
+-- Name: hospital_to; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hospital_to ON public.hospitals USING hash (latitude);
+
+
+--
+-- Name: hospital_to_county; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hospital_to_county ON public.hospitals USING btree (country_id);
+
+
+--
+-- Name: hospital_to_emirate; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hospital_to_emirate ON public.hospitals USING btree (emirate_id);
+
+
+--
+-- Name: hspital_log; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX hspital_log ON public.hospitals USING hash (longitude);
+
+
+--
+-- Name: jobs_queue_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX jobs_queue_index ON public.jobs USING btree (queue);
+
+
+--
+-- Name: lang_to_doc; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX lang_to_doc ON public.doctor_language_spokens USING btree (doctor_id, language_spoken_id);
+
+
+--
+-- Name: loca_to_hospital; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX loca_to_hospital ON public.hospital_locations USING btree (hospital_id);
+
+
+--
+-- Name: locl_long; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX locl_long ON public.hospital_locations USING hash (longitude);
+
+
+--
+-- Name: lolc_lat; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX lolc_lat ON public.hospital_locations USING hash (latitude);
+
+
+--
+-- Name: personal_access_tokens_tokenable_type_tokenable_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX personal_access_tokens_tokenable_type_tokenable_id_index ON public.personal_access_tokens USING btree (tokenable_type, tokenable_id);
+
+
+--
+-- Name: qual_to_doc; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX qual_to_doc ON public.doctor_qualifications USING btree (doctor_id, qualification_id);
+
+
+--
+-- Name: spec_to_doc; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX spec_to_doc ON public.doctor_specialities USING btree (doctor_id, speciality_id);
+
+
+--
+-- Name: users_id_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX users_id_index ON public.users USING btree (id);
+
+
+--
+-- Name: agent_user_details agent_user_details_user_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agent_user_details
+    ADD CONSTRAINT agent_user_details_user_id_foreign FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: callcenter_user_details callcenter_user_details_user_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.callcenter_user_details
+    ADD CONSTRAINT callcenter_user_details_user_id_foreign FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: department_doctors department_doctors_department_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_doctors
+    ADD CONSTRAINT department_doctors_department_id_foreign FOREIGN KEY (department_id) REFERENCES public.departments(id) ON DELETE CASCADE;
+
+
+--
+-- Name: department_doctors department_doctors_doctor_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_doctors
+    ADD CONSTRAINT department_doctors_doctor_id_foreign FOREIGN KEY (doctor_id) REFERENCES public.doctors(id) ON DELETE CASCADE;
+
+
+--
+-- Name: department_hospital department_hospital_department_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_hospital
+    ADD CONSTRAINT department_hospital_department_id_foreign FOREIGN KEY (department_id) REFERENCES public.departments(id) ON DELETE CASCADE;
+
+
+--
+-- Name: department_hospital department_hospital_hospital_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.department_hospital
+    ADD CONSTRAINT department_hospital_hospital_id_foreign FOREIGN KEY (hospital_id) REFERENCES public.hospitals(id) ON DELETE CASCADE;
+
+
+--
+-- Name: doctor_patient_appointments doctor_patient_appointments_department_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_patient_appointments
+    ADD CONSTRAINT doctor_patient_appointments_department_id_foreign FOREIGN KEY (department_id) REFERENCES public.departments(id) ON DELETE SET NULL;
+
+
+--
+-- Name: doctor_patient_appointments doctor_patient_appointments_hospital_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.doctor_patient_appointments
+    ADD CONSTRAINT doctor_patient_appointments_hospital_id_foreign FOREIGN KEY (hospital_id) REFERENCES public.hospitals(id) ON DELETE SET NULL;
+
+
+--
+-- Name: hospital_insurance_policies hospital_insurance_policies_hospital_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurance_policies
+    ADD CONSTRAINT hospital_insurance_policies_hospital_id_foreign FOREIGN KEY (hospital_id) REFERENCES public.hospitals(id) ON DELETE CASCADE;
+
+
+--
+-- Name: hospital_insurance_policies hospital_insurance_policies_insurance_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurance_policies
+    ADD CONSTRAINT hospital_insurance_policies_insurance_id_foreign FOREIGN KEY (insurance_id) REFERENCES public.insurence_policies(id) ON DELETE CASCADE;
+
+
+--
+-- Name: hospital_insurance_policies hospital_insurance_policies_sub_insurance_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.hospital_insurance_policies
+    ADD CONSTRAINT hospital_insurance_policies_sub_insurance_id_foreign FOREIGN KEY (sub_insurance_id) REFERENCES public.sub_insurence_policies(id) ON DELETE CASCADE;
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
